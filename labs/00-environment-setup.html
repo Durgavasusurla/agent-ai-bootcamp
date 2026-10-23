@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bootcamp Environment Setup</title>
+<style>
+  :root{
+    --bg:#f7f7f5; --card:#ffffff; --ink:#1f2328; --muted:#59636e; --line:#d9dde3;
+    --accent:#2457c5; --accent-soft:#e8effc; --ok:#1a7f37; --ok-soft:#e6f4ea;
+    --warn:#9a6700; --warn-soft:#fff6d6; --bad:#c0392b; --bad-soft:#fde8e6;
+    --code-bg:#f0f2f5; --telugu-bg:#f3eefb; --telugu-line:#7b4fc9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:32px 16px 80px}
+  h1{font-size:30px;margin:0 0 6px}
+  .sub{color:var(--muted);margin:0 0 24px}
+  h2{font-size:22px;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+  h3{font-size:16px;margin:18px 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-size:16px;font-weight:700;flex:none}
+  section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;margin:0 0 22px}
+  .where{display:inline-block;font-size:13px;font-weight:600;padding:2px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);margin:4px 0 10px}
+  ol,ul{padding-left:22px;margin:6px 0}
+  li{margin:4px 0}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;margin:8px 0;font-size:14px;line-height:1.5}
+  code{font-family:Consolas,"Cascadia Mono",Menlo,monospace;font-size:.93em;background:var(--code-bg);padding:1px 5px;border-radius:4px}
+  pre code{background:none;padding:0}
+  .expect{border-left:4px solid var(--ok);background:var(--ok-soft);padding:8px 12px;border-radius:0 8px 8px 0;margin:8px 0;font-size:15px}
+  .warn{border-left:4px solid var(--warn);background:var(--warn-soft);padding:8px 12px;border-radius:0 8px 8px 0;margin:8px 0;font-size:15px}
+  .bad{border-left:4px solid var(--bad);background:var(--bad-soft);padding:8px 12px;border-radius:0 8px 8px 0;margin:8px 0;font-size:15px}
+  .telugu{border-left:4px solid var(--telugu-line);background:var(--telugu-bg);padding:12px 14px;border-radius:0 8px 8px 0;margin:14px 0}
+  .telugu b.t{color:var(--telugu-line);display:block;margin-bottom:4px;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+  .next{margin-top:16px;padding-top:12px;border-top:1px dashed var(--line);color:var(--muted);font-size:15px}
+  .next b{color:var(--ink)}
+  table{border-collapse:collapse;width:100%;margin:8px 0;font-size:15px}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:var(--code-bg)}
+
+  /* flowcharts */
+  .flow{display:flex;flex-direction:column;align-items:center;gap:0;margin:12px 0;padding:14px;background:#fafbfc;border:1px dashed var(--line);border-radius:10px}
+  .flow.h{flex-direction:row;flex-wrap:wrap;justify-content:center}
+  .node{background:#fff;border:2px solid var(--accent);color:var(--ink);border-radius:8px;padding:8px 14px;font-size:14px;text-align:center;max-width:260px;font-weight:600}
+  .node.q{border-color:var(--warn);background:var(--warn-soft);border-radius:999px}
+  .node.ok{border-color:var(--ok);background:var(--ok-soft)}
+  .node.bad{border-color:var(--bad);background:var(--bad-soft)}
+  .node.ghost{border-style:dashed;font-weight:500;color:var(--muted)}
+  .arr{color:var(--muted);font-size:20px;line-height:1;padding:4px 8px}
+  .arr small{display:block;font-size:12px;color:var(--muted)}
+  .branches{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;width:100%;margin-top:4px}
+  .branch{display:flex;flex-direction:column;align-items:center;flex:1;min-width:200px}
+  .branch .lbl{font-size:12px;font-weight:700;color:var(--muted);padding:2px 8px;border:1px solid var(--line);border-radius:999px;background:#fff;margin-bottom:4px}
+  .cap{font-size:13px;color:var(--muted);text-align:center;margin-top:6px}
+  @media print{section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Bootcamp Environment Setup</h1>
+<p class="sub">Windows 11 · Python 3.15 · uv · Groq · VS Code. Prathi step lo: <b>ekkada</b> cheyyali, <b>emi</b> cheyyali, <b>emi command</b> run cheyyali, <b>emi vastundi</b>, <b>next emi</b>.<br>Ee file repo lo <code>labs/00-environment-setup.html</code> lo undi. Manam kotha step chesina prathi sari idi update avutundi (chivarlo Changelog chudandi). Open cheyyali ante VS Code Explorer lo file meeda right-click → Reveal in File Explorer → double-click.</p>
+
+<!-- OVERVIEW -->
+<section>
+  <h2>Mottham picture</h2>
+  <div class="flow">
+    <div class="node">0. Accounts + tools ready</div><div class="arr">↓</div>
+    <div class="node">1. Python check</div><div class="arr">↓</div>
+    <div class="node">2. uv install</div><div class="arr">↓</div>
+    <div class="node">3. PATH set + terminal restart</div><div class="arr">↓</div>
+    <div class="node">4. Project open + uv sync</div><div class="arr">↓</div>
+    <div class="node">5. uv add packages</div><div class="arr">↓</div>
+    <div class="node">6. .env file + keys</div><div class="arr">↓</div>
+    <div class="node">7. Notebook + kernel</div><div class="arr">↓</div>
+    <div class="node">8. Groq test → "ok"</div><div class="arr">↓</div>
+    <div class="node ok">9. Git commit + push</div>
+  </div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Idi mottham journey. Paina nunchi kindaki okkati tarvata okkati cheyyali. Okka step skip cheste next step fail avutundi. Prathi step chivarlo "Next" ani undi, adi follow cheyyandi.
+  </div>
+</section>
+
+<!-- STEP 0 -->
+<section>
+  <h2><span class="num">0</span> Mundu kavalsinavi</h2>
+  <span class="where">Ekkada: Browser + Windows</span>
+  <h3>Emi undali</h3>
+  <ul>
+    <li><b>VS Code</b> install ayi undali.</li>
+    <li><b>Python 3.15</b> install ayi undali (<code>C:\Python315</code>). Already undi.</li>
+    <li><b>Git</b> install ayi undali. Already undi.</li>
+    <li><b>GitHub account</b>, project already clone ayi undi: <code>C:\Users\vasus\Projects\agent-ai-bootcamp</code></li>
+    <li><b>Groq account</b>: <a href="https://console.groq.com">console.groq.com</a> lo sign up (free).</li>
+  </ul>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Ivi anni already unnayi. Groq account matrame kotha ga kavali. Groq ante free LLM API provider. OpenAI laga paid kaadu, bootcamp ki saripotundi.
+  </div>
+  <div class="next"><b>Next:</b> Step 1 ki vellandi.</div>
+</section>
+
+<!-- STEP 1 -->
+<section>
+  <h2><span class="num">1</span> Python check</h2>
+  <span class="where">Ekkada: VS Code Terminal (Ctrl + `)</span>
+  <h3>Emi run cheyyali</h3>
+<pre><code>py --version
+py -m pip --version</code></pre>
+  <div class="expect">Expected: <code>Python 3.15.x</code> and <code>pip 26.x from C:\Python315\Lib\site-packages\pip</code></div>
+  <div class="warn"><b>Rule:</b> Eppudu <code>py -m pip</code> vadandi. Direct <code>pip</code> vaddu. Karanam kinda flowchart lo.</div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <code>py</code> ante Windows lo unna Python launcher. Adi eppudu work avutundi. <code>py -m pip</code> ante "Python tho pip module run cheyyi" ani artham.
+    Direct <code>pip</code> type cheste <code>pip.exe</code> ane file run avutundi. Mee Windows lo <b>Smart App Control</b> ON undi. Adi digital signature leni <code>.exe</code> files ni block chestundi. <code>pip.exe</code> ki signature ledu, so block avutundi. <code>python.exe</code> ki signature undi, so adi run avutundi.
+  </div>
+  <div class="flow h">
+    <div class="node bad">pip install X</div><div class="arr">→</div>
+    <div class="node">pip.exe run</div><div class="arr">→</div>
+    <div class="node bad">Smart App Control BLOCK</div>
+  </div>
+  <div class="flow h">
+    <div class="node ok">py -m pip install X</div><div class="arr">→</div>
+    <div class="node">python.exe run (signed)</div><div class="arr">→</div>
+    <div class="node ok">Works</div>
+  </div>
+  <div class="next"><b>Next:</b> Rendu commands work aithe Step 2.</div>
+</section>
+
+<!-- STEP 2 -->
+<section>
+  <h2><span class="num">2</span> uv install</h2>
+  <span class="where">Ekkada: VS Code Terminal</span>
+  <h3>Emi run cheyyali</h3>
+<pre><code>py -m pip install uv</code></pre>
+  <div class="expect">Expected: <code>Successfully installed uv-0.13.x</code></div>
+  <h3>Verify</h3>
+<pre><code>py -m uv --version</code></pre>
+  <div class="expect">Expected: <code>uv 0.13.x</code></div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>uv</b> ante kotha, chala fast Python package manager. pip + virtualenv + lock file anni okka tool lo. Ee project mottham uv tho ne nadustundi.
+    Install ayyaka uv file ikkada untundi: <code>C:\Users\vasus\AppData\Roaming\Python\Python315\Scripts\uv.exe</code>. Ippudu <code>uv</code> ani direct ga type cheste work avvadu, enduku ante aa folder PATH lo ledu. Adi next step.
+  </div>
+  <div class="next"><b>Next:</b> Step 3 (PATH).</div>
+</section>
+
+<!-- STEP 3 -->
+<section>
+  <h2><span class="num">3</span> PATH set + terminal restart</h2>
+  <span class="where">Ekkada: VS Code Terminal (okka sari matrame)</span>
+  <h3>Emi run cheyyali</h3>
+<pre><code>$add = @(
+  'C:\Python315',
+  'C:\Python315\Scripts',
+  "$env:APPDATA\Python\Python315\Scripts"
+)
+$cur = [Environment]::GetEnvironmentVariable('Path', 'User')
+[Environment]::SetEnvironmentVariable('Path', ($cur + ';' + ($add -join ';')), 'User')</code></pre>
+  <div class="warn"><b>Important:</b> Ee command tarvata <b>VS Code mottham close chesi malli open cheyyandi.</b> Terminal matrame kaadu, VS Code full restart.</div>
+  <h3>Verify (restart tarvata)</h3>
+<pre><code>uv --version</code></pre>
+  <div class="expect">Expected: <code>uv 0.13.x</code> (ippudu <code>py -m</code> lekunda direct ga)</div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>PATH</b> ante Windows ki "commands ekkada vethakali" ani cheppే folders list. <code>uv</code> ani type cheste Windows aa list lo anni folders lo <code>uv.exe</code> vethukutundi. Mana folder list lo lekapothe "not recognized" error vastundi.
+    Ee command aa 3 folders ni list ki add chestundi. Idi permanent, okka sari chesthe saripotundi.
+    <b>Kani</b> already open unna terminal old list ne vadutundi. Anduke restart avasaram. Ide chala mandi confuse ayye point.
+  </div>
+  <div class="flow">
+    <div class="node">PATH command run</div><div class="arr">↓</div>
+    <div class="node q">VS Code restart chesara?</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">NO</span><div class="node bad">uv not recognized</div><div class="arr">↓</div><div class="node">VS Code close → open</div></div>
+      <div class="branch"><span class="lbl">YES</span><div class="node ok">uv --version works</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> <code>uv --version</code> work aithe Step 4.</div>
+</section>
+
+<!-- STEP 4 -->
+<section>
+  <h2><span class="num">4</span> Project open + uv sync</h2>
+  <span class="where">Ekkada: VS Code → File → Open Folder → <code>agent-ai-bootcamp</code>, tarvata Terminal</span>
+  <h3>Emi run cheyyali</h3>
+<pre><code>uv sync</code></pre>
+  <div class="expect">Expected: <code>Resolved N packages</code> … <code>Installed N packages</code>. Project lo <code>.venv</code> folder vastundi.</div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Project lo <code>pyproject.toml</code> ane file undi. Andulo "ee project ki ee packages kavali" ani list undi. <code>uv sync</code> aa list chadivi, <code>.venv</code> ane folder create chesi, andulo anni packages install chestundi.
+    <b>.venv</b> ante ee project ki matrame separate Python environment. Vere projects tho packages clash avvavu. Idi git lo commit avvadu (already <code>.gitignore</code> lo undi).
+  </div>
+  <div class="flow h">
+    <div class="node">pyproject.toml<br><small>(packages list)</small></div><div class="arr">→</div>
+    <div class="node">uv sync</div><div class="arr">→</div>
+    <div class="node ok">.venv folder<br><small>(packages installed)</small></div>
+  </div>
+  <div class="next"><b>Next:</b> Step 5.</div>
+</section>
+
+<!-- STEP 5 -->
+<section>
+  <h2><span class="num">5</span> Bootcamp packages add</h2>
+  <span class="where">Ekkada: VS Code Terminal (project folder lo)</span>
+  <h3>Emi run cheyyali</h3>
+<pre><code>uv add requests minsearch openai jupyter python-dotenv</code></pre>
+  <div class="expect">Expected: <code>Installed ~100 packages</code>. <code>pyproject.toml</code> lo dependencies list update avutundi, <code>uv.lock</code> file vastundi.</div>
+  <h3>Prathi package pani</h3>
+  <table>
+    <tr><th>Package</th><th>Pani</th></tr>
+    <tr><td><code>requests</code></td><td>Internet nunchi data download cheyyadaniki (HTTP)</td></tr>
+    <tr><td><code>minsearch</code></td><td>Chinna search engine. RAG lab lo documents search cheyyadaniki</td></tr>
+    <tr><td><code>openai</code></td><td>LLM ki matladే library. Groq ki kuda ide vadutam</td></tr>
+    <tr><td><code>jupyter</code></td><td>Notebooks run cheyyadaniki</td></tr>
+    <tr><td><code>python-dotenv</code></td><td><code>.env</code> file nunchi API keys chadavadaniki</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <code>uv add</code> ante 3 panulu okka command lo: (1) <code>pyproject.toml</code> lo package name add, (2) <code>uv.lock</code> lo exact version note, (3) <code>.venv</code> lo install. Ikapai kotha package kavalante eppudu <code>uv add package-name</code> matrame. <code>pip install</code> vaddu.
+  </div>
+  <div class="flow h">
+    <div class="node">uv add X</div><div class="arr">→</div>
+    <div class="node">pyproject.toml<br><small>X add</small></div><div class="arr">→</div>
+    <div class="node">uv.lock<br><small>version lock</small></div><div class="arr">→</div>
+    <div class="node ok">.venv<br><small>X installed</small></div>
+  </div>
+  <div class="next"><b>Next:</b> Step 6 (keys).</div>
+</section>
+
+<!-- STEP 6 -->
+<section>
+  <h2><span class="num">6</span> .env file + API keys</h2>
+  <span class="where">Ekkada: Terminal (file create) + VS Code editor (key paste) + Browser (key generate)</span>
+
+  <h3>6a. File create</h3>
+<pre><code>Copy-Item .env.example .env</code></pre>
+  <div class="expect">Project root lo <code>.env</code> ane kotha file vastundi.</div>
+
+  <h3>6b. Groq key generate</h3>
+  <ol>
+    <li>Browser lo <a href="https://console.groq.com/keys">console.groq.com/keys</a> open cheyyandi.</li>
+    <li><b>Create API Key</b> click → name ivvandi → key copy cheyyandi (<code>gsk_</code> tho start avutundi).</li>
+    <li>Ee key okka sari matrame kanipistundi. Ventane next step lo paste cheyyandi.</li>
+  </ol>
+
+  <h3>6c. Key file lo pettadam</h3>
+  <p>VS Code lo <code>.env</code> file open chesi ila undali (quotes vaddu, spaces vaddu):</p>
+<pre><code>ANTHROPIC_API_KEY=sk-ant-...
+AGENT_MODEL=claude-opus-5-5
+AGENT_EFFORT=medium
+
+GROQ_API_KEY=gsk_mee_asalu_key_ikkada</code></pre>
+  <p>Save cheyyandi (Ctrl + S).</p>
+
+  <h3>6d. Git ignore chestunda verify</h3>
+<pre><code>git status --short --ignored .env</code></pre>
+  <div class="expect">Expected: <code>!! .env</code>. <code>!!</code> ante "ignored", git ee file ni eppudu commit cheyyadu.</div>
+  <div class="bad"><b>Ee file ni eppudu:</b> git lo commit cheyyakudadu · chat lo paste cheyyakudadu · screenshot teeyakudadu. Key leak aithe ventane Groq console lo delete chesi kotha di generate cheyyandi.</div>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>API key</b> ante password lantidi. Daanitho mee account lo LLM calls cheyyochu. Code lo direct ga key rayakudadu, enduku ante code git lo veltundi, andaru chustaru.
+    Anduke <code>.env</code> ane separate file lo key pedtam. Ee file git lo veldu. Code lo <code>load_dotenv()</code> call cheste ee file chadivi keys ni memory lo pedutundi. Tarvata <code>os.getenv("GROQ_API_KEY")</code> tho key teesukovachu.
+    <b>Terminal lo direct ga <code>GROQ_API_KEY=gsk_...</code> type cheyyakandi.</b> Adi Linux syntax, PowerShell lo error vastundi. File lo ne pettandi.
+  </div>
+  <div class="flow h">
+    <div class="node">.env file<br><small>GROQ_API_KEY=gsk_...</small></div><div class="arr">→</div>
+    <div class="node">load_dotenv()<br><small>file chaduvutundi</small></div><div class="arr">→</div>
+    <div class="node">os.getenv()<br><small>key teesukuntundi</small></div><div class="arr">→</div>
+    <div class="node">OpenAI client</div><div class="arr">→</div>
+    <div class="node ok">api.groq.com</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 6e (optional) or Step 7 (notebook).</div>
+
+  <h3>6e. Optional: dirdotenv (terminal lo auto-load)</h3>
+  <p>Bootcamp notes lo ee rendu commands untayi. <b>First di</b> Windows lo work avutundi. <b>Second di</b> Linux/Mac bash ki, Windows lo error vastundi:</p>
+<pre><code>uv tool install dirdotenv                                    # OK on Windows
+echo 'eval "$(dirdotenv hook bash)"' >> ~/.bashrc            # Linux/Mac only, Windows lo vaddu</code></pre>
+  <p>Windows PowerShell lo second command badulu idi (okka sari matrame):</p>
+<pre><code>New-Item -ItemType Directory -Force (Split-Path $PROFILE) | Out-Null
+dirdotenv hook powershell --cmd dirdotenv | Set-Content $PROFILE -Encoding utf8</code></pre>
+  <p>Tarvata VS Code restart. Verify: project folder ki <code>cd</code> cheste ee line kanipistundi:</p>
+  <div class="expect"><code>dirdotenv: +AGENT_EFFORT +AGENT_MODEL +ANTHROPIC_API_KEY +GROQ_API_KEY +OPENAI_API_KEY</code></div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>dirdotenv</b> ante direnv lantidi: project folder loki <code>cd</code> cheste <code>.env</code> keys automatic ga terminal lo load avutayi, bayataki veltey unload avutayi. Idi <b>terminal</b> ki matrame (<code>uv run python script.py</code> lanti commands ki). Notebook lo Cell 1 lo <code>load_dotenv()</code> eppatilage kavali, adi maaradu.
+    <code>~/.bashrc</code> ante Linux bash shell start file. Windows PowerShell ki equivalent <code>$PROFILE</code>. Anduke aa command marchali.
+  </div>
+  <div class="flow h">
+    <div class="node">cd project folder</div><div class="arr">→</div>
+    <div class="node">dirdotenv .env chaduvutundi</div><div class="arr">→</div>
+    <div class="node ok">Terminal lo keys set</div><div class="arr">→</div>
+    <div class="node">cd bayataki → keys unset</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 7 (notebook).</div>
+</section>
+
+<!-- STEP 7 -->
+<section>
+  <h2><span class="num">7</span> Notebook create + kernel select</h2>
+  <span class="where">Ekkada: VS Code</span>
+  <h3>Emi cheyyali</h3>
+  <ol>
+    <li>Project lo <code>notebooks</code> folder create cheyyandi (already undi).</li>
+    <li>Andulo <code>bootcamp.ipynb</code> ane file create cheyyandi (already undi). Kotha notebook kavalante: Explorer lo right-click → New File → name <code>.ipynb</code> tho end avvali.</li>
+    <li>Notebook open cheyyandi. <b>Top-right lo "Select Kernel"</b> click cheyyandi.</li>
+    <li><b>Python Environments</b> → <code>.venv (Python 3.15)</code> select cheyyandi. Path lo <code>.venv\Scripts\python.exe</code> undali.</li>
+  </ol>
+  <div class="warn"><b>Chala important:</b> Kernel <code>.venv</code> kakapothe <code>ModuleNotFoundError: No module named 'openai'</code> vastundi. Packages anni <code>.venv</code> lo unnayi, vere Python lo levu.</div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Notebook</b> ante cells lo code rasi okkokkati run chese file. Bootcamp lo section notes nunchi code copy chesi cells lo paste chesi run chestam.
+    <b>Kernel</b> ante notebook venaka run avutunna Python. Mana packages anni <code>.venv</code> lo unnayi, so kernel kuda <code>.venv</code> ne undali. Ide first-time users ki common mistake.
+  </div>
+  <div class="flow">
+    <div class="node">Notebook open</div><div class="arr">↓</div>
+    <div class="node q">Kernel = .venv?</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">NO</span><div class="node bad">ModuleNotFoundError</div><div class="arr">↓</div><div class="node">Select Kernel → .venv</div></div>
+      <div class="branch"><span class="lbl">YES</span><div class="node ok">Imports work</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Step 8.</div>
+</section>
+
+<!-- STEP 8 -->
+<section>
+  <h2><span class="num">8</span> Groq client + test</h2>
+  <span class="where">Ekkada: Notebook cells</span>
+
+  <h3>Cell 1: paste chesi run (Shift + Enter)</h3>
+<pre><code>from dotenv import load_dotenv
+load_dotenv()
+
+from openai import OpenAI
+import os
+
+openai_client = OpenAI(
+    api_key=os.getenv("GROQ_API_KEY"),
+    base_url="https://api.groq.com/openai/v1",
+)</code></pre>
+  <div class="expect">Expected: Em output radu, error kuda radu. Adi correct.</div>
+
+  <h3>Cell 2: paste chesi run</h3>
+<pre><code>response = openai_client.chat.completions.create(
+    model="openai/gpt-oss-120b",
+    messages=[{"role": "user", "content": "Reply with the single word: ok"}],
+)
+print(response.choices[0].message.content)</code></pre>
+  <div class="expect">Expected output: <code>ok</code> &nbsp;← Idi vachinda? <b>Setup complete.</b></div>
+
+  <h3>Models</h3>
+  <table>
+    <tr><th>Model</th><th>Eppudu</th></tr>
+    <tr><td><code>openai/gpt-oss-120b</code></td><td>Default. Pedda model, tool calling ki best.</td></tr>
+    <tr><td><code>openai/gpt-oss-20b</code></td><td>Chinna, fast. Quick tests ki.</td></tr>
+  </table>
+  <div class="warn">Course notes lo <code>llama-3.3-70b-versatile</code> unte adi Groq lo ippudu ledu (404 error). <code>openai/gpt-oss-120b</code> tho replace cheyyandi. Available models list chudali ante: <code>for m in openai_client.models.list().data: print(m.id)</code></div>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Cell 1 lo:</b> <code>load_dotenv()</code> → <code>.env</code> file chaduvutundi. <code>os.getenv("GROQ_API_KEY")</code> → key teesukuntundi. <code>base_url</code> → "requests OpenAI ki kaadu, Groq ki pampu" ani cheptundi. Groq OpenAI laga same format accept chestundi, anduke same library work avutundi.
+    <b>Gurthunchukovalsindi:</b> Cell 1 API ki call cheyyadu. Key variable unda ani matrame chustundi. So key wrong unna Cell 1 pass avutundi. Asalu test Cell 2.
+    <b>Cell 2 lo:</b> model ki "ok ani reply ivvu" ani pampistunnam. <code>ok</code> vachindi ante key correct, model correct, internet correct, anni correct.
+  </div>
+  <div class="flow">
+    <div class="node">Cell 2 run</div><div class="arr">↓</div>
+    <div class="node q">Output?</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">ok</span><div class="node ok">Setup complete</div></div>
+      <div class="branch"><span class="lbl">401</span><div class="node bad">Key wrong / placeholder</div><div class="arr">↓</div><div class="node">.env check → kernel restart</div></div>
+      <div class="branch"><span class="lbl">404</span><div class="node bad">Model name wrong</div><div class="arr">↓</div><div class="node">openai/gpt-oss-120b vadandi</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Step 9 (commit).</div>
+</section>
+
+<!-- STEP 9 -->
+<section>
+  <h2><span class="num">9</span> Git commit + push</h2>
+  <span class="where">Ekkada: VS Code Terminal (project folder lo)</span>
+  <h3>9a. Emi change ayindo chudandi</h3>
+<pre><code>git status</code></pre>
+  <div class="expect">Kanipinchalsinavi: <code>pyproject.toml</code>, <code>uv.lock</code>, <code>notebooks/</code>, <code>labs/00-environment-setup.html</code>. <b><code>.env</code> kanipinchakudadu.</b> Kanipiste aagandi, <code>.gitignore</code> check cheyyandi.</div>
+  <h3>9b. Add + commit + push</h3>
+<pre><code>git add pyproject.toml uv.lock notebooks labs
+git commit -m "Add bootcamp packages, setup notebook and environment notes"
+git push</code></pre>
+  <div class="expect">Expected: <code>[main abc1234] Add bootcamp packages...</code> tarvata push lo <code>main -> main</code>.</div>
+  <h3>Commit cheyyalsinavi vs cheyyakudanivi</h3>
+  <table>
+    <tr><th>Commit cheyyali</th><th>Commit cheyyakudadu</th></tr>
+    <tr><td><code>pyproject.toml</code> (packages list)</td><td><code>.env</code> (keys!)</td></tr>
+    <tr><td><code>uv.lock</code> (exact versions)</td><td><code>.venv/</code> (installed packages, pedda folder)</td></tr>
+    <tr><td><code>notebooks/*.ipynb</code></td><td><code>.pytest_cache/</code>, <code>__pycache__/</code></td></tr>
+    <tr><td><code>labs/*.md</code>, <code>src/</code>, <code>tests/</code></td><td></td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Commit</b> ante "ee changes ni save point ga note cheyyi" ani. <b>Push</b> ante aa save point ni GitHub ki pampadam. <code>git add</code> lo file names specific ga istunnam, <code>git add .</code> kaadu, enduku ante pogaru <code>.env</code> add avvakudadu. <code>.gitignore</code> already protect chestundi, kani double safety.
+    <code>uv.lock</code> commit cheyyadam important: vere machine lo (or mee laptop reinstall tarvata) <code>uv sync</code> cheste exact same versions install avutayi.
+  </div>
+  <div class="flow h">
+    <div class="node">git status<br><small>.env ledu kada?</small></div><div class="arr">→</div>
+    <div class="node">git add files</div><div class="arr">→</div>
+    <div class="node">git commit -m</div><div class="arr">→</div>
+    <div class="node ok">git push → GitHub</div>
+  </div>
+  <div class="next"><b>Next:</b> Setup ayipoyindi. Ikapai daily workflow.</div>
+</section>
+
+<!-- DAILY -->
+<section>
+  <h2>Daily workflow (ikapai eppudu)</h2>
+  <div class="flow">
+    <div class="node">VS Code open → project folder</div><div class="arr">↓</div>
+    <div class="node">Notebook open → kernel .venv check</div><div class="arr">↓</div>
+    <div class="node">Cell 1 run (load_dotenv + client)</div><div class="arr">↓</div>
+    <div class="node">Course notes code → cells lo paste → run</div><div class="arr">↓</div>
+    <div class="node q">Kotha package kavala?</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">YES</span><div class="node">Terminal: uv add X</div><div class="arr">↓</div><div class="node">Kernel restart</div><div class="arr">↓</div><div class="node ghost">Continue</div></div>
+      <div class="branch"><span class="lbl">NO</span><div class="node ghost">Continue</div></div>
+    </div>
+    <div class="arr">↓</div>
+    <div class="node ok">Session end: git add + commit + push</div>
+  </div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Rules: (1) Prathi notebook lo first cell eppudu <code>load_dotenv()</code> + client. (2) Kotha package = <code>uv add</code>, pip kaadu. (3) <code>uv add</code> tarvata kernel restart (notebook top lo Restart button). (4) Keys eppudu <code>.env</code> lo matrame. (5) Roju chivarlo commit + push.
+  </div>
+</section>
+
+<!-- TROUBLESHOOT -->
+<section>
+  <h2>Troubleshooting</h2>
+  <table>
+    <tr><th>Error</th><th>Artham</th><th>Fix</th></tr>
+    <tr><td><code>'pip' is not recognized</code></td><td>pip PATH lo ledu</td><td><code>py -m pip</code> vadandi</td></tr>
+    <tr><td><code>Application Control policy has blocked</code></td><td>Smart App Control unsigned exe block chesindi</td><td><code>py -m pip</code> vadandi, direct <code>pip.exe</code> vaddu</td></tr>
+    <tr><td><code>'uv' is not recognized</code></td><td>PATH set kaledu, or old terminal</td><td>Step 3 chesi VS Code restart</td></tr>
+    <tr><td><code>GROQ_API_KEY=... not recognized</code></td><td>Linux syntax PowerShell lo vadaru</td><td><code>.env</code> file lo pettandi</td></tr>
+    <tr><td><code>ModuleNotFoundError: openai</code></td><td>Wrong kernel</td><td>Select Kernel → <code>.venv</code></td></tr>
+    <tr><td><code>401 Unauthorized</code></td><td>Key wrong / placeholder / revoked</td><td><code>.env</code> check → kernel restart</td></tr>
+    <tr><td><code>404 model_not_found</code></td><td>Model Groq lo ledu</td><td><code>openai/gpt-oss-120b</code> vadandi</td></tr>
+    <tr><td><code>.env</code> change work avvatledu</td><td>Kernel old key cache chesindi</td><td>Kernel restart → Cell 1 malli run</td></tr>
+  </table>
+  <div class="flow">
+    <div class="node bad">Error vachindi</div><div class="arr">↓</div>
+    <div class="node q">Error message lo emi undi?</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">not recognized</span><div class="node">PATH / terminal<br><small>VS Code restart</small></div></div>
+      <div class="branch"><span class="lbl">ModuleNotFound</span><div class="node">Kernel → .venv</div></div>
+      <div class="branch"><span class="lbl">401</span><div class="node">.env key check</div></div>
+      <div class="branch"><span class="lbl">404</span><div class="node">Model name check</div></div>
+    </div>
+  </div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Error vachinappudu panic avvakandi. Error message lo last line chadavandi, paina table lo match cheyyandi. 90% errors ee 4 types lo ne untayi: PATH, kernel, key, model.
+  </div>
+</section>
+
+<!-- STRUCTURE -->
+<section>
+  <h2>Final folder structure</h2>
+<pre><code>agent-ai-bootcamp/
+├── .env              ← keys (git ignore, commit cheyyakudadu)
+├── .env.example      ← template (commit ok)
+├── .venv/            ← installed packages (git ignore)
+├── pyproject.toml    ← packages list (commit)
+├── uv.lock           ← exact versions (commit)
+├── notebooks/
+│   └── bootcamp.ipynb
+├── labs/             ← lab notes
+│   ├── 00-environment-setup.html   ← ee file
+│   └── 01 ... 05 .md
+├── src/              ← agent code
+├── data/             ← docs + evals
+└── tests/</code></pre>
+</section>
+
+<!-- CHANGELOG -->
+<section>
+  <h2>Changelog (ee file lo emi add ayindi, eppudu)</h2>
+  <table>
+    <tr><th>Date</th><th>Emi chesam</th><th>Section</th></tr>
+    <tr><td>2026-10-23</td><td>Python check, uv install, PATH fix, Smart App Control issue</td><td>Steps 1-3</td></tr>
+    <tr><td>2026-10-23</td><td>uv sync, uv add (requests, minsearch, openai, jupyter, python-dotenv)</td><td>Steps 4-5</td></tr>
+    <tr><td>2026-10-23</td><td>.env file, Groq key, git ignore check</td><td>Step 6</td></tr>
+    <tr><td>2026-10-23</td><td>dirdotenv install + PowerShell profile hook</td><td>Step 6e</td></tr>
+    <tr><td>2026-10-23</td><td>Notebook create, kernel select, Groq client test (gpt-oss-120b)</td><td>Steps 7-8</td></tr>
+    <tr><td>2026-10-23</td><td>Git commit + push, daily workflow, troubleshooting</td><td>Step 9+</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.
+  </div>
+</section>
+
+</div>
+</body></html>
