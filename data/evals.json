@@ -1,0 +1,7 @@
+[
+  {"question": "What is 1234 * 5678?", "expect_tool": "calculator", "expect_substring": "7006652"},
+  {"question": "According to the docs, what is Mosaic AI Vector Search used for?", "expect_tool": "search_docs", "expect_substring": "vector"},
+  {"question": "Which Databricks feature makes tools governed with access control and lineage?", "expect_tool": "search_docs", "expect_substring": "unity catalog"},
+  {"question": "What date is it today?", "expect_tool": "get_current_time"},
+  {"question": "Remember that my favourite language is Python.", "expect_tool": "save_note"}
+]
