@@ -626,6 +626,101 @@ search_results = search(question)</code></pre>
   <div class="next"><b>Next:</b> Lab 06 Building the prompt (<code>build_prompt()</code>).</div>
 </section>
 
+<!-- LAB 06 PROMPT -->
+<section>
+  <h2><span class="num">13</span> Lab 06: Building the Prompt</h2>
+  <span class="where">Ekkada: notebooks/bootcamp.ipynb (Lab 05 cells kinda, <code>search_results</code> ready ga undali)</span>
+
+  <h3>13a. INSTRUCTIONS (system prompt, fixed)</h3>
+<pre><code>INSTRUCTIONS = """
+Your task is to answer questions from the course participants
+based on the provided context.
+
+Use the context to find relevant information and provide accurate
+answers. If the answer is not found in the context,
+respond with "I don't know."
+"""</code></pre>
+
+  <h3>13b. USER_PROMPT_TEMPLATE (prathi request ki maarutundi)</h3>
+<pre><code>USER_PROMPT_TEMPLATE = """
+Question:
+{question}
+
+Context:
+{context}
+"""</code></pre>
+
+  <h3>13c. build_context(): list of dicts → okka string</h3>
+<pre><code>def build_context(search_results):
+    lines = []
+    for doc in search_results:
+        lines.append(doc["section"])
+        lines.append("Q: " + doc["question"])
+        lines.append("A: " + doc["answer"])
+        lines.append("")
+    return "\n".join(lines).strip()</code></pre>
+
+  <h3>13d. build_prompt(): question + context → template</h3>
+<pre><code>def build_prompt(question, search_results):
+    context = build_context(search_results)
+    prompt = USER_PROMPT_TEMPLATE.format(
+        question=question,
+        context=context
+    )
+    return prompt.strip()
+
+prompt = build_prompt(question, search_results)
+print(prompt)</code></pre>
+  <div class="expect">Expected (mana run lo vachindi, ~2300 characters):
+<pre><code>Question:
+I just discovered the course. Can I join now?
+
+Context:
+General Course-Related Questions
+Q: I just discovered the course. Can I still join?
+A: Yes, but if you want to receive a certificate, you need to submit your project ...
+
+General Course-Related Questions
+Q: Course: I have registered for the LLM Zoomcamp. When can I expect ...
+A: You don't need it. You're accepted. ...
+...</code></pre></div>
+  <div class="warn">Ippudu <code>INSTRUCTIONS</code> define chesam kani inka LLM ki pampaledu. Lab 03 lo rasina <code>llm()</code> okka message matrame pamputundi. System prompt + user prompt rendu ela pampalo next lab (07 LLM) lo.</div>
+
+  <h3>System prompt vs User prompt</h3>
+  <table>
+    <tr><th></th><th>INSTRUCTIONS (system prompt)</th><th>User prompt</th></tr>
+    <tr><td>Emi untundi</td><td>LLM role, ela answer cheyyali, "I don't know" rule</td><td>Question + search results context</td></tr>
+    <tr><td>Maarutunda?</td><td>Ledu, eppudu same</td><td>Prathi request ki kotha ga build</td></tr>
+    <tr><td>Pani</td><td>Answer ni data lo ground cheyyadam, hallucination taggincham</td><td>Asalu data LLM ki ivvadam</td></tr>
+  </table>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    LLM ki mana documents automatic ga kanipinchavu. Manam prompt lo pettali. Ee lab lo search results ni prompt ga marchadam.
+    <b>Rendu parts enduku?</b> Instructions eppudu same, so okka sari rasi reuse. User prompt prathi question ki maarutundi, so prathi sari kotha ga build. Separate ga unte maintain cheyyadam easy.
+    <b>build_context():</b> Search results ante list of dictionaries. LLM ki string kavali. So prathi document ni "section / Q: / A:" block ga marchi, anni blocks ni okka string ga join chestam. Chinna preprocessing step.
+    <b>build_prompt():</b> Template lo <code>{question}</code>, <code>{context}</code> placeholders ni <code>.format()</code> tho fill chestundi.
+    <b>"I don't know" rule:</b> Context lo answer lekapothe LLM guess cheyyakudadu. Ide hallucination tagginche main trick.
+    <b>Prompt = search ki LLM ki madhya bridge.</b> Bad prompt aithe LLM context ignore chesi hallucinate chestundi. Good prompt aithe answer grounded ga untundi. Prompt engineering lo experiment cheyyali; tarvata evaluation metrics tho measure chestam.
+  </div>
+  <div class="flow h">
+    <div class="node">search_results<br><small>list of 5 dicts</small></div><div class="arr">→</div>
+    <div class="node">build_context()<br><small>section / Q / A blocks</small></div><div class="arr">→</div>
+    <div class="node">context string</div><div class="arr">→</div>
+    <div class="node">USER_PROMPT_TEMPLATE<br><small>.format(question, context)</small></div><div class="arr">→</div>
+    <div class="node ok">prompt</div>
+  </div>
+  <div class="flow">
+    <div class="node">LLM ki pampedi</div><div class="arr">↓</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">system</span><div class="node">INSTRUCTIONS<br><small>fixed</small></div></div>
+      <div class="branch"><span class="lbl">user</span><div class="node">build_prompt() output<br><small>prathi sari kotha di</small></div></div>
+    </div>
+    <div class="arr">↓</div>
+    <div class="node ok">Grounded answer (Lab 07)</div>
+  </div>
+  <div class="next"><b>Next:</b> Lab 07 LLM (instructions + prompt LLM ki pampi full RAG).</div>
+</section>
+
 <!-- DAILY -->
 <section>
   <h2>Daily workflow (ikapai eppudu)</h2>
@@ -712,6 +807,7 @@ search_results = search(question)</code></pre>
     <tr><td>2026-10-27</td><td>Lab 03 RAG: llm() Groq version, plain vs context answer, rag() skeleton. jupyter.exe block fix</td><td>Step 10</td></tr>
     <tr><td>2026-10-27</td><td>Lab 04 Dataset: courses.json fetch, 1456 FAQ docs, fields + course counts</td><td>Step 11</td></tr>
     <tr><td>2026-10-27</td><td>Lab 05 Search: minsearch index, boost, filter, search(). scipy DLL block + minsearch_lite fallback</td><td>Step 12</td></tr>
+    <tr><td>2026-10-27</td><td>Lab 06 Prompt: INSTRUCTIONS, USER_PROMPT_TEMPLATE, build_context(), build_prompt()</td><td>Step 13</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.
