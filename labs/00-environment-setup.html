@@ -51,6 +51,12 @@
   .branch{display:flex;flex-direction:column;align-items:center;flex:1;min-width:200px}
   .branch .lbl{font-size:12px;font-weight:700;color:var(--muted);padding:2px 8px;border:1px solid var(--line);border-radius:999px;background:#fff;margin-bottom:4px}
   .cap{font-size:13px;color:var(--muted);text-align:center;margin-top:6px}
+  .pic{margin:14px 0;text-align:center}
+  .pic img{max-width:100%;border:1px solid var(--line);border-radius:8px;background:#fff}
+  .pic figcaption{font-size:13px;color:var(--muted);margin-top:4px}
+  .pic .src{opacity:.8}
+  .pic .src a{color:var(--muted)}
+  .lesson{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--telugu-bg);color:var(--telugu-line);margin-left:6px;vertical-align:middle}
   @media print{section{break-inside:avoid}}
 </style>
 </head>
@@ -77,6 +83,41 @@
   </div>
   <div class="telugu"><b class="t">Telugu lo</b>
     Idi mottham journey. Paina nunchi kindaki okkati tarvata okkati cheyyali. Okka step skip cheste next step fail avutundi. Prathi step chivarlo "Next" ani undi, adi follow cheyyandi.
+  </div>
+</section>
+
+<!-- MODULE MAP -->
+<section>
+  <h2>Module 1: Agentic RAG map (course README)</h2>
+  <p>Course lo 16 lessons, 2 parts. Ee document lo prathi lesson ye Step lo undo ikkada chudandi. Course source: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">github.com/DataTalksClub/llm-zoomcamp/01-agentic-rag</a></p>
+  <table>
+    <tr><th>Lesson</th><th>Topic</th><th>Ee document lo</th></tr>
+    <tr><td>01-02</td><td>Introduction, Environment setup</td><td>Steps 0-9</td></tr>
+    <tr><td>03</td><td>What is RAG</td><td>Step 10</td></tr>
+    <tr><td>04</td><td>Course FAQ dataset</td><td>Step 11</td></tr>
+    <tr><td>05</td><td>Search (minsearch)</td><td>Step 12</td></tr>
+    <tr><td>06</td><td>Building the prompt</td><td>Step 13</td></tr>
+    <tr><td>07</td><td>The LLM + full RAG</td><td>Step 14</td></tr>
+    <tr><td>08</td><td>RAG helper (ingest.py, rag_helper.py)</td><td>Step 15</td></tr>
+    <tr><td>09</td><td>Data ingestion (sqlitesearch)</td><td>Step 16</td></tr>
+    <tr><td>10</td><td>Wrap-up of Part 1</td><td>Step 17</td></tr>
+    <tr><td>11</td><td>Agents: why fixed RAG is not enough</td><td>Step 18</td></tr>
+    <tr><td>12</td><td>Quick RAG revision (Olama typo)</td><td>Step 19</td></tr>
+    <tr><td>13</td><td>Function calling</td><td>Step 20</td></tr>
+    <tr><td>14</td><td>The agentic loop</td><td>Step 21</td></tr>
+    <tr><td>15</td><td>ToyAIKit</td><td>Step 22</td></tr>
+    <tr><td>16</td><td>Other frameworks</td><td>Step 23</td></tr>
+  </table>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/01-intro-01-rag-project-overview-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/01-intro-01-rag-project-overview-imagegen.png" alt="Module 1 lo manam build chese project overview" loading="lazy"></a><figcaption>Module 1 lo manam build chese project overview <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="flow">
+    <div class="node">Part 1: RAG (lessons 03-10)</div><div class="arr">↓</div>
+    <div class="node">search → prompt → LLM (fixed pipeline)</div><div class="arr">↓</div>
+    <div class="node">Part 2: Agents (lessons 11-16)</div><div class="arr">↓</div>
+    <div class="node ok">LLM decides: ye search, enni sarlu, eppudu aapali</div>
+  </div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Part 1</b> lo RAG pipeline zero nunchi build chestam: data, search, prompt, LLM, reusable code, persistent index. <b>Part 2</b> lo adi agent ga maarustam: LLM ki search tool ichi, ade decide chestundi ela vethakalo.
+    Notebooks: Part 1 lessons 03-08 <code>notebooks/bootcamp.ipynb</code> lo. Lesson 09 <code>sqlite-ingest.ipynb</code> + <code>sqlite-rag.ipynb</code>. Lessons 12-15 <code>agents.ipynb</code>.
   </div>
 </section>
 
@@ -402,6 +443,7 @@ git push</code></pre>
   <h2><span class="num">10</span> Lab 03: RAG (Retrieval-Augmented Generation)</h2>
   <span class="where">Ekkada: notebooks/bootcamp.ipynb (Cell 1 run chesaka)</span>
 
+<figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/03-rag-08-rag-architecture-sketch-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/03-rag-08-rag-architecture-sketch-imagegen.png" alt="RAG architecture: user question → assistant knowledge base lo vethuku → answer" loading="lazy"></a><figcaption>RAG architecture: user question → assistant knowledge base lo vethuku → answer <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>10a. llm() function (Groq version)</h3>
   <p>Course notes lo <code>openai_client.responses.create(model="gpt-5.4-mini")</code> undi. Adi OpenAI ki matrame. Groq lo <code>responses</code> API ledu, so <code>chat.completions</code> vadutam:</p>
 <pre><code>MODEL = "openai/gpt-oss-120b"
@@ -421,6 +463,7 @@ llm("Hey, what's up?")</code></pre>
 print(llm(question))</code></pre>
   <div class="warn">Expected: Generic answer ("Enroll Now button click cheyyandi..."). Model ki mana Zoomcamp gurinchi em teliyadu, anduke guess chestundi.</div>
 
+<figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/03-rag-04-faq-website-context-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/03-rag-04-faq-website-context-cropped.png" alt="FAQ website: ikkada nunchi context copy chesi prompt lo pettam" loading="lazy"></a><figcaption>FAQ website: ikkada nunchi context copy chesi prompt lo pettam <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>10c. Context manually add chesi test</h3>
   <p>Notebook lo <code>context</code> (FAQ entries) + <code>prompt</code> (question + context + "I don't know" rule) cells run cheyyandi, tarvata:</p>
 <pre><code>print(llm(prompt))</code></pre>
@@ -505,6 +548,7 @@ Counter(d["course"] for d in documents)</code></pre>
     <tr><td><code>ai-dev-tools-zoomcamp</code></td><td>73</td></tr>
   </table>
 
+<figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/04-dataset-04-json-entry-fields-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/04-dataset-04-json-entry-fields-cropped.png" alt="Okka FAQ JSON entry: id, course, section, question, answer" loading="lazy"></a><figcaption>Okka FAQ JSON entry: id, course, section, question, answer <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>Document fields</h3>
   <table>
     <tr><th>Field</th><th>Artham</th><th>RAG lo use</th></tr>
@@ -570,6 +614,7 @@ search_results = index.search(
 [doc["question"] for doc in search_results]</code></pre>
   <div class="expect">Expected first result: <code>'I just discovered the course. Can I still join?'</code> ← exact ga kavalsindi.</div>
 
+<figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/05-search-06-boosted-search-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/05-search-06-boosted-search-cropped.png" alt="Boost + filter tho search results" loading="lazy"></a><figcaption>Boost + filter tho search results <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>12c. Filter lekunda (boost matrame)</h3>
   <div class="expect">Results anni courses nunchi: llm-zoomcamp, machine-learning-zoomcamp, mlops-zoomcamp, data-engineering-zoomcamp. Anni "Can I still join" type questions.</div>
 
@@ -686,6 +731,7 @@ A: You don't need it. You're accepted. ...
 ...</code></pre></div>
   <div class="warn">Ippudu <code>INSTRUCTIONS</code> define chesam kani inka LLM ki pampaledu. Lab 03 lo rasina <code>llm()</code> okka message matrame pamputundi. System prompt + user prompt rendu ela pampalo next lab (07 LLM) lo.</div>
 
+<figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/06-building-prompt-01-rag-flow-diagram.jpg" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/06-building-prompt-01-rag-flow-diagram.jpg" alt="RAG flow: search results → prompt → LLM" loading="lazy"></a><figcaption>RAG flow: search results → prompt → LLM <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>System prompt vs User prompt</h3>
   <table>
     <tr><th></th><th>INSTRUCTIONS (system prompt)</th><th>User prompt</th></tr>
@@ -764,6 +810,7 @@ cost</code></pre>
   </table>
   <div class="warn">Prices source: <code>console.groq.com/docs/model/openai/gpt-oss-120b</code> (Oct 2026): input $0.15, output $0.60 per million tokens. Course lo gpt-5.4-mini ki $0.75 / $4.50, ivi OpenAI prices. Mee Groq <b>free tier</b> lo asalu charge ledu; idi "paid aithe entha" ani chupistundi.</div>
 
+<figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/07-llm-05-chatgpt-message-history.jpg" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/07-llm-05-chatgpt-message-history.jpg" alt="ChatGPT message history: hidden system prompt, tarvata user / assistant alternate" loading="lazy"></a><figcaption>ChatGPT message history: hidden system prompt, tarvata user / assistant alternate <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>14c. Message history: developer + user</h3>
 <pre><code>message_history = [
     {"role": "developer", "content": INSTRUCTIONS},
@@ -827,6 +874,7 @@ print(rag("How do I get a certificate?"))</code></pre>
   <h2><span class="num">15</span> Lab 08: RAG Helper (reusable files)</h2>
   <span class="where">Ekkada: <code>notebooks/</code> folder lo 2 kotha .py files + notebook</span>
 
+<figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/08-rag-helper-01-reusable-rag-helper-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/08-rag-helper-01-reusable-rag-helper-imagegen.png" alt="Reusable RAG helper: ingestion index build chestundi, RAGBase search + prompt + LLM kaluputhundi" loading="lazy"></a><figcaption>Reusable RAG helper: ingestion index build chestundi, RAGBase search + prompt + LLM kaluputhundi <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>15a. Files create</h3>
   <table>
     <tr><th>File</th><th>Lopala emi undi</th></tr>
@@ -908,6 +956,470 @@ mlops_assistant = RAGBase(index=index, llm_client=groq_client,
   <div class="next"><b>Next:</b> Lab 09 Data ingestion (sqlitesearch, persistent index).</div>
 </section>
 
+<!-- LAB 09 INGESTION -->
+<section>
+  <h2><span class="num">16</span> Lab 09: Data Ingestion (sqlitesearch) <span class="lesson">Lesson 09</span></h2>
+  <span class="where">Ekkada: Terminal (install) + 2 kotha notebooks: <code>notebooks/sqlite-ingest.ipynb</code>, <code>notebooks/sqlite-rag.ipynb</code></span>
+
+  <h3>16a. Install</h3>
+<pre><code>uv add sqlitesearch</code></pre>
+  <div class="expect">Mana machine lo <code>sqlitesearch 0.3.0</code> install ayindi. SQLite FTS5 Python lo built-in, Smart App Control block cheyyaledu.</div>
+
+  <h3>16b. Ingestion notebook (sqlite-ingest.ipynb): okka sari run</h3>
+<pre><code>from ingest import load_faq_data
+
+documents = load_faq_data()
+docs_llm = [doc for doc in documents if doc["course"] == "llm-zoomcamp"]
+
+import time
+from sqlitesearch import TextSearchIndex
+
+index = TextSearchIndex(
+    text_fields=["question", "section", "answer"],
+    keyword_fields=["course"],
+    db_path="faq.db"
+)
+
+for doc in docs_llm:
+    index.add(doc)
+    print(f"""Added: {doc["question"][:60]}...""")
+    time.sleep(0.5)          # slow ingestion simulate cheyyadaniki
+
+index.close()</code></pre>
+  <div class="expect">Expected: <code>Loaded 1456 documents</code>, <code>LLM Zoomcamp: 161 documents</code>, prathi doc ki <code>Added: ...</code> line, chivarlo <code>Done. Index saved to faq.db</code>. ~80 seconds padutundi. <code>notebooks/faq.db</code> file vastundi.</div>
+
+  <h3>16c. Querying notebook (sqlite-rag.ipynb)</h3>
+<pre><code>from sqlitesearch import TextSearchIndex
+
+sqlite_index = TextSearchIndex(
+    text_fields=["question", "section", "answer"],
+    keyword_fields=["course"],
+    db_path="faq.db"
+)
+sqlite_index.count()</code></pre>
+  <div class="expect">Ingestion madhyalo count run cheste perugutundi. Mana test lo vere process nunchi chusam: <code>2 → 22 → 42 → 62</code> (prathi 10 seconds ki). Ingestion ayyaka <code>161</code>.</div>
+
+  <h3>16d. RAG with sqlitesearch: index matrame maaripoyindi</h3>
+<pre><code>groq_client = OpenAI(api_key=os.getenv("GROQ_API_KEY"),
+                     base_url="https://api.groq.com/openai/v1")
+
+assistant = RAGBase(index=sqlite_index, llm_client=groq_client)
+print(assistant.rag("Can I still join the course after it started?"))
+sqlite_index.close()</code></pre>
+  <div class="expect">Expected: <code>Yes—you can still join the course after it has started. ... submit your capstone project before the live cohort stops accepting submissions.</code> minsearch answer laane.</div>
+  <div class="warn"><code>faq.db</code> ni <code>.gitignore</code> lo pettam (<code>*.db</code>). Adi data file, ingestion notebook tho eppudaina malli build cheyyochu.</div>
+
+  <h3>minsearch vs sqlitesearch</h3>
+  <table>
+    <tr><th></th><th>minsearch</th><th>sqlitesearch</th></tr>
+    <tr><td>Storage</td><td>RAM (Python dicts)</td><td>File (<code>faq.db</code>, SQLite FTS5)</td></tr>
+    <tr><td>Restart tarvata</td><td>Data pothundi, malli fetch + index</td><td>File undi, open chesi search</td></tr>
+    <tr><td>Processes</td><td>Okkate</td><td>Ingestion okati, querying inkokati</td></tr>
+    <tr><td>Eppudu</td><td>Data chinnadi, indexing fast</td><td>Data pedda, ingestion slow, restart survive kavali</td></tr>
+  </table>
+
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/09-data-ingestion-06-annotated-architecture-sketch-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/09-data-ingestion-06-annotated-architecture-sketch-imagegen.png" alt="Ingestion knowledge base ki rastundi, RAG assistant akkada nunchi chaduvutundi" loading="lazy"></a><figcaption>Ingestion knowledge base ki rastundi, RAG assistant akkada nunchi chaduvutundi <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Problem:</b> minsearch RAM lo untundi. Notebook / service restart cheste anni pothayi, malli download + index cheyyali. Chinna data ki parledu, kani millions of documents aithe prathi restart ki minutes wait.
+    <b>Solution: ingestion ni querying nunchi separate cheyyadam.</b> Okka process data ni persistent index (file) lo rastundi. Inkoka process aa file chadivi search chestundi. Rendu independent.
+    <b>sqlitesearch</b> = SQLite FTS5 (full text search) meeda chinna wrapper. SQLite Python tho vastundi, extra server avasaram ledu. API minsearch laane, so <code>RAGBase</code> lo okka line kuda maarchaledu, index matrame maarchi pass chesam. Ide modular design power.
+    <b>Count perugutundi:</b> Ingestion rastunte, vere notebook lo count chadivite number perugutundi. Normal database behaviour. minsearch lo idi impossible, enduku ante index okka process memory lo matrame untundi.
+    Production lo same pattern Elasticsearch, OpenSearch, Qdrant, Weaviate tho chestaru.
+  </div>
+  <div class="flow h">
+    <div class="node">minsearch<br><small>start</small></div><div class="arr">→</div>
+    <div class="node">fetch</div><div class="arr">→</div>
+    <div class="node">parse</div><div class="arr">→</div>
+    <div class="node">index</div><div class="arr">→</div>
+    <div class="node">ready</div><div class="arr">→</div>
+    <div class="node bad">restart = malli anni</div>
+  </div>
+  <div class="flow">
+    <div class="branches">
+      <div class="branch"><span class="lbl">Ingestion (okka sari)</span><div class="node">FAQ JSON</div><div class="arr">↓</div><div class="node">sqlite-ingest.ipynb</div><div class="arr">↓</div><div class="node ok">faq.db</div></div>
+      <div class="branch"><span class="lbl">Query (prathi sari)</span><div class="node">sqlite-rag.ipynb</div><div class="arr">↓</div><div class="node">faq.db open</div><div class="arr">↓</div><div class="node ok">RAGBase.rag()</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Lesson 10 Wrap-up.</div>
+</section>
+
+<!-- LAB 10 WRAPUP -->
+<section>
+  <h2><span class="num">17</span> Wrap-up of Part 1 <span class="lesson">Lesson 10</span></h2>
+  <span class="where">Ekkada: Reading matrame, code ledu</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/10-rag-next-steps-01-rag-roadmap-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/10-rag-next-steps-01-rag-roadmap-imagegen.png" alt="Working RAG pipeline nunchi next directions: agents, vector search, Elasticsearch, fine-tuning" loading="lazy"></a><figcaption>Working RAG pipeline nunchi next directions: agents, vector search, Elasticsearch, fine-tuning <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>Part 1 lo emi chesam</h3>
+  <ul>
+    <li>RAG ante emi: documents retrieve, prompt build, LLM grounded answer.</li>
+    <li>Real FAQ dataset meeda minsearch search engine.</li>
+    <li>Question + search results kalipe prompt template.</li>
+    <li>search + prompt + LLM = working RAG pipeline.</li>
+    <li>sqlitesearch tho ingestion, query separate processes.</li>
+  </ul>
+  <h3>Next directions</h3>
+  <table>
+    <tr><th>Direction</th><th>Emi solve chestundi</th></tr>
+    <tr><td><b>Agents</b> (Part 2)</td><td>Search okka sari, exact query tho matrame. Garbage results vaste recover ledu. Agent LLM ki control istundi: em vethakali, enni sarlu, eppudu aapali. Vere language question ni translate chesi search kuda cheyyochu.</td></tr>
+    <tr><td><b>Vector search</b> (Module 2)</td><td>Keyword exact match. Vector search meaning batti match chestundi ("enroll late" vs "join after start").</td></tr>
+    <tr><td><b>Elasticsearch</b></td><td>Industry standard: BM25, filters, aggregations, vector search, scaling. Production ki.</td></tr>
+    <tr><td><b>Fine-tuning</b></td><td>Model weights maarchadam. GPUs kavali, kotha data vaste malli train. RAG flexible, cheap. Fine-tuning chala arudu ga avasaram.</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Part 1 tho working RAG system undi. Ikapai prathi piece ni better cheyyadam. <b>RAG vs fine-tuning:</b> fine-tuning ante model ni kotha data tho retrain cheyyadam. Expensive, GPU kavali, prathi kotha FAQ ki malli train. RAG lo just kotha document index lo add cheste chalu. Course author cheptunnaru: RAG first, fine-tuning nijanga avasaram aithe matrame.
+    Try cheyyandi: vere prompts, ekkuva data sources, vere models (mana Groq lo <code>openai/gpt-oss-20b</code>, <code>qwen/qwen3.8-27b</code>), Elasticsearch.
+  </div>
+  <div class="next"><b>Next:</b> Part 2: Agents (Lesson 11).</div>
+</section>
+
+<!-- LAB 11 AGENTS INTRO -->
+<section>
+  <h2><span class="num">18</span> Agents: fixed RAG enduku saripodu <span class="lesson">Lesson 11</span></h2>
+  <span class="where">Ekkada: Reading matrame, code next lessons lo</span>
+  <h3>Fixed pipeline eppudu fail avutundi</h3>
+  <ul>
+    <li>User typo chesadu ("Olama").</li>
+    <li>Question unusual ga adigadu.</li>
+    <li>Answer ki rendu different searches kavali.</li>
+  </ul>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/11-agents-intro-02-typo-search-failure-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/11-agents-intro-02-typo-search-failure-cropped.png" alt="Typo tho search fail: relevant results raledu" loading="lazy"></a><figcaption>Typo tho search fail: relevant results raledu <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/11-agents-intro-04-agentic-flow-diagram-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/11-agents-intro-04-agentic-flow-diagram-imagegen.png" alt="Agentic flow: LLM empty search gamaninchi, correct term tho malli search chesi answer istundi" loading="lazy"></a><figcaption>Agentic flow: LLM empty search gamaninchi, correct term tho malli search chesi answer istundi <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <table>
+    <tr><th></th><th>RAG (fixed)</th><th>Agent</th></tr>
+    <tr><td>Evaru decide</td><td>Developer (steps code lo fix)</td><td>LLM (prathi step lo)</td></tr>
+    <tr><td>Search</td><td>Okka sari, exact user query</td><td>Enni sarlu ainaa, query rewrite chestundi</td></tr>
+    <tr><td>Bad results</td><td>Recover ledu</td><td>Typo fix, kotha keywords, clarifying question</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Mana RAG eppudu same pani: search → prompt → LLM. Search garbage isthe LLM ki garbage. Lexical search lo okka typo chalu, miss avutundi.
+    <b>Agent</b> ante LLM ni driver seat lo pettadam. LLM ye action, ye order lo cheyyalo decide chestundi. Typo fix chestundi, vere words tho malli vethukutundi, avasaram aithe user ni adugutundi.
+    Part 2 lo: <b>function calling</b> (LLM ki tools ivvadam), <b>agentic loop</b> (LLM tool call chestu, eppudu aapalo decide), <b>frameworks</b> (ee loop ni run chese libraries).
+  </div>
+  <div class="flow">
+    <div class="node">User question</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">RAG</span><div class="node">search (okka sari)</div><div class="arr">↓</div><div class="node">LLM</div><div class="arr">↓</div><div class="node bad">bad search = bad answer</div></div>
+      <div class="branch"><span class="lbl">Agent</span><div class="node">LLM: search cheyyala?</div><div class="arr">↓</div><div class="node">search → results chusi → malli search?</div><div class="arr">↓</div><div class="node ok">enough info → answer</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Lesson 12 RAG revision.</div>
+</section>
+
+<!-- LAB 12 REVISION -->
+<section>
+  <h2><span class="num">19</span> Quick RAG Revision: Olama typo <span class="lesson">Lesson 12</span></h2>
+  <span class="where">Ekkada: <code>notebooks/agents.ipynb</code> (kotha notebook, lessons 12-15 anni ikkade)</span>
+  <h3>19a. Setup (Groq client + Responses API)</h3>
+<pre><code>import os, json
+from dotenv import load_dotenv
+from openai import OpenAI
+
+load_dotenv()
+openai_client = OpenAI(
+    api_key=os.getenv("GROQ_API_KEY"),
+    base_url="https://api.groq.com/openai/v1",
+)
+MODEL = "openai/gpt-oss-120b"
+
+from rag_helper import RAGBase
+from ingest import load_faq_data, build_index
+documents = load_faq_data()
+index = build_index(documents)
+
+assistant = RAGBase(index=index, llm_client=openai_client, instructions=instructions)</code></pre>
+  <div class="warn">Course lo <code>wget</code> tho <code>rag_helper.py</code>, <code>ingest.py</code> download cheyyamani undi. Manaki already <code>notebooks/</code> lo unnayi (Lab 08), download avasaram ledu. Windows PowerShell lo <code>wget</code> different ga pani chestundi, so vaddu.</div>
+  <h3>19b. Test</h3>
+<pre><code>assistant.rag("How do I run Ollama locally?")    # works
+assistant.rag("How do I run Olama locally?")     # typo</code></pre>
+  <div class="bad">"Olama" search results (mana run): <code>'Can I run the course locally instead of Codespaces?'</code>, <code>'For peer review, do I need to clone...'</code>, <code>'Why do we need orchestration / Kestra...'</code>. Ollama install FAQ raledu. LLM "course locally ela run cheyyali" ani off-target answer ichindi.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/12-rag-revision-01-typo-retry-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/12-rag-revision-01-typo-retry-imagegen.png" alt="Fixed keyword RAG typo meeda fail, agent query rewrite chesi malli search chesi answer chestundi" loading="lazy"></a><figcaption>Fixed keyword RAG typo meeda fail, agent query rewrite chesi malli search chesi answer chestundi <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Part 1 setup malli okka sari: client, data, index, assistant. "Ollama" correct spelling tho pani chestundi. "Olama" typo tho lexical search exact word vethukutundi, dorakadu. Pipeline ki teliyadu search fail ayindi ani, so retry cheyyadu. Ide fixed pipeline limit. Daaniki agent kavali.
+  </div>
+  <div class="flow h">
+    <div class="node">"How do I run Olama?"</div><div class="arr">→</div>
+    <div class="node">search("Olama")</div><div class="arr">→</div>
+    <div class="node bad">irrelevant docs</div><div class="arr">→</div>
+    <div class="node bad">wrong / "I don't know"</div>
+  </div>
+  <div class="next"><b>Next:</b> Lesson 13 Function calling.</div>
+</section>
+
+<!-- LAB 13 FUNCTION CALLING -->
+<section>
+  <h2><span class="num">20</span> Function Calling <span class="lesson">Lesson 13</span></h2>
+  <span class="where">Ekkada: <code>notebooks/agents.ipynb</code></span>
+
+  <div class="warn"><b>Groq + Responses API:</b> Groq ippudu OpenAI <b>Responses API</b> support chestundi (function calling tho sahaa, mana test lo confirm chesam). So course code almost same. Maarchinavi 3 matrame:
+  <ol>
+    <li><code>model="gpt-5.4-mini"</code> → <code>model=MODEL</code></li>
+    <li>Groq <code>response.output</code> lo first item <code>reasoning</code>. Course <code>call = response.output[0]</code> badulu: <code>call = next(item for item in response.output if item.type == "function_call")</code></li>
+    <li>gpt-oss konnisarlu tool icchina search cheyyakunda direct ga answer chestundi. One-step demo ki chinna developer hint + 3 retries pettam. (<code>tool_choice="required"</code> try chesam, model comply avvakapothe Groq 400 error istundi.)</li>
+  </ol></div>
+
+  <h3>20a. Tools lekunda</h3>
+<pre><code>messages = [{"role": "user", "content": "I just discovered the course. Can I join it?"}]
+response = openai_client.responses.create(model=MODEL, input=messages)
+response.output_text</code></pre>
+  <div class="bad">Generic answer: "Find the Course Page... Enroll Now..." Mana FAQ teliyadu.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/13-function-calling-01-no-tools-vague-answer-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/13-function-calling-01-no-tools-vague-answer-cropped.png" alt="Tools lekunda vague, general answer" loading="lazy"></a><figcaption>Tools lekunda vague, general answer <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <h3>20b. Tool define: Python function + JSON schema</h3>
+<pre><code>def search(query):
+    return index.search(query, num_results=5,
+                        boost_dict={"question": 3.0, "section": 0.5},
+                        filter_dict={"course": "llm-zoomcamp"})
+
+search_tool = {
+    "type": "function",
+    "name": "search",
+    "description": "Search the FAQ database for entries matching the given query.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "query": {"type": "string",
+                      "description": "Search query text to look up in the course FAQ."}
+        },
+        "required": ["query"],
+        "additionalProperties": False
+    }
+}</code></pre>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/13-function-calling-03-search-tool-schema-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/13-function-calling-03-search-tool-schema-cropped.png" alt="search tool JSON schema" loading="lazy"></a><figcaption>search tool JSON schema <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <h3>20c. Tool tho pampadam</h3>
+<pre><code>response = openai_client.responses.create(model=MODEL, input=messages, tools=[search_tool])
+response.output</code></pre>
+  <div class="expect">Mana run: <code>[('reasoning', None, None), ('function_call', 'search', '{"query":"Can I join the course? eligibility enrollment open"}')]</code>. Model answer ivvaledu, "search run cheyyi" ani adigindi. Query kuda rewrite chesindi.</div>
+
+  <h3>20d. Function run chesi result tirigi pampadam</h3>
+<pre><code>call = next(item for item in response.output if item.type == "function_call")
+args = json.loads(call.arguments)
+results = search(**args)
+result_json = json.dumps(results, indent=2)
+
+messages.extend(response.output)          # model function call history lo
+messages.append({
+    "type": "function_call_output",
+    "call_id": call.call_id,              # ye call ki ee result
+    "output": result_json,
+})
+
+response = openai_client.responses.create(model=MODEL, input=messages, tools=[search_tool])
+print(response.output_text)</code></pre>
+  <div class="expect">Mana run: <code>Yes—you can still enroll in the LLM Zoomcamp even if you've just found it. ... submit a final project while the submission form is still open.</code> FAQ based answer.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/13-function-calling-07-second-call-answer-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/13-function-calling-07-second-call-answer-cropped.png" alt="Second call tarvata FAQ based answer" loading="lazy"></a><figcaption>Second call tarvata FAQ based answer <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <h3>20e. Cost</h3>
+  <table>
+    <tr><th>Second call (mana run)</th><th>Value</th></tr>
+    <tr><td>input_tokens</td><td>754</td></tr>
+    <tr><td>output_tokens</td><td>143</td></tr>
+    <tr><td>cost ($0.15 / $0.60 per 1M)</td><td>$0.0002</td></tr>
+  </table>
+  <div class="warn">Idi second call matrame. First call ki separate cost. Rendu calls = rendu sarlu pay, second lo full history malli pampistam so ekkuva input tokens.</div>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Function calling</b> ante LLM ki "neeku ee tool undi, avasaram aithe vadu" ani cheppadam. LLM mana Python code chudadu. JSON <b>schema</b> matrame chustundi: tool peru, <b>description</b> (eppudu vadalo LLM ikkada nunchi decide chestundi, most important), parameters.
+    <b>Flow:</b> (1) question + tools pampu. (2) LLM <code>function_call</code> return chestundi, answer kaadu. (3) Manam aa function run chestam. (4) Result ni <code>function_call_output</code> ga, same <code>call_id</code> tho history lo add. (5) Full history malli pampu. (6) LLM ippudu results chusi answer.
+    <b>Full history enduku?</b> LLM stateless. Prathi API call kotha. Memory = manam pampe list. Result matrame pampite LLM ki context teliyadu.
+    RAG lo okka call, ikkada rendu. Agentic = ekkuva round-trips = ekkuva cost.
+  </div>
+  <div class="flow">
+    <div class="node">messages + tools=[search_tool]</div><div class="arr">↓</div>
+    <div class="node">LLM call #1</div><div class="arr">↓</div>
+    <div class="node q">function_call: search(query)</div><div class="arr">↓</div>
+    <div class="node">Mana code: search(**args) run</div><div class="arr">↓</div>
+    <div class="node">messages += call + function_call_output (call_id)</div><div class="arr">↓</div>
+    <div class="node">LLM call #2 (full history)</div><div class="arr">↓</div>
+    <div class="node ok">FAQ based answer</div>
+  </div>
+  <div class="next"><b>Next:</b> Lesson 14 Agentic loop.</div>
+</section>
+
+<!-- LAB 14 AGENT LOOP -->
+<section>
+  <h2><span class="num">21</span> The Agentic Loop <span class="lesson">Lesson 14</span></h2>
+  <span class="where">Ekkada: <code>notebooks/agents.ipynb</code></span>
+
+  <h3>Agent = 3 parts</h3>
+  <table>
+    <tr><th>Part</th><th>Emi</th><th>Mana code lo</th></tr>
+    <tr><td>Instructions</td><td>Role, behaviour</td><td><code>developer</code> message</td></tr>
+    <tr><td>Tools</td><td>Agent call chese functions</td><td><code>search</code></td></tr>
+    <tr><td>Memory</td><td>Message history</td><td><code>messages</code> list (prompts + outputs + tool results)</td></tr>
+  </table>
+
+  <h3>21a. make_call() helper</h3>
+<pre><code>def make_call(call):
+    args = json.loads(call.arguments)
+    if call.name == "search":
+        result = search(**args)
+    return {
+        "type": "function_call_output",
+        "call_id": call.call_id,
+        "output": json.dumps(result, indent=2),
+    }</code></pre>
+
+  <h3>21b. agent_loop()</h3>
+<pre><code>def agent_loop(instructions, question, model=MODEL) -> str:
+    messages = [
+        {"role": "developer", "content": instructions},
+        {"role": "user", "content": question}
+    ]
+    it = 1
+    while True:
+        print(f"iteration #{it}...")
+        has_function_calls = False
+
+        response = openai_client.responses.create(
+            model=model, input=messages, tools=[search_tool])
+        messages.extend(response.output)
+
+        for item in response.output:
+            if item.type == "function_call":
+                print("function_call:", item.name, item.arguments)
+                messages.append(make_call(item))
+                has_function_calls = True
+            elif item.type == "message":
+                last_answer = item.content[0].text
+                print("ASSISTANT:", last_answer)
+
+        it = it + 1
+        if has_function_calls == False:
+            break
+    return last_answer</code></pre>
+  <div class="expect">Groq <code>reasoning</code> items ni <code>if/elif</code> skip chestundi, so ee loop course code laane pani chestundi, maarpu ledu (model matrame).</div>
+
+  <h3>21c. Mana runs</h3>
+  <table>
+    <tr><th>Question</th><th>Iterations / searches</th><th>Result</th></tr>
+    <tr><td>How do I run Olama locally?</td><td>5 iterations: "Olama run locally" → "Olama" → "Olama local installation" → <b>"run Ollama locally step by step"</b></td><td class="ok">Typo recover chesi Ollama install steps</td></tr>
+    <tr><td>Can I still join it?</td><td>2: okka search</td><td>Yes + certificate ki project submit</td></tr>
+    <tr><td>what's queen gambit? (scope rule lekunda)</td><td>3: 2 searches</td><td>Chess explanation ichindi (off-topic!)</td></tr>
+    <tr><td>what's queen gambit? (scope rule tho)</td><td>2: okka search</td><td><code>I'm sorry, but I don't have any information on that topic in the course FAQ...</code></td></tr>
+  </table>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/14-agentic-loop-04-loop-run-output-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/14-agentic-loop-04-loop-run-output-cropped.png" alt="Agent loop run output: iterations + function calls" loading="lazy"></a><figcaption>Agent loop run output: iterations + function calls <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <h3>21d. Instructions tho steer cheyyadam</h3>
+  <ul>
+    <li><b>Multiple searches:</b> "Make multiple searches. First perform search, analyze the results and then perform more searches." ani add. Model ekkuva explore chestundi (eppudu kaadu).</li>
+    <li><b>Off-topic block:</b> "The question has to be about the course... If you can't answer the question using FAQ, don't do it yourself." ani add. Lightweight input guardrail.</li>
+  </ul>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/14-agentic-loop-07-queen-gambit-run-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/14-agentic-loop-07-queen-gambit-run-cropped.png" alt="Off-topic question (queen gambit) run" loading="lazy"></a><figcaption>Off-topic question (queen gambit) run <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Lesson 13 lo okka function call chethi tho chesam. Kani model enni sarlu search cheyyalanukuntundo manaki mundu teliyadu. So <b>loop</b>: model ni call chey, function calls unte run chesi results add chey, malli model ni call chey. Model function call lekunda answer isthe aapu. Ide <b>agent</b>.
+    <b>Exit condition:</b> <code>has_function_calls == False</code>. Production frameworks extra safety pedataru: max iterations, token budget, time limit.
+    <b>Instructions = steering wheel.</b> "Ekkuva search chey", "course topics matrame" ani rasthe model ala behave chestundi, kani 100% guarantee kaadu.
+    Ee handwritten loop ne LangChain, PydanticAI, OpenAI Agents SDK anni lopala chestayi. Idi ardham aithe frameworks ardham avutayi.
+  </div>
+  <div class="flow">
+    <div class="node">messages = [developer, user]</div><div class="arr">↓</div>
+    <div class="node">LLM call (tools=[search])</div><div class="arr">↓</div>
+    <div class="node q">function_call unda?</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">YES</span><div class="node">make_call() → result</div><div class="arr">↓</div><div class="node">messages lo add</div><div class="arr">↓</div><div class="node ghost">malli LLM call (loop)</div></div>
+      <div class="branch"><span class="lbl">NO</span><div class="node ok">Final answer → break</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Lesson 15 ToyAIKit.</div>
+</section>
+
+<!-- LAB 15 TOYAIKIT -->
+<section>
+  <h2><span class="num">22</span> ToyAIKit <span class="lesson">Lesson 15</span></h2>
+  <span class="where">Ekkada: Terminal (install) + <code>notebooks/agents.ipynb</code></span>
+
+  <h3>22a. Install</h3>
+<pre><code>uv add toyaikit</code></pre>
+  <div class="expect">Mana machine lo <code>toyaikit 0.0.11</code>. Imports pass.</div>
+
+  <h3>22b. Tool: type hint + docstring → schema automatic</h3>
+<pre><code>def search(query: str) -> dict[str, str]:
+    """
+    Search the FAQ database for entries matching the given query.
+    """
+    return index.search(query, num_results=5,
+                        boost_dict={"question": 3.0, "section": 0.5},
+                        filter_dict={"course": "llm-zoomcamp"})
+
+agent_tools = Tools()
+agent_tools.add_tool(search)
+agent_tools.get_tools()</code></pre>
+  <div class="expect">Output: <code>[{'type': 'function', 'name': 'search', 'description': 'Search the FAQ database for entries matching the given query.', 'parameters': {...'required': ['query']...}}]</code>. Lesson 13 lo chethi tho rasina schema laane.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/15-frameworks-04-generated-schema.jpg" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/15-frameworks-04-generated-schema.jpg" alt="ToyAIKit generate chesina schema" loading="lazy"></a><figcaption>ToyAIKit generate chesina schema <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <h3>22c. Runner (Groq ki 2 maarpulu)</h3>
+<pre><code>from toyaikit.pricing import PricingConfig
+
+pricing = PricingConfig()
+pricing.register_model(MODEL, input_price=0.15, output_price=0.60)
+
+runner = OpenAIResponsesRunner(
+    tools=agent_tools,
+    developer_prompt=instructions,
+    chat_interface=chat_interface,
+    llm_client=OpenAIClient(model=MODEL, client=openai_client),   # Groq client pass
+    pricing_config=pricing,                                       # Groq model price
+)</code></pre>
+  <div class="warn"><b>Course nunchi maarchinavi:</b> (1) Course <code>OpenAIClient(model="gpt-5.4-mini")</code>, adi default ga <code>OpenAI()</code> create chestundi. Manam <code>client=openai_client</code> (Groq) pass chestam. (2) ToyAIKit price list lo Groq model ledu, so <code>result.cost</code> <code>None</code> vachindi + <code>UnknownModelWarning</code>. <code>PricingConfig.register_model()</code> tho fix.</div>
+
+  <h3>22d. Run + cost + conversation continue</h3>
+<pre><code>result = runner.loop(prompt="How do I run Olama locally?", callback=callback)
+result.cost
+result.all_messages
+
+result2 = runner.loop(prompt="How do I run a different model?",
+                      previous_messages=result.all_messages, callback=callback)
+
+# runner.run()   # interactive chat, VS Code lo meere run cheyyandi, "stop" tho exit</code></pre>
+  <div class="expect">Mana run: <code>search("Olama locally run Olama local")</code> → <code>search("Ollama local run")</code> → Ollama install steps. Cost: <code>total_cost = $0.00108</code>. Second question ki "different model" ante Ollama ani history nunchi ardham chesukundi: <code>search("run a different model ollama")</code>.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/15-frameworks-06-agentic-run-with-retry-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/15-frameworks-06-agentic-run-with-retry-cropped.png" alt="ToyAIKit run: typo tarvata retry" loading="lazy"></a><figcaption>ToyAIKit run: typo tarvata retry <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Prathi agent ki same while-loop, same function call handling malli malli rayadam boring. <b>ToyAIKit</b> aa loop ni wrap chestundi. Lopala chusthe same <code>while True</code>. Teaching library, production kaadu.
+    <b>Schema automatic:</b> Function ki type hint (<code>query: str</code>) + docstring isthe ToyAIKit JSON schema create chestundi. OpenAI Agents SDK, PydanticAI, LangChain, Google ADK anni ide trick.
+    <b>Runner</b> = agent loop. <b>chat_interface</b> + <b>callback</b> = notebook lo prathi tool call, message andanga chupistundi.
+    <b>result.cost</b> = mottham loop cost (anni calls kalipi). <b>previous_messages</b> pass cheste conversation continue, model ki mundu turn gurthu untundi.
+  </div>
+  <div class="flow h">
+    <div class="node">def search(query: str)<br><small>+ docstring</small></div><div class="arr">→</div>
+    <div class="node">Tools().add_tool()<br><small>schema auto</small></div><div class="arr">→</div>
+    <div class="node">OpenAIResponsesRunner<br><small>Groq client + pricing</small></div><div class="arr">→</div>
+    <div class="node">runner.loop(prompt)</div><div class="arr">→</div>
+    <div class="node ok">LoopResult<br><small>messages, tokens, cost</small></div>
+  </div>
+  <div class="next"><b>Next:</b> Lesson 16 Other frameworks.</div>
+</section>
+
+<!-- LAB 16 FRAMEWORKS -->
+<section>
+  <h2><span class="num">23</span> Other Frameworks <span class="lesson">Lesson 16</span></h2>
+  <span class="where">Ekkada: Reading matrame (install cheyyaledu)</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/16-other-frameworks-01-shared-agent-loop-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/16-other-frameworks-01-shared-agent-loop-imagegen.png" alt="Anni agent SDKs lo same core loop: messages, tool calls, observation, answer" loading="lazy"></a><figcaption>Anni agent SDKs lo same core loop: messages, tool calls, observation, answer <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <table>
+    <tr><th>Framework</th><th>Install</th><th>Eppudu</th></tr>
+    <tr><td>OpenAI Agents SDK</td><td><code>uv add openai-agents</code></td><td>OpenAI official, Responses API, handoffs</td></tr>
+    <tr><td>PydanticAI</td><td><code>uv add pydantic-ai</code></td><td>Type-safe, multi-provider (Groq kuda), course author favourite</td></tr>
+    <tr><td>LangChain / LangGraph</td><td></td><td>Chala integrations, graph workflows, pedda community</td></tr>
+    <tr><td>Google ADK</td><td></td><td>Gemini, Google Cloud</td></tr>
+    <tr><td>CrewAI, AutoGen, Semantic Kernel, Smolagents, Anthropic Tool Use</td><td></td><td>Multi-agent, Microsoft, HuggingFace, Anthropic native</td></tr>
+  </table>
+  <h3>Agent avasarama? Mundu adugandi</h3>
+  <div class="flow">
+    <div class="node q">Simple approach saripotunda?</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">Try first</span><div class="node">Plain RAG (okka search)</div><div class="arr">↓</div><div class="node">Template / parsing</div><div class="arr">↓</div><div class="node">Single LLM call, tools lekunda</div><div class="arr">↓</div><div class="node ok">Pani chesthe ship</div></div>
+      <div class="branch"><span class="lbl">Nijanga kudaraledu</span><div class="node">Agent loop</div><div class="arr">↓</div><div class="node bad">Ekkuva calls, latency, cost, unpredictable</div></div>
+    </div>
+  </div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Anni frameworks lopala same pattern: messages pampu, function calls run chey, model aapevaraku repeat. Manam handwritten loop nerchukunnam, so e framework ainaa easy ga ardham avutundi. Kashtam loop kaadu, <b>manchi tools + manchi prompts design cheyyadam</b>.
+    <b>Agent cost:</b> ekkuva API calls, ekkuva wait, ekkuva dabbu (prathi turn full history malli), monitor cheyyalsinavi ekkuva, same prompt ki rendu sarlu different path. So mundu simple approach try cheyyandi. Pani chesthe ship. Agent nijanga avasaram aithe matrame.
+  </div>
+  <div class="next"><b>Next:</b> Module 2: Vector Search.</div>
+</section>
+
 <!-- DAILY -->
 <section>
   <h2>Daily workflow (ikapai eppudu)</h2>
@@ -942,6 +1454,8 @@ mlops_assistant = RAGBase(index=index, llm_client=groq_client,
     <tr><td><code>401 Unauthorized</code></td><td>Key wrong / placeholder / revoked</td><td><code>.env</code> check → kernel restart</td></tr>
     <tr><td><code>Failed to spawn: jupyter</code> / <code>os error 4551</code></td><td>Smart App Control <code>.venv\Scripts\jupyter.exe</code> ni block chesindi</td><td><code>uv run python -m jupyter lab</code> or <code>uv run python -m nbconvert ...</code> vadandi. VS Code notebook direct ga open cheste problem ledu.</td></tr>
     <tr><td><code>DLL load failed while importing _ckdtree</code> (or any <code>.pyd</code>)</td><td>Smart App Control unsigned compiled file block chesindi</td><td>Kernel restart chesi malli try (konnisarlu tarvata allow avutundi). minsearch aithe <code>minsearch_lite</code> fallback automatic.</td></tr>
+    <tr><td><code>StopIteration</code> on <code>next(... function_call)</code></td><td>gpt-oss tool icchina search cheyyakunda direct answer ichindi</td><td>Developer message lo "use the search tool" hint + retry. <code>tool_choice="required"</code> Groq lo 400 error ivvochu.</td></tr>
+    <tr><td>toyaikit <code>UnknownModelWarning</code>, <code>result.cost</code> = None</td><td>ToyAIKit price list lo Groq model ledu</td><td><code>PricingConfig().register_model(MODEL, 0.15, 0.60)</code> → runner ki <code>pricing_config=</code></td></tr>
     <tr><td><code>404 model_not_found</code></td><td>Model Groq lo ledu</td><td><code>openai/gpt-oss-120b</code> vadandi</td></tr>
     <tr><td><code>.env</code> change work avvatledu</td><td>Kernel old key cache chesindi</td><td>Kernel restart → Cell 1 malli run</td></tr>
   </table>
@@ -973,7 +1487,11 @@ mlops_assistant = RAGBase(index=index, llm_client=groq_client,
 │   ├── bootcamp.ipynb
 │   ├── minsearch_lite.py   ← minsearch fallback
 │   ├── ingest.py           ← load_faq_data, build_index
-│   └── rag_helper.py       ← RAGBase class
+│   ├── rag_helper.py       ← RAGBase class
+│   ├── sqlite-ingest.ipynb ← Lesson 09 ingestion
+│   ├── sqlite-rag.ipynb    ← Lesson 09 querying
+│   ├── agents.ipynb        ← Lessons 12-15
+│   └── faq.db              ← sqlitesearch index (git ignore)
 ├── labs/             ← lab notes
 │   ├── 00-environment-setup.html   ← ee file
 │   └── 01 ... 05 .md
@@ -999,6 +1517,11 @@ mlops_assistant = RAGBase(index=index, llm_client=groq_client,
     <tr><td>2026-10-27</td><td>Lab 06 Prompt: INSTRUCTIONS, USER_PROMPT_TEMPLATE, build_context(), build_prompt()</td><td>Step 13</td></tr>
     <tr><td>2026-10-27</td><td>Lab 07 LLM: chat.completions (Groq), usage + cost, developer/user messages, llm(), full rag()</td><td>Step 14</td></tr>
     <tr><td>2026-10-27</td><td>Lab 08 RAG helper: ingest.py, rag_helper.py (RAGBase, Groq llm), custom instructions, course switch</td><td>Step 15</td></tr>
+    <tr><td>2026-10-27</td><td>Module map (README) + course pictures for lessons 01-08</td><td>Top, Steps 10-15</td></tr>
+    <tr><td>2026-10-27</td><td>Lesson 09 sqlitesearch: sqlite-ingest + sqlite-rag notebooks, concurrent count demo</td><td>Step 16</td></tr>
+    <tr><td>2026-10-27</td><td>Lessons 10-11: Part 1 wrap-up, agents intro</td><td>Steps 17-18</td></tr>
+    <tr><td>2026-10-27</td><td>Lessons 12-14: Olama typo, function calling (Groq Responses API), agent loop, instructions steering</td><td>Steps 19-21</td></tr>
+    <tr><td>2026-10-27</td><td>Lessons 15-16: ToyAIKit (Groq client + pricing), other frameworks</td><td>Steps 22-23</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.

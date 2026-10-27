@@ -19,3 +19,8 @@ memory/*.json
 .idea/
 .DS_Store
 Thumbs.db
+
+# sqlitesearch index files (rebuilt by sqlite-ingest.ipynb)
+*.db
+*.db-wal
+*.db-shm
