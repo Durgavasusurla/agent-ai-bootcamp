@@ -721,6 +721,107 @@ A: You don't need it. You're accepted. ...
   <div class="next"><b>Next:</b> Lab 07 LLM (instructions + prompt LLM ki pampi full RAG).</div>
 </section>
 
+<!-- LAB 07 LLM -->
+<section>
+  <h2><span class="num">14</span> Lab 07: The LLM + Full RAG</h2>
+  <span class="where">Ekkada: notebooks/bootcamp.ipynb (Lab 06 cells kinda, <code>prompt</code> + <code>INSTRUCTIONS</code> ready ga undali)</span>
+
+  <div class="warn"><b>Groq adaptation (chala important):</b> Course lo <code>openai_client.responses.create(model="gpt-5.4-mini", input=...)</code> undi. Course notes ee vishayam cheptunnayi: Groq, Gemini lanti providers OpenAI client istayi kani <b>chat completions</b> matrame, responses API kaadu. So manam ila maarchali:
+  <table>
+    <tr><th>OpenAI Responses (course)</th><th>Groq chat.completions (manam)</th></tr>
+    <tr><td><code>responses.create(input=prompt)</code></td><td><code>chat.completions.create(messages=[{"role": "user", "content": prompt}])</code></td></tr>
+    <tr><td><code>response.output_text</code></td><td><code>response.choices[0].message.content</code></td></tr>
+    <tr><td><code>response.output[0].content[0].text</code></td><td><code>response.choices[0].message.content</code></td></tr>
+    <tr><td><code>usage.input_tokens</code></td><td><code>usage.prompt_tokens</code></td></tr>
+    <tr><td><code>usage.output_tokens</code></td><td><code>usage.completion_tokens</code></td></tr>
+    <tr><td><code>model="gpt-5.4-mini"</code></td><td><code>model=MODEL</code> (<code>"openai/gpt-oss-120b"</code>)</td></tr>
+  </table></div>
+
+  <h3>14a. Prompt LLM ki pampadam</h3>
+<pre><code>response = openai_client.chat.completions.create(
+    model=MODEL,
+    messages=[{"role": "user", "content": prompt}]
+)
+response.choices[0].message.content</code></pre>
+  <div class="expect">Expected: <code>'Yes—you can still join the course. Just keep in mind that if you'd like to earn a certificate, you'll need to submit your capstone project before the current submission window closes...'</code></div>
+
+  <h3>14b. Usage + price</h3>
+<pre><code>response.usage
+
+input_price = 0.15 / 1_000_000    # Groq gpt-oss-120b
+output_price = 0.60 / 1_000_000
+
+cost = (
+    response.usage.prompt_tokens * input_price +
+    response.usage.completion_tokens * output_price
+)
+cost</code></pre>
+  <table>
+    <tr><th>Mana run</th><th>Value</th></tr>
+    <tr><td>prompt_tokens (input)</td><td>571</td></tr>
+    <tr><td>completion_tokens (output)</td><td>120 (andulo 65 reasoning tokens)</td></tr>
+    <tr><td>cost</td><td>$0.00016 (cent lo 1/60 va bhagam)</td></tr>
+  </table>
+  <div class="warn">Prices source: <code>console.groq.com/docs/model/openai/gpt-oss-120b</code> (Oct 2026): input $0.15, output $0.60 per million tokens. Course lo gpt-5.4-mini ki $0.75 / $4.50, ivi OpenAI prices. Mee Groq <b>free tier</b> lo asalu charge ledu; idi "paid aithe entha" ani chupistundi.</div>
+
+  <h3>14c. Message history: developer + user</h3>
+<pre><code>message_history = [
+    {"role": "developer", "content": INSTRUCTIONS},
+    {"role": "user", "content": prompt}
+]
+response = openai_client.chat.completions.create(
+    model=MODEL,
+    messages=message_history
+)</code></pre>
+  <div class="expect">Groq lo <code>developer</code> and <code>system</code> rendu roles test chesam, rendu work avutayi.</div>
+
+  <h3>14d. Kotha llm() (Lab 03 version ni replace chestundi)</h3>
+<pre><code>def llm(instructions, user_prompt, model=MODEL):
+    message_history = [
+        {"role": "developer", "content": instructions},
+        {"role": "user", "content": user_prompt}
+    ]
+    response = openai_client.chat.completions.create(
+        model=model,
+        messages=message_history
+    )
+    return response.choices[0].message.content</code></pre>
+
+  <h3>14e. Full RAG</h3>
+<pre><code>def rag(query, model=MODEL):
+    search_results = search(query)
+    prompt = build_prompt(query, search_results)
+    answer = llm(INSTRUCTIONS, prompt, model=model)
+    return answer
+
+print(rag("I just discovered the course. Can I join now?"))
+print(rag("How do I get a certificate?"))</code></pre>
+  <div class="expect">Expected: Join question ki FAQ based answer (certificate kavalante project submit). Certificate question ki steps list: live cohort lo enroll, capstone project submit, peer reviews complete. Anni LLM Zoomcamp FAQ nunchi.</div>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    RAG lo last piece LLM. Prompt teesukuni answer generate chestundi.
+    <b>Responses vs Chat completions:</b> OpenAI ki rendu APIs unnayi. Chat completions old (legacy), Responses kotha di. Kani Groq chat completions matrame support chestundi. So code lo field names maarutayi (paina table). Idea same.
+    <b>Response object:</b> Pydantic object. Answer <code>choices[0].message.content</code> lo untundi. <code>usage</code> lo tokens count.
+    <b>Tokens = money:</b> Input tokens + output tokens batti charge. gpt-oss-120b <b>reasoning model</b>, answer ivvadaniki mundu lopala "think" chestundi, aa reasoning tokens kuda output lo count avutayi. Okka RAG query ~$0.0002, chala cheap.
+    <b>Message history:</b> ChatGPT lo hidden system prompt, tarvata user / assistant messages alternate. LLM ki memory ledu, prathi sari full history pampali. Ikkada multi-turn chat ledu kani <code>developer</code> (fixed instructions) and <code>user</code> (question + context) separate cheyyadaniki ee format vadutam.
+    <b>Full RAG:</b> <code>search()</code> → <code>build_prompt()</code> → <code>llm()</code>. Answer LLM general knowledge nunchi kaadu, mana FAQ nunchi. <b>Modular:</b> search backend, prompt, model, edaina maarchochu, migatha code touch cheyyanavasaram ledu.
+  </div>
+  <div class="flow">
+    <div class="node">User question</div><div class="arr">↓</div>
+    <div class="node">search(query)<br><small>minsearch, top 5 FAQ</small></div><div class="arr">↓</div>
+    <div class="node">build_prompt(query, results)<br><small>Question + Context</small></div><div class="arr">↓</div>
+    <div class="node">llm(INSTRUCTIONS, prompt)<br><small>developer + user messages → Groq</small></div><div class="arr">↓</div>
+    <div class="node ok">Grounded answer</div>
+  </div>
+  <div class="flow h">
+    <div class="node">response</div><div class="arr">→</div>
+    <div class="node">.choices[0]</div><div class="arr">→</div>
+    <div class="node">.message</div><div class="arr">→</div>
+    <div class="node ok">.content<br><small>answer text</small></div>
+  </div>
+  <div class="next"><b>Next:</b> Lab 08 RAG helper.</div>
+</section>
+
 <!-- DAILY -->
 <section>
   <h2>Daily workflow (ikapai eppudu)</h2>
@@ -808,6 +909,7 @@ A: You don't need it. You're accepted. ...
     <tr><td>2026-10-27</td><td>Lab 04 Dataset: courses.json fetch, 1456 FAQ docs, fields + course counts</td><td>Step 11</td></tr>
     <tr><td>2026-10-27</td><td>Lab 05 Search: minsearch index, boost, filter, search(). scipy DLL block + minsearch_lite fallback</td><td>Step 12</td></tr>
     <tr><td>2026-10-27</td><td>Lab 06 Prompt: INSTRUCTIONS, USER_PROMPT_TEMPLATE, build_context(), build_prompt()</td><td>Step 13</td></tr>
+    <tr><td>2026-10-27</td><td>Lab 07 LLM: chat.completions (Groq), usage + cost, developer/user messages, llm(), full rag()</td><td>Step 14</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.
