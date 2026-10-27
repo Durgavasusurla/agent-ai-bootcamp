@@ -66,7 +66,7 @@
 <div class="wrap">
 
 <h1>LLM Zoomcamp Bootcamp Notes</h1>
-<p class="sub">Setup + Module 1 (Agentic RAG) + Module 2 (Vector Search), okke document lo. Windows 11 · Python 3.15 / 3.14 · uv · Groq · VS Code. Prathi step lo: <b>ekkada</b> cheyyali, <b>emi</b> cheyyali, <b>emi command</b> run cheyyali, <b>emi vastundi</b>, <b>next emi</b>.<br>Ee file repo lo <code>labs/00-environment-setup.html</code> lo undi. Manam kotha step chesina prathi sari idi update avutundi (chivarlo Changelog chudandi). Open cheyyali ante VS Code Explorer lo file meeda right-click → Reveal in File Explorer → double-click.</p>
+<p class="sub">Setup + Module 1 (Agentic RAG) + Module 2 (Vector Search) + Module 3 (Orchestration), okke document lo. Windows 11 · Python 3.15 / 3.14 · uv · Groq · VS Code. Prathi step lo: <b>ekkada</b> cheyyali, <b>emi</b> cheyyali, <b>emi command</b> run cheyyali, <b>emi vastundi</b>, <b>next emi</b>.<br>Ee file repo lo <code>labs/00-environment-setup.html</code> lo undi. Manam kotha step chesina prathi sari idi update avutundi (chivarlo Changelog chudandi). Open cheyyali ante VS Code Explorer lo file meeda right-click → Reveal in File Explorer → double-click.</p>
 
 <!-- TOC -->
 <section>
@@ -76,12 +76,14 @@
     <tr><td><b>Setup</b> (Python, uv, .env, Groq)</td><td>0-9</td><td>01-agentic-rag lessons 01-02</td><td>project root</td></tr>
     <tr><td><b>Module 1: Agentic RAG</b></td><td>10-23</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">01-agentic-rag</a> lessons 03-16</td><td><code>notebooks/</code> (Python 3.15)</td></tr>
     <tr><td><b>Module 2: Vector Search</b></td><td>24-33</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">02-vector-search</a> lessons 01-10</td><td><code>module2-vector-search/</code> (Python 3.14)</td></tr>
+    <tr><td><b>Module 3: AI Orchestration (Kestra)</b></td><td>34-42</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">03-orchestration</a> lessons 01-09</td><td><code>module3-orchestration/</code> (Docker + Kestra)</td></tr>
     <tr><td>Daily workflow, Troubleshooting, Folder structure, Changelog</td><td>chivarlo</td><td></td><td></td></tr>
   </table>
   <div class="flow h">
     <div class="node">Setup<br><small>Steps 0-9</small></div><div class="arr">→</div>
     <div class="node">Module 1: keyword RAG + agents<br><small>Steps 10-23</small></div><div class="arr">→</div>
-    <div class="node ok">Module 2: vector (meaning) search<br><small>Steps 24-33</small></div>
+    <div class="node">Module 2: vector (meaning) search<br><small>Steps 24-33</small></div><div class="arr">→</div>
+    <div class="node ok">Module 3: Kestra workflows + agents<br><small>Steps 34-42</small></div>
   </div>
 </section>
 
@@ -1920,7 +1922,408 @@ CREATE INDEX ON documents USING hnsw (embedding vector_cosine_ops);</code></pre>
     <div class="node">v2 + Vector search</div><div class="arr">→ <small>evaluate</small></div>
     <div class="node ok">v3 Hybrid + rerank</div>
   </div>
-  <div class="next"><b>Next:</b> Module 3 (Orchestration).</div>
+  <div class="next"><b>Next:</b> Module 3: AI Orchestration (kinda, Step 34 nunchi).</div>
+</section>
+
+<!-- MODULE 3 MAP -->
+<section>
+  <h2>Module 3: AI Orchestration with Kestra map (course README)</h2>
+  <p>Course source: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">github.com/DataTalksClub/llm-zoomcamp/03-orchestration</a>. Teacher: Will Russell (Kestra). Module 1, 2 lo Python code. Module 3 lo <b>Kestra</b> platform lo <b>YAML flows</b>: Kestra server Docker lo run avutundi, browser UI (<code>localhost:8080</code>) lo flows run chestam.</p>
+  <div class="bad"><b>Status: Module 3 inka RUN cheyyaledu.</b> Anni hands-on lessons ki Kestra server kavali, Kestra ki Docker kavali. Mee machine lo Docker ledu. Plus Gemini key + Tavily key kavali, avi <code>.env</code> lo inka placeholders. Kinda checklist lo 3 panulu meeru chesthe, nenu okka command tho anni flows run chesi ee document lo results add chestanu. Ippudu document lo: concepts, prathi flow line-by-line explanation, Windows setup steps, ready ga unna script.</div>
+  <h3>Meeru cheyyalsinavi (3 panulu)</h3>
+  <table>
+    <tr><th>#</th><th>Pani</th><th>Ekkada</th><th>Gamanika</th></tr>
+    <tr><td>1</td><td><b>Docker Desktop install</b></td><td><a href="https://www.docker.com/products/docker-desktop/">docker.com/products/docker-desktop</a></td><td>Admin rights + restart kavali. WSL2 automatic ga set avutundi. Mee CPU virtualization already on (Hyper-V running), RAM 16 GB, saripotundi.</td></tr>
+    <tr><td>2</td><td><b>Gemini API key</b> (free)</td><td><a href="https://aistudio.google.com/app/apikey">aistudio.google.com/app/apikey</a></td><td><code>.env</code> lo <code>GEMINI_API_KEY=</code> line lo paste. Flows 1, 2, 4, 5, 6 + AI Copilot ki required.</td></tr>
+    <tr><td>3</td><td><b>Tavily API key</b> (free, 1000 searches/month)</td><td><a href="https://tavily.com/">tavily.com</a></td><td><code>.env</code> lo <code>TAVILY_API_KEY=</code>. Flows 3, 5, 6 (web search).</td></tr>
+  </table>
+  <div class="warn">OpenAI key <b>avasaram ledu</b>: flow 3 ki Groq version (<code>3_rag_with_websearch_groq.yaml</code>) create chesam. Keys chat lo paste cheyyakandi, direct ga <code>.env</code> file lo matrame.</div>
+  <table>
+    <tr><th>Lesson</th><th>Topic</th><th>Ee document lo</th><th>Status</th></tr>
+    <tr><td>01</td><td>Introduction</td><td>Step 34</td><td>Reading</td></tr>
+    <tr><td>02</td><td>Context engineering</td><td>Step 35</td><td>Reading (ChatGPT experiment meere cheyyochu)</td></tr>
+    <tr><td>03</td><td>Setting up Kestra</td><td>Step 36</td><td class="bad">Script ready, Docker kosam wait</td></tr>
+    <tr><td>04</td><td>AI Copilot</td><td>Step 37</td><td class="bad">Docker + Gemini kosam wait</td></tr>
+    <tr><td>05</td><td>RAG (flows 1, 2, 3)</td><td>Step 38</td><td class="bad">Docker + keys kosam wait</td></tr>
+    <tr><td>06</td><td>AI Agents (flows 4, 5)</td><td>Step 39</td><td class="bad">Docker + keys kosam wait</td></tr>
+    <tr><td>07</td><td>Multi-agent (flow 6)</td><td>Step 40</td><td class="bad">Docker + keys kosam wait</td></tr>
+    <tr><td>08</td><td>Best practices</td><td>Step 41</td><td>Reading</td></tr>
+    <tr><td>09</td><td>Next steps</td><td>Step 42</td><td>Reading</td></tr>
+  </table>
+</section>
+
+<!-- M3 L01 -->
+<section>
+  <h2><span class="num">34</span> AI Orchestration: Introduction <span class="lesson">M3 Lesson 01</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/01-intro-01-ai-orchestration-path-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/01-intro-01-ai-orchestration-path-imagegen.png" alt="Path: context + AI Copilot → RAG → agents → multi-agent → production" loading="lazy"></a><figcaption>Path: context + AI Copilot → RAG → agents → multi-agent → production <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>Ee module lo nerchukunedi</h3>
+  <ul>
+    <li>Context engineering enduku important.</li>
+    <li><b>AI Copilot</b>: English lo cheppi Kestra flow generate cheyyadam.</li>
+    <li><b>RAG</b> Kestra flows lo: real data tho answers.</li>
+    <li><b>AI Agents</b>: tools vaadi decisions teesukune agents.</li>
+    <li><b>Multi-agent</b>: specialized agents kalisi pani.</li>
+    <li>Production best practices: cost, security, observability.</li>
+  </ul>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Orchestration</b> ante tasks ni correct order lo, schedule tho, retries tho, monitoring tho run cheyyadam. <b>Kestra</b> open-source orchestration platform: workflows ni <b>YAML</b> lo rastam, Kestra run chestundi, UI lo logs, outputs chupistundi.
+    Module 1 lo manam Python lo rasina RAG, agent loop ni ikkada Kestra <b>plugins</b> chestayi. Code takkuva, configuration ekkuva.
+    Course flows <b>Gemini</b> vadutayi, kani Kestra AI plugins OpenAI, Anthropic, Groq (OpenAI-compatible) anni support chestayi, provider block matrame maarchali.
+  </div>
+  <div class="flow h">
+    <div class="node">Module 1: Python RAG + agent loop<br><small>code manam rasam</small></div><div class="arr">→</div>
+    <div class="node ok">Module 3: Kestra YAML<br><small>plugins loop run chestayi</small></div>
+  </div>
+  <div class="next"><b>Next:</b> Step 35 Context engineering.</div>
+</section>
+
+<!-- M3 L02 -->
+<section>
+  <h2><span class="num">35</span> Context Engineering <span class="lesson">M3 Lesson 02</span></h2>
+  <span class="where">Ekkada: Browser (ChatGPT private window), Kestra avasaram ledu</span>
+  <h3>Experiment (meere cheyyochu, ippude)</h3>
+  <ol>
+    <li>ChatGPT ni private / incognito window lo open cheyyandi.</li>
+    <li>Ee prompt ivvandi:</li>
+  </ol>
+<pre><code>Create a Kestra flow that loads NYC taxi data from a CSV file to BigQuery. The flow should extract data, upload to GCS, and load to BigQuery.</code></pre>
+  <div class="bad">Expected problems: paata plugin names (rename ayinavi), lenivi properties, asalu exist kani features (hallucination).</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/02-context-engineering-01-context-quality-flow-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/02-context-engineering-01-context-quality-flow-imagegen.png" alt="Context lekunda outdated flow, current docs context tho trusted flow" loading="lazy"></a><figcaption>Context lekunda outdated flow, current docs context tho trusted flow <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    LLM ki training cutoff date undi. Aa tarvata software updates, renamed plugins, kotha APIs, mee company rules teliyavu. So guess chestundi.
+    <b>Context is everything:</b> correct, current information isthe correct code. Ide Module 1 RAG lo nerchukunna principle: FAQ context isthe correct answer, lekapothe generic. Ikkada same idea, kani <b>code generation</b> ki.
+  </div>
+  <div class="flow">
+    <div class="node">Same prompt</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">Generic ChatGPT</span><div class="node bad">Old syntax, fake properties</div></div>
+      <div class="branch"><span class="lbl">Kestra AI Copilot (current docs context)</span><div class="node ok">Valid, runnable YAML</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Step 36 Setup.</div>
+</section>
+
+<!-- M3 L03 -->
+<section>
+  <h2><span class="num">36</span> Setting up Kestra (Windows version) <span class="lesson">M3 Lesson 03</span></h2>
+  <span class="where">Ekkada: <code>module3-orchestration/</code> folder + PowerShell</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/03-setup-01-secure-kestra-setup-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/03-setup-01-secure-kestra-setup-imagegen.png" alt="Docker Compose tho Kestra, keys environment secrets ga, flows Kestra lo" loading="lazy"></a><figcaption>Docker Compose tho Kestra, keys environment secrets ga, flows Kestra lo <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>36a. Folder lo emi undi</h3>
+  <table>
+    <tr><th>File</th><th>Emi</th></tr>
+    <tr><td><code>docker-compose.yml</code></td><td>Course file. Kestra v1.3.21 + Postgres 18. Okka line add: <code>SECRET_GROQ_API_KEY</code></td></tr>
+    <tr><td><code>flows/1..6_*.yaml</code></td><td>Course 6 flows</td></tr>
+    <tr><td><code>flows/3_rag_with_websearch_groq.yaml</code></td><td>Mana version: flow 3 OpenAI badulu Groq</td></tr>
+    <tr><td><code>start-kestra.ps1</code></td><td>Mana Windows script: course bash steps anni okka command lo</td></tr>
+  </table>
+
+  <h3>36b. Course bash vs mana PowerShell</h3>
+  <table>
+    <tr><th>Course (Linux/Mac bash)</th><th>Mana Windows</th></tr>
+    <tr><td><code>export SECRET_GEMINI_API_KEY=$(echo -n $GEMINI_API_KEY | base64)</code></td><td>Script <code>.env</code> nunchi key chadivi base64 chestundi</td></tr>
+    <tr><td><code>docker compose up -d</code></td><td>Script run chestundi</td></tr>
+    <tr><td><code>curl -X POST -u ... /api/v1/flows/import -F fileUpload=@flows/...</code> (6 sarlu)</td><td>Script Kestra ready ayyevaraku wait chesi, anni flows import chestundi (<code>curl.exe</code>, Windows tho vastundi)</td></tr>
+  </table>
+
+  <h3>36c. Run (Docker install + keys tarvata)</h3>
+<pre><code>cd module3-orchestration
+.\start-kestra.ps1 -DryRun     # keys check matrame (ippude run cheyyochu)
+.\start-kestra.ps1             # Kestra start + flows import</code></pre>
+  <div class="expect">Mana dry run ippudu: <code>OK GROQ_API_KEY</code>, <code>MISSING GEMINI_API_KEY</code>, <code>MISSING TAVILY_API_KEY</code>. Docker lekunda full run: <code>Docker is not installed. Install Docker Desktop ...</code> ani clear ga aagutundi.</div>
+  <div class="expect">Docker + keys tarvata expected: prathi flow ki <code>import ... HTTP 200</code>, chivarlo <code>Kestra UI: http://localhost:8080 (login admin@kestra.io / Admin1234!) namespace: zoomcamp</code>.</div>
+<pre><code>docker compose down          # Kestra aapadaniki (module3-orchestration folder lo)</code></pre>
+
+  <h3>36d. Kestra secrets ela pani chestayi</h3>
+  <table>
+    <tr><th>Ekkada</th><th>Peru</th><th>Value</th></tr>
+    <tr><td>Environment variable (container)</td><td><code>SECRET_GEMINI_API_KEY</code></td><td>Key <b>base64</b> lo</td></tr>
+    <tr><td>Flow YAML lo</td><td><code>{{ secret('GEMINI_API_KEY') }}</code></td><td><code>SECRET_</code> prefix lekunda</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Docker Compose</b> = okka file lo rendu containers: Kestra server + Postgres database (Kestra flows, executions ikkada store). <code>docker compose up -d</code> = background lo start.
+    <b>Secrets:</b> Kestra <code>SECRET_</code> tho start ayye env variables ni secrets ga chaduvutundi, value base64 lo undali. Flow lo <code>secret('NAME')</code> tho vadatam. Key YAML lo direct ga rayakudadu, git lo veltundi.
+    <b>Mana script</b> Module 1 laane keys ni <code>.env</code> nunchi matrame teesukuntundi, script lo key ledu, screen meeda print avvadu.
+    Gemini free tier lo rate limit takkuva: <code>429 Resource Exhausted</code> vaste okka nimisham aagi malli try.
+  </div>
+  <div class="flow h">
+    <div class="node">.env<br><small>GEMINI, TAVILY, GROQ</small></div><div class="arr">→</div>
+    <div class="node">start-kestra.ps1<br><small>base64 → SECRET_*</small></div><div class="arr">→</div>
+    <div class="node">docker compose up -d<br><small>Kestra + Postgres</small></div><div class="arr">→</div>
+    <div class="node">flows import<br><small>namespace zoomcamp</small></div><div class="arr">→</div>
+    <div class="node ok">localhost:8080 UI</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 37 AI Copilot.</div>
+</section>
+
+<!-- M3 L04 -->
+<section>
+  <h2><span class="num">37</span> AI Copilot <span class="lesson">M3 Lesson 04</span></h2>
+  <span class="where">Ekkada: Kestra UI → Flow Editor → ✨ button (Docker + Gemini tarvata)</span>
+  <ol>
+    <li><code>http://localhost:8080</code> open → kotha flow or existing flow.</li>
+    <li>Flow Editor top-right lo <b>AI Copilot ✨</b> click.</li>
+    <li>Step 35 lo ChatGPT ki ichina same NYC taxi → BigQuery prompt ivvandi.</li>
+    <li>Result compare cheyyandi: correct plugin types, valid properties, run ayye YAML.</li>
+  </ol>
+  <div class="warn">Kestra Open Source lo AI Copilot <b>Gemini matrame</b> support chestundi. Groq ikkada pani cheyyadu, anduke Gemini key required.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/04-ai-copilot-03-generated-taxi-flow-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/04-ai-copilot-03-generated-taxi-flow-cropped.png" alt="AI Copilot generate chesina taxi flow" loading="lazy"></a><figcaption>AI Copilot generate chesina taxi flow <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>Iterative refinement (conversation)</h3>
+  <table>
+    <tr><th>Meeru adigedi</th><th>Copilot add chesedi</th></tr>
+    <tr><td>Create a flow that downloads a CSV file and loads it to BigQuery</td><td>Basic flow</td></tr>
+    <tr><td>Add a task that checks data quality in BigQuery</td><td>SQL validation tasks</td></tr>
+    <tr><td>Schedule the flow to run daily at 9 AM UTC</td><td><code>Schedule</code> trigger</td></tr>
+    <tr><td>Send a Slack notification if it fails</td><td><code>errors</code> branch lo <code>SlackIncomingWebhook</code></td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Manual ga flow rayali ante: ye plugin, exact property names, syntax, tasks connect. Time padutundi. <b>Copilot</b> lo meeru inputs + goal cheptaru, structure ade rastundi.
+    <b>Copilot enduku correct?</b> Running Kestra version yokka current plugin docs Copilot ki context ga untayi. Generic ChatGPT guess chestundi. (Step 35 context engineering.)
+    <b>5% rule:</b> Copilot 95% chestundi. Mee environment specific vi (secrets, Slack channel, retry count) meere chivari 5% fix cheyyali.
+    Conversation <b>cumulative</b>: prathi follow-up existing flow ni unchi, avasaram unna part matrame maarustundi.
+    <b>Alternative:</b> Claude / Cursor lanti coding assistant vadite Kestra <a href="https://github.com/kestra-io/agent-skills">agent-skills</a> repo same context istundi.
+  </div>
+  <div class="flow h">
+    <div class="node">Mee goal (English)</div><div class="arr">→</div>
+    <div class="node">AI Copilot<br><small>+ current plugin docs</small></div><div class="arr">→</div>
+    <div class="node">95% flow YAML</div><div class="arr">→</div>
+    <div class="node ok">Meeru 5% tweak → run</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 38 RAG flows.</div>
+</section>
+
+<!-- M3 L05 -->
+<section>
+  <h2><span class="num">38</span> RAG in Kestra (flows 1, 2, 3) <span class="lesson">M3 Lesson 05</span></h2>
+  <span class="where">Ekkada: Kestra UI → namespace <code>zoomcamp</code> → flow → Execute</span>
+  <h3>38a. Flow 1: <code>1_chat_without_rag</code> (Gemini key)</h3>
+<pre><code>- id: chat_without_rag
+  type: io.kestra.plugin.ai.completion.ChatCompletion
+  provider:
+    type: io.kestra.plugin.ai.provider.GoogleGemini
+    modelName: gemini-2.5-flash
+    apiKey: "{{ secret('GEMINI_API_KEY') }}"
+  messages:
+    - type: USER
+      content: Which features were released in Kestra 1.1? ...</code></pre>
+  <div class="bad">Expected: wrong / vague / paata features. Module 1 Step 10b laane (context lekunda generic answer).</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/05-rag-01-without-rag-hallucinated-answer-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/05-rag-01-without-rag-hallucinated-answer-cropped.png" alt="RAG lekunda hallucinated answer" loading="lazy"></a><figcaption>RAG lekunda hallucinated answer <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <h3>38b. Flow 2: <code>2_chat_with_rag</code> (Gemini key)</h3>
+<pre><code>- id: ingest_release_notes
+  type: io.kestra.plugin.ai.rag.IngestDocument       # 1. INGEST
+  provider: GoogleGemini, modelName: gemini-embedding-001
+  embeddings:
+    type: io.kestra.plugin.ai.embeddings.KestraKVStore
+  drop: true
+  fromExternalURLs:
+    - https://raw.githubusercontent.com/kestra-io/docs/.../release-1-1/index.md
+
+- id: chat_with_rag
+  type: io.kestra.plugin.ai.rag.ChatCompletion        # 2. QUERY
+  chatProvider: gemini-2.5-flash
+  embeddingProvider: gemini-embedding-001
+  embeddings: KestraKVStore
+  systemMessage: ... If you don't find the information in the context, say so.
+  prompt: Which features were released in Kestra 1.1? ...</code></pre>
+  <div class="expect">Expected: release blog post nunchi real Kestra 1.1 features, detailed, grounded.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/05-rag-02-rag-flow-topology-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/05-rag-02-rag-flow-topology-cropped.png" alt="RAG flow topology: ingest → chat" loading="lazy"></a><figcaption>RAG flow topology: ingest → chat <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/05-rag-03-rag-grounded-answer-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/05-rag-03-rag-grounded-answer-cropped.png" alt="RAG tho grounded answer" loading="lazy"></a><figcaption>RAG tho grounded answer <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <h3>38c. Flow 3: web search RAG (mana Groq version)</h3>
+<pre><code>chatProvider:
+  type: io.kestra.plugin.ai.provider.OpenAI
+  baseUrl: https://api.groq.com/openai/v1          # Groq (course: OpenAI)
+  apiKey: "{{ secret('GROQ_API_KEY') }}"
+  modelName: openai/gpt-oss-120b
+contentRetrievers:
+  - type: io.kestra.plugin.ai.retriever.TavilyWebSearch
+    apiKey: "{{ secret('TAVILY_API_KEY') }}"
+prompt: What is the latest release of Kestra?</code></pre>
+  <div class="warn">Kestra OpenAI provider ki <code>baseUrl</code> property undi (Kestra plugin docs lo confirm chesam), so Groq OpenAI-compatible endpoint vadochu. Course original <code>3_rag_with_websearch.yaml</code> kuda folder lo undi, OpenAI key unte adi run cheyyochu.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/05-rag-04-websearch-retriever-flow-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/05-rag-04-websearch-retriever-flow-cropped.png" alt="Web search retriever flow" loading="lazy"></a><figcaption>Web search retriever flow <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <table>
+    <tr><th></th><th>Static RAG (flow 2)</th><th>Web search RAG (flow 3)</th></tr>
+    <tr><td>Data</td><td>Manam ingest chesina documents</td><td>Live web results (Tavily)</td></tr>
+    <tr><td>Best for</td><td>Internal docs, policies, fixed knowledge</td><td>Fast ga maare information</td></tr>
+    <tr><td>Ingestion</td><td>Kavali</td><td>Ledu</td></tr>
+    <tr><td>Example</td><td>"Mana refund policy emi?"</td><td>"Kestra latest release enti?"</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Module 1, 2 lo Python lo chesina RAG ne ikkada Kestra tasks tho. <b>2 phases:</b> Ingest (documents → embeddings → store) and Query (question → similar content → prompt lo add → LLM answer). Demo lo rendu okke flow lo, production lo ingest schedule tho, query on demand (Module 1 Step 16 ingestion/query split laane).
+    <b>KV Store</b> lo embeddings: learning ki easy, kani nijamaina vector database kaadu. Pedda data ki Module 2 lo chusina vector DB vadali.
+    <b>gemini-embedding-001</b> = Module 2 lo mana <code>all-MiniLM-L6-v2</code> pani chese Gemini model. Groq ki embedding models levu, anduke flow 2 ki Gemini key tappanisari.
+    <b>Web search RAG:</b> ingest ledu, prathi question ki Tavily live search. Results search engine entha manchido antha matrame, quality test cheyyali.
+  </div>
+  <div class="flow">
+    <div class="branches">
+      <div class="branch"><span class="lbl">Ingest (once / schedule)</span><div class="node">Fetch docs (URL)</div><div class="arr">↓</div><div class="node">gemini-embedding-001</div><div class="arr">↓</div><div class="node ok">KV Store</div></div>
+      <div class="branch"><span class="lbl">Query (on demand)</span><div class="node">User question</div><div class="arr">↓</div><div class="node">Similar content from KV Store</div><div class="arr">↓</div><div class="node">Prompt + context</div><div class="arr">↓</div><div class="node ok">Gemini answer</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Step 39 AI Agents.</div>
+</section>
+
+<!-- M3 L06 -->
+<section>
+  <h2><span class="num">39</span> AI Agents in Kestra (flows 4, 5) <span class="lesson">M3 Lesson 06</span></h2>
+  <span class="where">Ekkada: Kestra UI → <code>4_simple_agent</code>, <code>5_web_research_agent</code> → Execute</span>
+  <div class="expect"><b>Module 1 connection:</b> Step 21 lo manam chethi tho rasina <code>while True</code> agent loop (LLM call → tool calls run → results add → malli call → tool calls lekapothe stop) ni Kestra <code>AIAgent</code> plugin lopala chestundi. Meeru goal, tools, system message istaru, loop Kestra drive chestundi.</div>
+  <h3>39a. Agent anatomy (YAML)</h3>
+<pre><code>- id: agent
+  type: io.kestra.plugin.ai.agent.AIAgent
+  systemMessage: You are a data analyst...            # role (Module 1: developer message)
+  prompt: "What are the top 3 trends in this data?"   # task (Module 1: user message)
+  provider:                                            # LLM
+    type: io.kestra.plugin.ai.provider.GoogleGemini
+    modelName: gemini-2.5-flash
+    apiKey: "{{ secret('GEMINI_API_KEY') }}"
+  tools:                                               # Module 1: tools=[search_tool]
+    - type: io.kestra.plugin.ai.tool.TavilyWebSearch
+      apiKey: "{{ secret('TAVILY_API_KEY') }}"
+  memory:                                              # Module 1: messages list
+    type: io.kestra.plugin.ai.memory.KestraKVStore
+    memoryId: analyst_001</code></pre>
+
+  <h3>39b. Flow 4: simple agent (Gemini key matrame)</h3>
+  <ul>
+    <li><b>Inputs:</b> <code>summary_length</code> (short / medium / long), <code>language</code> (en, fr, de, es, it, pt, ja), <code>text</code>.</li>
+    <li><b>multilingual_agent:</b> selected length + language lo summary.</li>
+    <li><b>english_brevity:</b> first agent output ni 1 English sentence ga (agents chain).</li>
+    <li><b>log_token_usage:</b> rendu agents input / output / total tokens (cost monitoring).</li>
+    <li><b>pluginDefaults:</b> Gemini provider okka sari define, anni AIAgent tasks ki apply (repeat cheyyakunda).</li>
+  </ul>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/06-agents-02-agent-execution-tokens-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/06-agents-02-agent-execution-tokens-cropped.png" alt="Agent execution token usage" loading="lazy"></a><figcaption>Agent execution token usage <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <h3>39c. Flow 5: web research agent (Gemini + Tavily)</h3>
+  <ol>
+    <li>Research topic input (default: data orchestration trends).</li>
+    <li>Agent Tavily search chestundi (max 10 results), enough kakapothe malli search.</li>
+    <li>Markdown report: Executive Summary, Key Findings, Detailed Analysis, Sources.</li>
+    <li><code>DockerMcpClient</code> (<code>mcp/filesystem</code>) tool tho <code>research_report.md</code> save.</li>
+  </ol>
+  <div class="warn">Flow 5 <code>DockerMcpClient</code> vadutundi: Kestra Docker socket dwara inkoka container start chestundi. docker-compose lo <code>/var/run/docker.sock</code> mount ide kosam. Docker Desktop (Linux containers mode) lo pani cheyyali, kani mana machine lo inka test cheyyaledu.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/06-agents-03-web-research-agent-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/06-agents-03-web-research-agent-cropped.png" alt="Web research agent" loading="lazy"></a><figcaption>Web research agent <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <h3>39d. Kestra agent tools</h3>
+  <table>
+    <tr><th>Tool</th><th>Pani</th></tr>
+    <tr><td><code>TavilyWebSearch</code> / <code>GoogleCustomWebSearch</code></td><td>Web search</td></tr>
+    <tr><td><code>CodeExecution</code></td><td>Code safely run (Judge0)</td></tr>
+    <tr><td><code>KestraTask</code> / <code>KestraFlow</code></td><td>1000+ Kestra plugins / vere flows trigger</td></tr>
+    <tr><td><code>StreamableHttpMcpClient</code>, <code>DockerMcpClient</code>, <code>StdioMcpClient</code></td><td>MCP servers</td></tr>
+    <tr><td><code>AIAgent</code></td><td>Inkoka agent ni tool ga (Step 40)</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Traditional workflow:</b> step1 → step2 → step3, fixed. <b>Agent workflow:</b> goal + tools ivvandi, ye step, ye order agent decide.
+    <b>Agent eppudu:</b> steps mundu teliyanappudu, decisions changing data meeda depend ainappudu. <b>Traditional eppudu:</b> steps fixed, compliance ki exact audit kavali, cost / latency takkuva undali. (Module 1 Step 23 "avoid agents when you can" same advice.)
+    <b>Observability:</b> Kestra prathi execution ki token usage, tool calls, logs, time chupistundi. <code>configuration: logRequests: true, logResponses: true</code> tho full LLM request/response logs.
+  </div>
+  <div class="flow h">
+    <div class="node">Goal (prompt)</div><div class="arr">→</div>
+    <div class="node">AIAgent<br><small>Kestra runs the loop</small></div><div class="arr">→</div>
+    <div class="node q">Tool kavala?</div><div class="arr">→ <small>yes: Tavily / MCP</small></div>
+    <div class="node ok">Final output + tokenUsage</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 40 Multi-agent.</div>
+</section>
+
+<!-- M3 L07 -->
+<section>
+  <h2><span class="num">40</span> Multi-Agent Systems (flow 6) <span class="lesson">M3 Lesson 07</span></h2>
+  <span class="where">Ekkada: Kestra UI → <code>6_multi_agent_research</code> → input <code>company_name</code> (default <code>kestra.io</code>)</span>
+  <table>
+    <tr><th>Agent</th><th>Role</th><th>Tools</th><th>Pani</th></tr>
+    <tr><td>Main Analyst (<code>analysis</code>)</td><td>Senior market intelligence analyst</td><td>Research agent (AIAgent as tool)</td><td>Findings ni JSON report ga</td></tr>
+    <tr><td>Research Agent (tool)</td><td>Web research assistant</td><td>Tavily web search</td><td>Current company facts vethakadam</td></tr>
+  </table>
+  <h3>Output JSON structure</h3>
+<pre><code>{
+  "company": "...",
+  "summary": "...",
+  "recent_news": [{"title": "...", "date": "...", "description": "..."}],
+  "competitors": ["...", "..."]
+}</code></pre>
+  <div class="expect">Expected log: <code>Competitive Intelligence Report</code>: company, summary, kanisam 2 recent news, kanisam 2 competitors, main agent token count.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/07-multi-agent-01-multi-agent-flow-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/07-multi-agent-01-multi-agent-flow-cropped.png" alt="Multi-agent flow" loading="lazy"></a><figcaption>Multi-agent flow <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/07-multi-agent-02-research-output-logs-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/07-multi-agent-02-research-output-logs-cropped.png" alt="Research output logs" loading="lazy"></a><figcaption>Research output logs <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Pedda task ni specialized agents ki split: prathi agent ki okka clear responsibility. Main agent research agent ni <b>tool</b> laaga call chestundi, web search tool ni call chesinatte.
+    <b>Benefits:</b> separation of concerns, debugging easy (ye agent lo problem ani isolate).
+    <b>Cost:</b> agents ekkuva = LLM calls ekkuva. Token usage monitor cheyyandi.
+    Prompt lo strict rules ("valid JSON only, no code fences") enduku? Tarvata <code>parse_results</code> task <code>json(...)</code> tho parse chestundi, extra text unte fail avutundi.
+  </div>
+  <div class="flow">
+    <div class="node">Input: company_name</div><div class="arr">↓</div>
+    <div class="node">Main Analyst Agent</div><div class="arr">↓ <small>tool call</small></div>
+    <div class="node">Research Agent → Tavily search</div><div class="arr">↓ <small>findings</small></div>
+    <div class="node">Main Analyst → JSON</div><div class="arr">↓</div>
+    <div class="node ok">parse_results log</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 41 Best practices.</div>
+</section>
+
+<!-- M3 L08 -->
+<section>
+  <h2><span class="num">41</span> Best Practices <span class="lesson">M3 Lesson 08</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/08-best-practices-01-pattern-selection-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/08-best-practices-01-pattern-selection-imagegen.png" alt="Ye scenario ki ye pattern" loading="lazy"></a><figcaption>Ye scenario ki ye pattern <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <table>
+    <tr><th>Scenario</th><th>Vadandi</th><th>Enduku</th></tr>
+    <tr><td>Flows create / edit</td><td>AI Copilot</td><td>YAML fastest</td></tr>
+    <tr><td>Mee data meeda questions</td><td>RAG</td><td>Real data lo ground</td></tr>
+    <tr><td>Fixed ETL pipelines</td><td>Traditional workflow</td><td>Deterministic, compliant</td></tr>
+    <tr><td>Research / analysis</td><td>AI Agent</td><td>Findings batti adapt</td></tr>
+    <tr><td>Complex multi-step goals</td><td>Multi-agent</td><td>Specialized agents</td></tr>
+  </table>
+  <h3>Gemini pricing (per 1M tokens, course table)</h3>
+  <table>
+    <tr><th>Model</th><th>Tier</th><th>Input</th><th>Output</th></tr>
+    <tr><td>Gemini 2.5 Flash</td><td>Free</td><td>$0</td><td>$0</td></tr>
+    <tr><td>Gemini 2.5 Flash</td><td>Batch / Flex</td><td>$0.15</td><td>$1.25</td></tr>
+    <tr><td>Gemini 3.5 Flash</td><td>Standard</td><td>$1.50</td><td>$9.00</td></tr>
+  </table>
+  <h3>Security</h3>
+<pre><code># ❌ Wrong
+apiKey: "sk-abc123def456"
+# ✅ Correct
+apiKey: "{{ secret('GEMINI_API_KEY') }}"</code></pre>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Cost:</b> free tier tho start. Simple tasks ki chinna model. <code>maxOutputTokens</code> tho response size limit. Execution outputs lo token usage chudandi. Determinism kavalante AI vaddu, traditional workflow.
+    <b>Security:</b> keys eppudu secrets lo, git lo kaadu (Module 1 Step 6 rule same). Keys 90 days ki rotate.
+    <b>Observability:</b> <code>logRequests</code> / <code>logResponses</code>, token usage, tool calls, time, output quality monitor.
+    <b>Production ki mundu:</b> different inputs tho chala sarlu test, API failures ki retries + alerts, token limits, agent emi chestundo flow description lo document.
+  </div>
+  <div class="next"><b>Next:</b> Step 42 Next steps.</div>
+</section>
+
+<!-- M3 L09 -->
+<section>
+  <h2><span class="num">42</span> Next Steps <span class="lesson">M3 Lesson 09</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <ul>
+    <li><b>Vere LLM providers try:</b> flows lo <code>provider</code> block maarchi compare (mana flow 3 Groq version ide).</li>
+    <li><b>Mee pipelines ki agents:</b> external data meeda decisions unna steps = agent candidates.</li>
+    <li><b>Kestra Blueprints:</b> <a href="https://kestra.io/blueprints">kestra.io/blueprints</a>, AI + agent examples import cheyyochu.</li>
+    <li><b>Community:</b> <a href="https://kestra.io/slack">Kestra Slack</a>.</li>
+  </ul>
+  <h3>Docs</h3>
+  <ul>
+    <li><a href="https://kestra.io/docs/ai-tools">AI Tools Overview</a> · <a href="https://kestra.io/docs/ai-tools/ai-copilot">AI Copilot</a> · <a href="https://kestra.io/docs/ai-tools/ai-agents">AI Agents</a> · <a href="https://kestra.io/docs/ai-tools/ai-rag-workflows">RAG Workflows</a></li>
+    <li><a href="https://kestra.io/plugins/plugin-ai">AI Plugin</a> · <a href="https://kestra.io/plugins/plugin-ai/agent">AI Agent Task</a> · <a href="https://kestra.io/plugins/plugin-ai/rag">RAG Tasks</a></li>
+  </ul>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Module 3 tho workflow lifecycle mottham AI tho: flows fast ga generate (Copilot), mee data nunchi answers (RAG), fixed steps leni tasks automate (agents).
+    Module 1-2 lo Python lo "lopala ela pani chestundo" nerchukunnam. Module 3 lo adi production platform lo configuration tho ela vadalo.
+  </div>
+  <div class="flow h">
+    <div class="node">Copilot<br><small>build flows</small></div><div class="arr">→</div>
+    <div class="node">RAG<br><small>answer from data</small></div><div class="arr">→</div>
+    <div class="node">Agents<br><small>dynamic tasks</small></div><div class="arr">→</div>
+    <div class="node ok">Multi-agent<br><small>complex goals</small></div>
+  </div>
+  <div class="next"><b>Next:</b> Module 4 (Evaluation).</div>
 </section>
 
 <!-- DAILY -->
@@ -1964,6 +2367,9 @@ CREATE INDEX ON documents USING hnsw (embedding vector_cosine_ops);</code></pre>
     <tr><td><code>onnxruntime ... no wheels with a matching Python ABI tag (cp315)</code></td><td>onnxruntime ki Python 3.15 version inka ledu</td><td><code>module2-vector-search/</code> (Python 3.14) lo install</td></tr>
     <tr><td><code>No module named 'onnxruntime'</code> Module 2 notebook lo</td><td>Module 1 kernel (3.15) select ayindi</td><td>Kernel → <code>module2-vector-search\.venv\Scripts\python.exe</code></td></tr>
     <tr><td><code>FileNotFoundError</code> deep inside <code>site-packages\transformers\...</code></td><td>Windows 260-character path limit (LongPathsEnabled=0)</td><td>Project ni chinna path lo unchandi (<code>C:\Users\vasus\Projects\...</code> ok)</td></tr>
+    <tr><td><code>Docker is not installed</code> (start-kestra.ps1)</td><td>Module 3 ki Docker Desktop kavali</td><td>Docker Desktop install + start, tarvata script malli</td></tr>
+    <tr><td>Kestra <code>429 Resource Exhausted</code></td><td>Gemini free tier rate limit</td><td>Okka nimisham aagi malli run</td></tr>
+    <tr><td>Flow lo <code>secret('GEMINI_API_KEY')</code> not found</td><td>Kestra start chesinappudu SECRET_ variable ledu</td><td><code>.env</code> lo key pettandi → <code>.\start-kestra.ps1</code> malli (container restart avutundi)</td></tr>
     <tr><td><code>404 model_not_found</code></td><td>Model Groq lo ledu</td><td><code>openai/gpt-oss-120b</code> vadandi</td></tr>
     <tr><td><code>.env</code> change work avvatledu</td><td>Kernel old key cache chesindi</td><td>Kernel restart → Cell 1 malli run</td></tr>
   </table>
@@ -2008,8 +2414,12 @@ CREATE INDEX ON documents USING hnsw (embedding vector_cosine_ops);</code></pre>
 │   ├── vector_search_persistent.ipynb ← Lesson 07
 │   ├── models/                  ← ONNX model (git ignore)
 │   └── faq_vectors2.db          ← vector index (git ignore)
+├── module3-orchestration/      ← Module 3 (Kestra, Docker kavali)
+│   ├── docker-compose.yml       ← course file + SECRET_GROQ_API_KEY
+│   ├── start-kestra.ps1         ← Windows: .env → SECRET_* → compose up → import flows
+│   └── flows/                   ← course 6 flows + 3_rag_with_websearch_groq.yaml
 ├── labs/             ← lab notes
-│   ├── 00-environment-setup.html   ← ee file (Setup + Module 1 + Module 2)
+│   ├── 00-environment-setup.html   ← ee file (Setup + Modules 1-3)
 │   └── 01 ... 05 .md
 ├── src/              ← agent code
 ├── data/             ← docs + evals
@@ -2042,6 +2452,7 @@ CREATE INDEX ON documents USING hnsw (embedding vector_cosine_ops);</code></pre>
     <tr><td>2026-10-27</td><td>Module 2 setup: PyTorch test (3.13/3.14/3.15), Python 3.14 + ONNX project, model download</td><td>Steps 24-25</td></tr>
     <tr><td>2026-10-27</td><td>Module 2 lessons 02-07: embeddings, dataset, numpy, minsearch VectorSearch, RAGVector, sqlitesearch vector</td><td>Steps 26-31</td></tr>
     <tr><td>2026-10-27</td><td>Module 2 lessons 08, 10: PGVector (code matrame, Docker ledu), next steps</td><td>Steps 32-33</td></tr>
+    <tr><td>2026-10-27</td><td>Module 3 Kestra: anni 9 lessons documented, 6 flows explained, Groq flow 3, Windows start script. Run pending: Docker + Gemini + Tavily</td><td>Steps 34-42</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.
