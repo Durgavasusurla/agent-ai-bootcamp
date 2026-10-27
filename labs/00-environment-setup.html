@@ -539,6 +539,93 @@ Counter(d["course"] for d in documents)</code></pre>
   <div class="next"><b>Next:</b> Lab 05 Search (minsearch tho index build).</div>
 </section>
 
+<!-- LAB 05 SEARCH -->
+<section>
+  <h2><span class="num">12</span> Lab 05: Search (minsearch)</h2>
+  <span class="where">Ekkada: notebooks/bootcamp.ipynb (Lab 04 cells kinda, <code>documents</code> ready ga undali)</span>
+
+  <h3>12a. Index build</h3>
+<pre><code>try:
+    from minsearch import Index
+except ImportError:
+    from minsearch_lite import Index   # Windows Smart App Control fallback
+
+index = Index(
+    text_fields=["question", "section", "answer"],
+    keyword_fields=["course"]
+)
+index.fit(documents)</code></pre>
+  <div class="expect">Expected: <code>&lt;minsearch.minsearch.Index at 0x...&gt;</code> (or fallback aithe <code>minsearch_lite.Index</code>). Rendu same pani chestayi.</div>
+  <div class="warn"><b>Windows note:</b> Course lo direct <code>from minsearch import Index</code> undi. Mana machine lo first time <code>ImportError: DLL load failed while importing _ckdtree: An Application Control policy has blocked this file</code> vachindi. minsearch → scikit-learn → scipy, aa scipy DLL ni Smart App Control block chesindi. Anduke <code>notebooks/minsearch_lite.py</code> rasam: same API, pure Python, DLLs levu. Test lo real minsearch tho 21 lo 20 queries exact same ranking. Tarvata run lo real minsearch kuda load ayindi, so <code>try/except</code> rendu cases handle chestundi.</div>
+
+  <h3>12b. Search with boost + filter</h3>
+<pre><code>question = "I just discovered the course. Can I join now?"
+
+search_results = index.search(
+    question,
+    boost_dict={"question": 2.0, "section": 0.5},
+    filter_dict={"course": "llm-zoomcamp"},
+    num_results=5
+)
+[doc["question"] for doc in search_results]</code></pre>
+  <div class="expect">Expected first result: <code>'I just discovered the course. Can I still join?'</code> ← exact ga kavalsindi.</div>
+
+  <h3>12c. Filter lekunda (boost matrame)</h3>
+  <div class="expect">Results anni courses nunchi: llm-zoomcamp, machine-learning-zoomcamp, mlops-zoomcamp, data-engineering-zoomcamp. Anni "Can I still join" type questions.</div>
+
+  <h3>12d. search() function: RAG first component</h3>
+<pre><code>def search(question, course="llm-zoomcamp"):
+    boost_dict = {"question": 2.0, "section": 0.5}
+    filter_dict = {"course": course}
+    return index.search(
+        question,
+        boost_dict=boost_dict,
+        filter_dict=filter_dict,
+        num_results=5
+    )
+
+search_results = search(question)</code></pre>
+
+  <h3>12e. Lexical search limit (extra test)</h3>
+<pre><code>[doc["question"] for doc in search("Is it possible to enroll late?")]</code></pre>
+  <div class="bad">Result: "Is it a group project?", "Codespaces error" lanti <b>wrong</b> results. "enroll late" ane words FAQ lo levu ("join", "start date" unnayi). Text search words matrame match chestundi, meaning kaadu. Vector search (module 2) ee problem solve chestundi.</div>
+
+  <h3>Text field vs Keyword field</h3>
+  <table>
+    <tr><th></th><th>Text field</th><th>Keyword field</th></tr>
+    <tr><td>Fields</td><td><code>question</code>, <code>section</code>, <code>answer</code></td><td><code>course</code></td></tr>
+    <tr><td>Pani</td><td>Search + rank</td><td>Exact match filter</td></tr>
+    <tr><td>Ela</td><td>Words split, lowercase, TF-IDF score</td><td>SQL <code>WHERE course = '...'</code> laga</td></tr>
+    <tr><td>Parameter</td><td><code>boost_dict</code></td><td><code>filter_dict</code></td></tr>
+  </table>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Search engine basic idea:</b> Prathi document ki <code>score = sim(query, document)</code> calculate chesi, score batti sort chesi, top N istundi. <code>sim</code> ela calculate chestamo daani batti search type maarutundi.
+    <b>Text (lexical) search:</b> Query lo words, document lo words entha common ani chustundi. Ide ippudu chesindi. <b>Vector (semantic) search:</b> meaning compare chestundi, next module.
+    <b>Enduku search?</b> 1456 documents anni LLM ki pampite expensive, slow, model confuse avutundi. Search top 5 relevant matrame istundi.
+    <b>fit()</b> ante index build cheyyadam (scikit-learn nunchi vachina name).
+    <b>boost_dict:</b> <code>question: 2.0</code> ante question field lo match ki double weight. <code>section: 0.5</code> ante half weight. Default 1.0. Question lo word match avvadam strong signal.
+    <b>filter_dict:</b> <code>course: llm-zoomcamp</code> ante aa course documents matrame. LLM course student ki MLOps answers raakudadu.
+    <b>minsearch</b> ante Elasticsearch lantidi kani chinna, in-memory, Docker avasaram ledu. Concepts (text field, keyword field, boost, filter) Elasticsearch lo same, so ikkada nerchukunnadi direct ga transfer avutundi.
+  </div>
+  <div class="flow h">
+    <div class="node">Query</div><div class="arr">→</div>
+    <div class="node">filter_dict<br><small>course = llm-zoomcamp</small></div><div class="arr">→</div>
+    <div class="node">prathi doc ki score<br><small>question×2 + answer×1 + section×0.5</small></div><div class="arr">→</div>
+    <div class="node">sort by score</div><div class="arr">→</div>
+    <div class="node ok">Top 5 docs</div>
+  </div>
+  <div class="flow">
+    <div class="node">from minsearch import Index</div><div class="arr">↓</div>
+    <div class="node q">DLL block ayindaa?</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">NO</span><div class="node ok">Real minsearch</div></div>
+      <div class="branch"><span class="lbl">YES (ImportError)</span><div class="node">minsearch_lite.py</div><div class="arr">↓</div><div class="node ok">Same API, same results</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Lab 06 Building the prompt (<code>build_prompt()</code>).</div>
+</section>
+
 <!-- DAILY -->
 <section>
   <h2>Daily workflow (ikapai eppudu)</h2>
@@ -572,6 +659,7 @@ Counter(d["course"] for d in documents)</code></pre>
     <tr><td><code>ModuleNotFoundError: openai</code></td><td>Wrong kernel</td><td>Select Kernel → <code>.venv</code></td></tr>
     <tr><td><code>401 Unauthorized</code></td><td>Key wrong / placeholder / revoked</td><td><code>.env</code> check → kernel restart</td></tr>
     <tr><td><code>Failed to spawn: jupyter</code> / <code>os error 4551</code></td><td>Smart App Control <code>.venv\Scripts\jupyter.exe</code> ni block chesindi</td><td><code>uv run python -m jupyter lab</code> or <code>uv run python -m nbconvert ...</code> vadandi. VS Code notebook direct ga open cheste problem ledu.</td></tr>
+    <tr><td><code>DLL load failed while importing _ckdtree</code> (or any <code>.pyd</code>)</td><td>Smart App Control unsigned compiled file block chesindi</td><td>Kernel restart chesi malli try (konnisarlu tarvata allow avutundi). minsearch aithe <code>minsearch_lite</code> fallback automatic.</td></tr>
     <tr><td><code>404 model_not_found</code></td><td>Model Groq lo ledu</td><td><code>openai/gpt-oss-120b</code> vadandi</td></tr>
     <tr><td><code>.env</code> change work avvatledu</td><td>Kernel old key cache chesindi</td><td>Kernel restart → Cell 1 malli run</td></tr>
   </table>
@@ -600,7 +688,8 @@ Counter(d["course"] for d in documents)</code></pre>
 ├── pyproject.toml    ← packages list (commit)
 ├── uv.lock           ← exact versions (commit)
 ├── notebooks/
-│   └── bootcamp.ipynb
+│   ├── bootcamp.ipynb
+│   └── minsearch_lite.py   ← minsearch fallback
 ├── labs/             ← lab notes
 │   ├── 00-environment-setup.html   ← ee file
 │   └── 01 ... 05 .md
@@ -622,6 +711,7 @@ Counter(d["course"] for d in documents)</code></pre>
     <tr><td>2026-10-23</td><td>Git commit + push, daily workflow, troubleshooting</td><td>Step 9+</td></tr>
     <tr><td>2026-10-27</td><td>Lab 03 RAG: llm() Groq version, plain vs context answer, rag() skeleton. jupyter.exe block fix</td><td>Step 10</td></tr>
     <tr><td>2026-10-27</td><td>Lab 04 Dataset: courses.json fetch, 1456 FAQ docs, fields + course counts</td><td>Step 11</td></tr>
+    <tr><td>2026-10-27</td><td>Lab 05 Search: minsearch index, boost, filter, search(). scipy DLL block + minsearch_lite fallback</td><td>Step 12</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.
