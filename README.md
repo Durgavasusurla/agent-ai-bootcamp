@@ -1,17 +1,41 @@
 # agent-ai-bootcamp
 
-A small AI agent written from first principles while following the Databricks
-**Agent AI / LLM bootcamp**. No framework hides the loop: every piece a bootcamp
-talks about (model call, tool calling, RAG, memory, evaluation) is a readable file
-you can change.
+My hands-on work for [LLM Zoomcamp](https://github.com/DataTalksClub/llm-zoomcamp)
+(DataTalks.Club), on Windows 11 with Groq, plus a small agent written from first
+principles. Goal: AI Forward Deployed Engineer.
 
-```
-you > According to the docs, what does Unity Catalog do for agent tools?
-agent > Unity Catalog functions become governed tools: access control, audit logs and
-        lineage apply automatically (source: unity-catalog-tools.md).
-```
+**Notes:** open [docs/bootcamp-notes.html](docs/bootcamp-notes.html) in a browser.
+It has a course map, a one-minute summary per module, every step with commands
+and real outputs, troubleshooting, and the roadmap.
 
-## What's inside
+## Course modules (same folder names as the course repo)
+
+| Folder | Module | What it does | Run with | Status |
+|---|---|---|---|---|
+| [01-agentic-rag](01-agentic-rag/) | Agentic RAG | FAQ RAG, sqlitesearch ingestion, function calling, agent loop, ToyAIKit | root `.venv` (Python 3.15) | Done |
+| [02-vector-search](02-vector-search/) | Vector Search | ONNX embeddings, numpy / minsearch / sqlitesearch vector search, vector RAG | own `.venv` (Python 3.14) | Done (PGVector needs Docker) |
+| [03-orchestration](03-orchestration/) | Orchestration | Kestra flows (RAG, agents, multi-agent), Windows start script | Docker | Waiting for Docker + Gemini/Tavily keys |
+| [04-evaluation](04-evaluation/) | Evaluation | Ground truth, Hit Rate / MRR, boost tuning, LLM judge, agent eval | root `.venv` | Done (free-tier samples) |
+| [05-monitoring](05-monitoring/) | Monitoring | Streamlit chat + dashboard, metrics, feedback, judge, SQLite/Postgres | root `.venv` | Done (Grafana needs Docker) |
+| [06-best-practices](06-best-practices/) | Best Practices | Keyword vs vector vs hybrid (RRF), evaluated | `02-vector-search` `.venv` | Done |
+| [07-project-example](07-project-example/) | Project Example | Map of the reference project onto this repo | - | Notes |
+
+Key results: hybrid search hit rate 0.959 (keyword 0.908, vector 0.943) on 315
+questions; boost tuning raised keyword hit rate from 0.778 to 0.908.
+
+### Windows notes
+
+- Smart App Control blocks unsigned `.exe` launchers: use `py -m pip`,
+  `uv run python -m streamlit`, `uv run python -m jupyter`.
+- PyTorch does not run here, so Module 2 uses the course's ONNX embedder.
+- API keys live only in `.env` (see `.env.example`). LLM provider: Groq
+  (`openai/gpt-oss-120b`) through the OpenAI client.
+
+## My own agent (`src/`)
+
+A small Claude agent written from first principles before the course. No
+framework hides the loop: model call, tool calling, RAG, memory, evaluation are
+each one readable file.
 
 | Lab | Topic | Code |
 |-----|-------|------|
@@ -21,59 +45,13 @@ agent > Unity Catalog functions become governed tools: access control, audit log
 | [04](labs/04-memory.md) | Persistent conversation memory and notes | `src/agent/memory.py` |
 | [05](labs/05-evaluation.md) | Eval harness with tool-usage checks | `src/agent/evaluate.py`, `data/evals.json` |
 
-Tools the agent can call: `calculator`, `get_current_time`, `search_docs`, `save_note`, `list_notes`.
-
-## Quick start
-
 ```bash
-git clone https://github.com/Durgavasusurla/agent-ai-bootcamp.git
-cd agent-ai-bootcamp
-python -m venv .venv
-.venv\Scripts\activate          # Windows   (macOS/Linux: source .venv/bin/activate)
-pip install -r requirements.txt
-copy .env.example .env          # then put your ANTHROPIC_API_KEY in .env
-
-python -m agent                 # chat
-python -m agent.evaluate        # run the eval suite
-pytest                          # offline unit tests, no API key needed
+uv sync
+copy .env.example .env          # add ANTHROPIC_API_KEY
+uv run python -m agent          # chat
+uv run python -m agent.evaluate # eval suite
+uv run pytest                   # offline tests
 ```
-
-The model defaults to `claude-opus-5-5`. Override with `AGENT_MODEL` / `AGENT_EFFORT` in `.env`.
-
-## How the agent works
-
-```
-user message
-    |
-    v
-+-----------------+   tool_use    +----------------+
-|  Claude (LLM)   | ------------> |  ToolRegistry  |
-|  + system prompt| <------------ |  run handler   |
-+-----------------+  tool_result  +----------------+
-    |  end_turn
-    v
-answer  (+ Trace of every tool call, used by evals)
-```
-
-`Agent.ask()` in [src/agent/agent.py](src/agent/agent.py) is the whole loop, about 40 lines.
-
-## Project layout
-
-```
-src/agent/      the package (one file per concept)
-data/docs/      knowledge base for RAG (drop your own .md files here)
-data/evals.json eval cases
-labs/           notes per bootcamp module, with exercises
-tests/          offline tests using a scripted fake model
-memory/         created at runtime, per-session history (git-ignored)
-```
-
-## Roadmap
-
-- [ ] Embedding-based retriever (compare with BM25)
-- [ ] LLM-as-judge groundedness metric in the eval harness
-- [ ] Streaming replies in the CLI
-- [ ] Deploy the same agent on Databricks with Mosaic AI Agent Framework and MLflow tracing
 
 ## License
 

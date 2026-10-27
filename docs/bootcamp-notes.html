@@ -59,38 +59,144 @@
   .pic .src{opacity:.8}
   .pic .src a{color:var(--muted)}
   .lesson{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--telugu-bg);color:var(--telugu-line);margin-left:6px;vertical-align:middle}
-  @media print{section{break-inside:avoid}}
+  .hero{border:2px solid var(--accent)}
+  .modcard{border-left:6px solid var(--accent);margin-top:34px}
+  .modcard h2{font-size:24px}
+  table.card th{width:150px;background:var(--accent-soft);color:var(--accent)}
+  .okt{color:var(--ok);font-weight:700} .badt{color:var(--bad);font-weight:700}
+  details.group{margin:0 0 22px}
+  details.group>summary{cursor:pointer;list-style:none;background:var(--accent);color:#fff;font-weight:700;padding:10px 16px;border-radius:10px;margin-bottom:14px}
+  details.group>summary::before{content:'▶  '} details.group[open]>summary::before{content:'▼  '}
+  details.group>summary::-webkit-details-marker{display:none}
+  @media print{section{break-inside:avoid} details.group{display:block}}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <h1>LLM Zoomcamp Bootcamp Notes</h1>
-<p class="sub">Setup + Module 1 (Agentic RAG) + Module 2 (Vector Search) + Module 3 (Orchestration) + Module 4 (Evaluation) + Module 5 (Monitoring), okke document lo. Windows 11 · Python 3.15 / 3.14 · uv · Groq · VS Code. Prathi step lo: <b>ekkada</b> cheyyali, <b>emi</b> cheyyali, <b>emi command</b> run cheyyali, <b>emi vastundi</b>, <b>next emi</b>.<br>Ee file repo lo <code>labs/00-environment-setup.html</code> lo undi. Manam kotha step chesina prathi sari idi update avutundi (chivarlo Changelog chudandi). Open cheyyali ante VS Code Explorer lo file meeda right-click → Reveal in File Explorer → double-click.</p>
+<p class="sub">Goal: <b>AI Forward Deployed Engineer (FDE), January 2028</b> · Windows 11 · Groq · uv · VS Code<br>File: <code>docs/bootcamp-notes.html</code> (copy: <code>Downloads\bootcamp-environment-setup.html</code>). Course: <a href="https://github.com/DataTalksClub/llm-zoomcamp">DataTalksClub/llm-zoomcamp</a>.</p>
 
-<!-- TOC -->
-<section>
-  <h2>Contents</h2>
+<!-- START HERE -->
+<section class="hero">
+  <h2>Start here</h2>
+  <div class="telugu"><b class="t">Ee document ela vadali (3 rules)</b>
+    1. Kinda <b>course map</b> chudandi: ye module, ye folder, status emi.<br>
+    2. Prathi module ki <b>1-minute summary card</b> undi: emi nerchukunnam, key idea, mana result. Revision ki adi chalu.<br>
+    3. Code / commands / errors kavalante card kinda <b>"Full steps"</b> click cheyyandi. Anni steps, flowcharts, pictures akkada.
+  </div>
+
+  <h3>Course map = repo map</h3>
+  <p>Mana repo folders course repo laage. Folder open cheste aa module code; document lo same number card.</p>
   <table>
-    <tr><th>Part</th><th>Steps</th><th>Course folder</th><th>Mana code</th></tr>
-    <tr><td><b>Setup</b> (Python, uv, .env, Groq)</td><td>0-9</td><td>01-agentic-rag lessons 01-02</td><td>project root</td></tr>
-    <tr><td><b>Module 1: Agentic RAG</b></td><td>10-23</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">01-agentic-rag</a> lessons 03-16</td><td><code>notebooks/</code> (Python 3.15)</td></tr>
-    <tr><td><b>Module 2: Vector Search</b></td><td>24-33</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">02-vector-search</a> lessons 01-10</td><td><code>module2-vector-search/</code> (Python 3.14)</td></tr>
-    <tr><td><b>Module 3: AI Orchestration (Kestra)</b></td><td>34-42</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">03-orchestration</a> lessons 01-09</td><td><code>module3-orchestration/</code> (Docker + Kestra)</td></tr>
-    <tr><td><b>Module 4: Evaluation</b></td><td>43-53</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">04-evaluation</a> lessons 01-06, 11-15</td><td><code>module4-evaluation/</code> (root .venv, Python 3.15)</td></tr>
-    <tr><td><b>Module 5: Monitoring</b></td><td>54-64</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">05-monitoring</a> lessons 01-14</td><td><code>module5-monitoring/</code> (root .venv, SQLite; Postgres/Grafana Docker kavali)</td></tr>
-    <tr><td>Daily workflow, Troubleshooting, Folder structure, Changelog</td><td>chivarlo</td><td></td><td></td></tr>
+    <tr><th>#</th><th>Module</th><th>Okka line lo</th><th>Mana folder</th><th>Status</th><th>FDE skill</th></tr>
+    <tr><td>0</td><td><a href="#setup">Setup</a></td><td>Python, uv, .env keys, Groq</td><td>root</td><td class="ok">Done</td><td>Dev environment</td></tr>
+    <tr><td>1</td><td><a href="#m1">Agentic RAG</a></td><td>Search + prompt + LLM, tarvata LLM ki tools ichi agent</td><td><code>01-agentic-rag/</code></td><td class="ok">Done</td><td>Build LLM apps</td></tr>
+    <tr><td>2</td><td><a href="#m2">Vector Search</a></td><td>Words kaadu, meaning batti search (embeddings)</td><td><code>02-vector-search/</code></td><td class="ok">Done</td><td>Retrieval</td></tr>
+    <tr><td>3</td><td><a href="#m3">Orchestration (Kestra)</a></td><td>AI workflows YAML lo, schedule, agents platform lo</td><td><code>03-orchestration/</code></td><td class="bad">Docker + keys kosam wait</td><td>Pipelines, integration</td></tr>
+    <tr><td>W</td><td>Workshop: dlt</td><td>LLM traces ingest chese data pipelines (dltHub)</td><td>-</td><td>Optional, inka start cheyyaledu</td><td>Data ingestion</td></tr>
+    <tr><td>4</td><td><a href="#m4">Evaluation</a></td><td>Number tho measure: Hit Rate, MRR, LLM judge</td><td><code>04-evaluation/</code></td><td class="ok">Done (samples)</td><td>Prove quality</td></tr>
+    <tr><td>5</td><td><a href="#m5">Monitoring</a></td><td>Live app: metrics, feedback, dashboard</td><td><code>05-monitoring/</code></td><td class="ok">Done (Grafana wait)</td><td>Production ops</td></tr>
+    <tr><td>6</td><td><a href="#m6">Best Practices</a></td><td>Hybrid search + RRF reranking</td><td><code>06-best-practices/</code></td><td class="ok">Done (no Elasticsearch)</td><td>Retrieval tuning</td></tr>
+    <tr><td>7</td><td><a href="#m7">Project Example</a></td><td>Fitness assistant: full project ela untundo</td><td><code>07-project-example/</code></td><td>Reading</td><td>End-to-end delivery</td></tr>
+    <tr><td>★</td><td><a href="#capstone">Capstone</a></td><td>Mee sontha dataset tho full app (rubric 18+ points)</td><td>separate repo</td><td>Next</td><td>Portfolio</td></tr>
   </table>
   <div class="flow h">
-    <div class="node">Setup<br><small>Steps 0-9</small></div><div class="arr">→</div>
-    <div class="node">Module 1: keyword RAG + agents<br><small>Steps 10-23</small></div><div class="arr">→</div>
-    <div class="node">Module 2: vector (meaning) search<br><small>Steps 24-33</small></div><div class="arr">→</div>
-    <div class="node">Module 3: Kestra workflows + agents<br><small>Steps 34-42</small></div><div class="arr">→</div>
-    <div class="node">Module 4: evaluation (measure everything)<br><small>Steps 43-53</small></div><div class="arr">→</div>
-    <div class="node ok">Module 5: monitoring (live app)<br><small>Steps 54-64</small></div>
+    <div class="node">0 Setup</div><div class="arr">→</div>
+    <div class="node">1 RAG + agents</div><div class="arr">→</div>
+    <div class="node">2 Vectors</div><div class="arr">→</div>
+    <div class="node">3 Workflows</div><div class="arr">→</div>
+    <div class="node">4 Evaluate</div><div class="arr">→</div>
+    <div class="node">5 Monitor</div><div class="arr">→</div>
+    <div class="node">6 Improve retrieval</div><div class="arr">→</div>
+    <div class="node ok">7 + Capstone: ship</div>
+  </div>
+
+  <h3>Meeru cheyyalsinavi (pending)</h3>
+  <table>
+    <tr><th>Pani</th><th>Enduku</th><th>Unlocks</th></tr>
+    <tr><td>Docker Desktop install (admin + restart)</td><td>Kestra, Postgres, Grafana, PGVector anni Docker lo</td><td>Module 3, Module 5 Grafana, Module 2 PGVector</td></tr>
+    <tr><td><code>.env</code> lo <code>GEMINI_API_KEY</code> (aistudio.google.com, free)</td><td>Kestra flows + AI Copilot</td><td>Module 3</td></tr>
+    <tr><td><code>.env</code> lo <code>TAVILY_API_KEY</code> (tavily.com, free)</td><td>Web search agents</td><td>Module 3 flows 3, 5, 6</td></tr>
+    <tr><td><code>git push</code></td><td>GitHub lo backup + portfolio</td><td>Anni</td></tr>
+  </table>
+</section>
+
+<!-- FDE -->
+<section id="fde">
+  <h2>FDE goal: January 2028 roadmap</h2>
+  <div class="telugu"><b class="t">FDE ante emi (simple ga)</b>
+    <b>Forward Deployed Engineer</b> = customer company lo (or vaari team tho) kurchuni, vaari <b>real data, real systems</b> meeda AI solution build chesi, deploy chesi, pani chestondi ani <b>prove</b> chese engineer. Palantir lo start ayina role; ippudu OpenAI, Anthropic, Scale AI lanti AI companies kuda hire chestunnayi.
+    Normal ML engineer model build chestadu. FDE <b>customer problem</b> ni ardham chesukuni, existing AI ni vaari data ki connect chesi, production lo nadipistadu. So kavalsinavi: build + integrate + evaluate + deploy + communicate.
+  </div>
+  <h3>Course module → FDE skill</h3>
+  <table>
+    <tr><th>FDE lo roju pani</th><th>Ee course lo ekkada</th><th>Mana proof (repo lo)</th></tr>
+    <tr><td>Customer docs meeda Q&amp;A / assistant build</td><td>Module 1, 2, 6</td><td>RAG, agent loop, hybrid search 0.959 hit rate</td></tr>
+    <tr><td>Messy data ni system loki teesukuraadam</td><td>Module 1 L09, Module 3, dlt workshop</td><td>sqlitesearch ingestion, Kestra flows (pending)</td></tr>
+    <tr><td>"Idi pani chestunda?" ki number tho answer</td><td>Module 4</td><td>Hit Rate / MRR, boost tuning, LLM judge, judge vs judge</td></tr>
+    <tr><td>Production lo nadipinchadam, cost, latency</td><td>Module 5</td><td>Streamlit app, metrics, feedback, dashboard</td></tr>
+    <tr><td>Constraints tho pani (firewall, policies, old machines)</td><td>Mana Windows journey</td><td>Smart App Control, PyTorch → ONNX, Docker lekunda SQLite, Groq free tier limits</td></tr>
+    <tr><td>Customer ki explain + document</td><td>Capstone README rules</td><td>Ee document (Tenglish), changelog, troubleshooting</td></tr>
+  </table>
+  <div class="expect"><b>Mana journey lo already FDE-type skill:</b> prathi blocker ki (pip block, PyTorch crash, Docker ledu, rate limits) workaround kanipettam, test chesam, document chesam. Customer site lo exact ga ide pani: "manaki ideal setup ledu, ayina ship cheyyali".</div>
+  <h3>Roadmap (Nov 2026 → Jan 2028), suggestion</h3>
+  <table>
+    <tr><th>Phase</th><th>Eppudu</th><th>Emi cheyyali</th><th>Done ani ela telustundi</th></tr>
+    <tr><td>1. Course complete</td><td>Nov – Dec 2026</td><td>Docker install → Module 3 Kestra, Module 5 Grafana, Module 2 PGVector run. dlt workshop. Repo push.</td><td>Ee map lo anni "Done"</td></tr>
+    <tr><td>2. Capstone #1</td><td>Jan – Mar 2027</td><td>Sontha dataset (FAQ kaadu). Rubric anni: hybrid + rerank + query rewriting, retrieval + LLM eval, FastAPI/Streamlit, docker-compose, Grafana 5+ charts, cloud deploy (bonus).</td><td>Separate public repo, README screenshots, demo video</td></tr>
+    <tr><td>3. Customer-style project</td><td>Apr – Jul 2027</td><td>Messy enterprise data (PDFs, Slack, SQL), agent tools tho real APIs call, auth, cloud deploy (AWS/GCP/Azure okati deep ga), cost + latency budget, tracing (OpenTelemetry / Logfire).</td><td>"Problem → solution → metrics → cost" case study write-up</td></tr>
+    <tr><td>4. Visibility</td><td>Aug – Oct 2027</td><td>Learning in public: LinkedIn / blog posts (prathi project ki), open-source chinna contributions, LLM system design practice.</td><td>4-6 posts, 1-2 merged PRs</td></tr>
+    <tr><td>5. Job hunt</td><td>Nov 2027 – Jan 2028</td><td>FDE / AI solutions engineer roles apply, portfolio walkthrough, mock interviews: coding, LLM system design, customer scenario ("ee client ki RAG design cheyyandi").</td><td>Offer, January 2028</td></tr>
+  </table>
+  <div class="flow h">
+    <div class="node">Course<br><small>Dec 2026</small></div><div class="arr">→</div>
+    <div class="node">Capstone<br><small>Mar 2027</small></div><div class="arr">→</div>
+    <div class="node">Customer-style project<br><small>Jul 2027</small></div><div class="arr">→</div>
+    <div class="node">Visibility<br><small>Oct 2027</small></div><div class="arr">→</div>
+    <div class="node ok">FDE role<br><small>Jan 2028</small></div>
   </div>
 </section>
 
+<!-- STRUCTURE -->
+<section>
+  <h2>Repo folder structure (course laage)</h2>
+<pre><code>agent-ai-bootcamp/
+├── .env                     ← keys (git ignore)        .env.example ← template
+├── pyproject.toml, uv.lock  ← root .venv (Python 3.15): Modules 1, 4, 5
+├── docs/
+│   └── bootcamp-notes.html  ← EE DOCUMENT
+├── 01-agentic-rag/          ← Module 1: bootcamp.ipynb, agents.ipynb, sqlite-ingest/-rag.ipynb,
+│                              ingest.py, rag_helper.py, minsearch_lite.py, faq.db (ignore)
+├── 02-vector-search/        ← Module 2: own .venv (Python 3.14, ONNX); vector_search*.ipynb,
+│                              embedder.py, download.py, models/ (ignore)
+├── 03-orchestration/        ← Module 3: docker-compose.yml, start-kestra.ps1, flows/
+├── 04-evaluation/           ← Module 4: 01-04 notebooks, evaluation_utils.py, data/ (course/ ignore)
+├── 05-monitoring/           ← Module 5: app.py, dashboard.py, db_*.py, judge.py, docker-compose.yml
+├── 06-best-practices/       ← Module 6: hybrid-search.ipynb (kernel: 02-vector-search .venv)
+├── 07-project-example/      ← Module 7: README (notes + capstone plan)
+├── src/agent/, tests/, data/, labs/   ← mana sontha "from-scratch" Claude agent (bootcamp mundu nunchi)
+└── README.md                ← repo map</code></pre>
+  <table>
+    <tr><th>Folder</th><th>Run ela</th><th>Kernel / env</th></tr>
+    <tr><td>01, 04</td><td>VS Code notebook</td><td>root <code>.venv</code> (3.15)</td></tr>
+    <tr><td>02, 06</td><td>VS Code notebook</td><td><code>02-vector-search\.venv</code> (3.14)</td></tr>
+    <tr><td>03</td><td><code>.\start-kestra.ps1</code></td><td>Docker</td></tr>
+    <tr><td>05</td><td><code>uv run python -m streamlit run app.py</code></td><td>root <code>.venv</code></td></tr>
+  </table>
+</section>
+
+<section class="modcard" id="setup">
+  <h2>0. Setup</h2>
+  <table class="card">
+    <tr><th>Emi nerchukunnam</th><td>Python 3.15, uv, PATH, <code>.env</code> keys, Groq client, Jupyter kernel, git.</td></tr>
+    <tr><th>Key idea</th><td>Smart App Control unsigned <code>.exe</code> block chestundi: <code>py -m pip</code>, <code>python -m streamlit</code>, <code>python -m jupyter</code> vadali. Keys eppudu <code>.env</code> lo matrame.</td></tr>
+    <tr><th>Mana result</th><td>Groq <code>openai/gpt-oss-120b</code> "ok" reply.</td></tr>
+    <tr><th>Folder</th><td>project root</td></tr>
+    <tr><th>Status</th><td><span class="okt">Done</span></td></tr>
+  </table>
+</section>
+<details class="group"><summary>0. Setup: full steps 0-9 (click chesi open)</summary>
 <!-- OVERVIEW -->
 <section>
   <h2>Mottham picture</h2>
@@ -108,41 +214,6 @@
   </div>
   <div class="telugu"><b class="t">Telugu lo</b>
     Idi mottham journey. Paina nunchi kindaki okkati tarvata okkati cheyyali. Okka step skip cheste next step fail avutundi. Prathi step chivarlo "Next" ani undi, adi follow cheyyandi.
-  </div>
-</section>
-
-<!-- MODULE MAP -->
-<section>
-  <h2>Module 1: Agentic RAG map (course README)</h2>
-  <p>Course lo 16 lessons, 2 parts. Ee document lo prathi lesson ye Step lo undo ikkada chudandi. Course source: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">github.com/DataTalksClub/llm-zoomcamp/01-agentic-rag</a></p>
-  <table>
-    <tr><th>Lesson</th><th>Topic</th><th>Ee document lo</th></tr>
-    <tr><td>01-02</td><td>Introduction, Environment setup</td><td>Steps 0-9</td></tr>
-    <tr><td>03</td><td>What is RAG</td><td>Step 10</td></tr>
-    <tr><td>04</td><td>Course FAQ dataset</td><td>Step 11</td></tr>
-    <tr><td>05</td><td>Search (minsearch)</td><td>Step 12</td></tr>
-    <tr><td>06</td><td>Building the prompt</td><td>Step 13</td></tr>
-    <tr><td>07</td><td>The LLM + full RAG</td><td>Step 14</td></tr>
-    <tr><td>08</td><td>RAG helper (ingest.py, rag_helper.py)</td><td>Step 15</td></tr>
-    <tr><td>09</td><td>Data ingestion (sqlitesearch)</td><td>Step 16</td></tr>
-    <tr><td>10</td><td>Wrap-up of Part 1</td><td>Step 17</td></tr>
-    <tr><td>11</td><td>Agents: why fixed RAG is not enough</td><td>Step 18</td></tr>
-    <tr><td>12</td><td>Quick RAG revision (Olama typo)</td><td>Step 19</td></tr>
-    <tr><td>13</td><td>Function calling</td><td>Step 20</td></tr>
-    <tr><td>14</td><td>The agentic loop</td><td>Step 21</td></tr>
-    <tr><td>15</td><td>ToyAIKit</td><td>Step 22</td></tr>
-    <tr><td>16</td><td>Other frameworks</td><td>Step 23</td></tr>
-  </table>
-  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/01-intro-01-rag-project-overview-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/01-intro-01-rag-project-overview-imagegen.png" alt="Module 1 lo manam build chese project overview" loading="lazy"></a><figcaption>Module 1 lo manam build chese project overview <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
-  <div class="flow">
-    <div class="node">Part 1: RAG (lessons 03-10)</div><div class="arr">↓</div>
-    <div class="node">search → prompt → LLM (fixed pipeline)</div><div class="arr">↓</div>
-    <div class="node">Part 2: Agents (lessons 11-16)</div><div class="arr">↓</div>
-    <div class="node ok">LLM decides: ye search, enni sarlu, eppudu aapali</div>
-  </div>
-  <div class="telugu"><b class="t">Telugu lo</b>
-    <b>Part 1</b> lo RAG pipeline zero nunchi build chestam: data, search, prompt, LLM, reusable code, persistent index. <b>Part 2</b> lo adi agent ga maarustam: LLM ki search tool ichi, ade decide chestundi ela vethakalo.
-    Notebooks: Part 1 lessons 03-08 <code>notebooks/bootcamp.ipynb</code> lo. Lesson 09 <code>sqlite-ingest.ipynb</code> + <code>sqlite-rag.ipynb</code>. Lessons 12-15 <code>agents.ipynb</code>.
   </div>
 </section>
 
@@ -358,7 +429,7 @@ dirdotenv hook powershell --cmd dirdotenv | Set-Content $PROFILE -Encoding utf8<
   <span class="where">Ekkada: VS Code</span>
   <h3>Emi cheyyali</h3>
   <ol>
-    <li>Project lo <code>notebooks</code> folder create cheyyandi (already undi).</li>
+    <li>Project lo <code>01-agentic-rag</code> folder (already undi; mundu <code>notebooks</code> ani undedi).</li>
     <li>Andulo <code>bootcamp.ipynb</code> ane file create cheyyandi (already undi). Kotha notebook kavalante: Explorer lo right-click → New File → name <code>.ipynb</code> tho end avvali.</li>
     <li>Notebook open cheyyandi. <b>Top-right lo "Select Kernel"</b> click cheyyandi.</li>
     <li><b>Python Environments</b> → <code>.venv (Python 3.15)</code> select cheyyandi. Path lo <code>.venv\Scripts\python.exe</code> undali.</li>
@@ -436,7 +507,7 @@ print(response.choices[0].message.content)</code></pre>
   <span class="where">Ekkada: VS Code Terminal (project folder lo)</span>
   <h3>9a. Emi change ayindo chudandi</h3>
 <pre><code>git status</code></pre>
-  <div class="expect">Kanipinchalsinavi: <code>pyproject.toml</code>, <code>uv.lock</code>, <code>notebooks/</code>, <code>labs/00-environment-setup.html</code>. <b><code>.env</code> kanipinchakudadu.</b> Kanipiste aagandi, <code>.gitignore</code> check cheyyandi.</div>
+  <div class="expect">Kanipinchalsinavi: <code>pyproject.toml</code>, <code>uv.lock</code>, <code>01-agentic-rag/</code>, <code>docs/bootcamp-notes.html</code>. <b><code>.env</code> kanipinchakudadu.</b> Kanipiste aagandi, <code>.gitignore</code> check cheyyandi.</div>
   <h3>9b. Add + commit + push</h3>
 <pre><code>git add pyproject.toml uv.lock notebooks labs
 git commit -m "Add bootcamp packages, setup notebook and environment notes"
@@ -447,7 +518,7 @@ git push</code></pre>
     <tr><th>Commit cheyyali</th><th>Commit cheyyakudadu</th></tr>
     <tr><td><code>pyproject.toml</code> (packages list)</td><td><code>.env</code> (keys!)</td></tr>
     <tr><td><code>uv.lock</code> (exact versions)</td><td><code>.venv/</code> (installed packages, pedda folder)</td></tr>
-    <tr><td><code>notebooks/*.ipynb</code></td><td><code>.pytest_cache/</code>, <code>__pycache__/</code></td></tr>
+    <tr><td><code>01-agentic-rag/*.ipynb</code></td><td><code>.pytest_cache/</code>, <code>__pycache__/</code></td></tr>
     <tr><td><code>labs/*.md</code>, <code>src/</code>, <code>tests/</code></td><td></td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
@@ -463,10 +534,58 @@ git push</code></pre>
   <div class="next"><b>Next:</b> Setup ayipoyindi. Ikapai daily workflow.</div>
 </section>
 
+</details>
+
+<section class="modcard" id="m1">
+  <h2>1. Agentic RAG</h2>
+  <table class="card">
+    <tr><th>Emi nerchukunnam</th><td>RAG = search + prompt + LLM. FAQ dataset, minsearch, RAGBase class, sqlitesearch ingestion. Tarvata function calling, agent loop, ToyAIKit.</td></tr>
+    <tr><th>Key idea</th><td>LLM ki mana data teliyadu: relevant documents vethiki prompt lo pedithe correct answer. Fixed pipeline typo ki fail; agent LLM ki search tool ichi ade malli vethukunela chestundi.</td></tr>
+    <tr><th>Mana result</th><td>"Olama" typo ni agent "Ollama" ga correct chesi answer ichindi. Okka RAG query ~$0.0002.</td></tr>
+    <tr><th>Folder</th><td><code>01-agentic-rag/</code> (bootcamp, sqlite-ingest, sqlite-rag, agents notebooks)</td></tr>
+    <tr><th>Status</th><td><span class="okt">Done</span></td></tr>
+  </table>
+</section>
+<details class="group"><summary>1. Agentic RAG: full steps 10-23 (click chesi open)</summary>
+<!-- MODULE MAP -->
+<section>
+  <h2>Module 1: Agentic RAG map (course README)</h2>
+  <p>Course lo 16 lessons, 2 parts. Ee document lo prathi lesson ye Step lo undo ikkada chudandi. Course source: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">github.com/DataTalksClub/llm-zoomcamp/01-agentic-rag</a></p>
+  <table>
+    <tr><th>Lesson</th><th>Topic</th><th>Ee document lo</th></tr>
+    <tr><td>01-02</td><td>Introduction, Environment setup</td><td>Steps 0-9</td></tr>
+    <tr><td>03</td><td>What is RAG</td><td>Step 10</td></tr>
+    <tr><td>04</td><td>Course FAQ dataset</td><td>Step 11</td></tr>
+    <tr><td>05</td><td>Search (minsearch)</td><td>Step 12</td></tr>
+    <tr><td>06</td><td>Building the prompt</td><td>Step 13</td></tr>
+    <tr><td>07</td><td>The LLM + full RAG</td><td>Step 14</td></tr>
+    <tr><td>08</td><td>RAG helper (ingest.py, rag_helper.py)</td><td>Step 15</td></tr>
+    <tr><td>09</td><td>Data ingestion (sqlitesearch)</td><td>Step 16</td></tr>
+    <tr><td>10</td><td>Wrap-up of Part 1</td><td>Step 17</td></tr>
+    <tr><td>11</td><td>Agents: why fixed RAG is not enough</td><td>Step 18</td></tr>
+    <tr><td>12</td><td>Quick RAG revision (Olama typo)</td><td>Step 19</td></tr>
+    <tr><td>13</td><td>Function calling</td><td>Step 20</td></tr>
+    <tr><td>14</td><td>The agentic loop</td><td>Step 21</td></tr>
+    <tr><td>15</td><td>ToyAIKit</td><td>Step 22</td></tr>
+    <tr><td>16</td><td>Other frameworks</td><td>Step 23</td></tr>
+  </table>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/01-intro-01-rag-project-overview-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/01-intro-01-rag-project-overview-imagegen.png" alt="Module 1 lo manam build chese project overview" loading="lazy"></a><figcaption>Module 1 lo manam build chese project overview <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="flow">
+    <div class="node">Part 1: RAG (lessons 03-10)</div><div class="arr">↓</div>
+    <div class="node">search → prompt → LLM (fixed pipeline)</div><div class="arr">↓</div>
+    <div class="node">Part 2: Agents (lessons 11-16)</div><div class="arr">↓</div>
+    <div class="node ok">LLM decides: ye search, enni sarlu, eppudu aapali</div>
+  </div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Part 1</b> lo RAG pipeline zero nunchi build chestam: data, search, prompt, LLM, reusable code, persistent index. <b>Part 2</b> lo adi agent ga maarustam: LLM ki search tool ichi, ade decide chestundi ela vethakalo.
+    Notebooks: Part 1 lessons 03-08 <code>01-agentic-rag/bootcamp.ipynb</code> lo. Lesson 09 <code>sqlite-ingest.ipynb</code> + <code>sqlite-rag.ipynb</code>. Lessons 12-15 <code>agents.ipynb</code>.
+  </div>
+</section>
+
 <!-- LAB 03 RAG -->
 <section>
   <h2><span class="num">10</span> Lab 03: RAG (Retrieval-Augmented Generation)</h2>
-  <span class="where">Ekkada: notebooks/bootcamp.ipynb (Cell 1 run chesaka)</span>
+  <span class="where">Ekkada: 01-agentic-rag/bootcamp.ipynb (Cell 1 run chesaka)</span>
 
 <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/03-rag-08-rag-architecture-sketch-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/03-rag-08-rag-architecture-sketch-imagegen.png" alt="RAG architecture: user question → assistant knowledge base lo vethuku → answer" loading="lazy"></a><figcaption>RAG architecture: user question → assistant knowledge base lo vethuku → answer <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>10a. llm() function (Groq version)</h3>
@@ -531,7 +650,7 @@ print(llm(question))</code></pre>
 <!-- LAB 04 DATASET -->
 <section>
   <h2><span class="num">11</span> Lab 04: Course FAQ Dataset</h2>
-  <span class="where">Ekkada: notebooks/bootcamp.ipynb (Lab 03 cells kinda)</span>
+  <span class="where">Ekkada: 01-agentic-rag/bootcamp.ipynb (Lab 03 cells kinda)</span>
 
   <h3>11a. Courses list fetch</h3>
 <pre><code>import requests
@@ -611,7 +730,7 @@ Counter(d["course"] for d in documents)</code></pre>
 <!-- LAB 05 SEARCH -->
 <section>
   <h2><span class="num">12</span> Lab 05: Search (minsearch)</h2>
-  <span class="where">Ekkada: notebooks/bootcamp.ipynb (Lab 04 cells kinda, <code>documents</code> ready ga undali)</span>
+  <span class="where">Ekkada: 01-agentic-rag/bootcamp.ipynb (Lab 04 cells kinda, <code>documents</code> ready ga undali)</span>
 
   <h3>12a. Index build</h3>
 <pre><code>try:
@@ -625,7 +744,7 @@ index = Index(
 )
 index.fit(documents)</code></pre>
   <div class="expect">Expected: <code>&lt;minsearch.minsearch.Index at 0x...&gt;</code> (or fallback aithe <code>minsearch_lite.Index</code>). Rendu same pani chestayi.</div>
-  <div class="warn"><b>Windows note:</b> Course lo direct <code>from minsearch import Index</code> undi. Mana machine lo first time <code>ImportError: DLL load failed while importing _ckdtree: An Application Control policy has blocked this file</code> vachindi. minsearch → scikit-learn → scipy, aa scipy DLL ni Smart App Control block chesindi. Anduke <code>notebooks/minsearch_lite.py</code> rasam: same API, pure Python, DLLs levu. Test lo real minsearch tho 21 lo 20 queries exact same ranking. Tarvata run lo real minsearch kuda load ayindi, so <code>try/except</code> rendu cases handle chestundi.</div>
+  <div class="warn"><b>Windows note:</b> Course lo direct <code>from minsearch import Index</code> undi. Mana machine lo first time <code>ImportError: DLL load failed while importing _ckdtree: An Application Control policy has blocked this file</code> vachindi. minsearch → scikit-learn → scipy, aa scipy DLL ni Smart App Control block chesindi. Anduke <code>01-agentic-rag/minsearch_lite.py</code> rasam: same API, pure Python, DLLs levu. Test lo real minsearch tho 21 lo 20 queries exact same ranking. Tarvata run lo real minsearch kuda load ayindi, so <code>try/except</code> rendu cases handle chestundi.</div>
 
   <h3>12b. Search with boost + filter</h3>
 <pre><code>question = "I just discovered the course. Can I join now?"
@@ -699,7 +818,7 @@ search_results = search(question)</code></pre>
 <!-- LAB 06 PROMPT -->
 <section>
   <h2><span class="num">13</span> Lab 06: Building the Prompt</h2>
-  <span class="where">Ekkada: notebooks/bootcamp.ipynb (Lab 05 cells kinda, <code>search_results</code> ready ga undali)</span>
+  <span class="where">Ekkada: 01-agentic-rag/bootcamp.ipynb (Lab 05 cells kinda, <code>search_results</code> ready ga undali)</span>
 
   <h3>13a. INSTRUCTIONS (system prompt, fixed)</h3>
 <pre><code>INSTRUCTIONS = """
@@ -795,7 +914,7 @@ A: You don't need it. You're accepted. ...
 <!-- LAB 07 LLM -->
 <section>
   <h2><span class="num">14</span> Lab 07: The LLM + Full RAG</h2>
-  <span class="where">Ekkada: notebooks/bootcamp.ipynb (Lab 06 cells kinda, <code>prompt</code> + <code>INSTRUCTIONS</code> ready ga undali)</span>
+  <span class="where">Ekkada: 01-agentic-rag/bootcamp.ipynb (Lab 06 cells kinda, <code>prompt</code> + <code>INSTRUCTIONS</code> ready ga undali)</span>
 
   <div class="warn"><b>Groq adaptation (chala important):</b> Course lo <code>openai_client.responses.create(model="gpt-5.4-mini", input=...)</code> undi. Course notes ee vishayam cheptunnayi: Groq, Gemini lanti providers OpenAI client istayi kani <b>chat completions</b> matrame, responses API kaadu. So manam ila maarchali:
   <table>
@@ -897,16 +1016,16 @@ print(rag("How do I get a certificate?"))</code></pre>
 <!-- LAB 08 RAG HELPER -->
 <section>
   <h2><span class="num">15</span> Lab 08: RAG Helper (reusable files)</h2>
-  <span class="where">Ekkada: <code>notebooks/</code> folder lo 2 kotha .py files + notebook</span>
+  <span class="where">Ekkada: <code>01-agentic-rag/</code> folder lo 2 kotha .py files + notebook</span>
 
 <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/08-rag-helper-01-reusable-rag-helper-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/01-agentic-rag/images/08-rag-helper-01-reusable-rag-helper-imagegen.png" alt="Reusable RAG helper: ingestion index build chestundi, RAGBase search + prompt + LLM kaluputhundi" loading="lazy"></a><figcaption>Reusable RAG helper: ingestion index build chestundi, RAGBase search + prompt + LLM kaluputhundi <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>15a. Files create</h3>
   <table>
     <tr><th>File</th><th>Lopala emi undi</th></tr>
-    <tr><td><code>notebooks/ingest.py</code></td><td><code>load_faq_data()</code> (FAQ download), <code>build_index(documents)</code> (minsearch index)</td></tr>
-    <tr><td><code>notebooks/rag_helper.py</code></td><td><code>INSTRUCTIONS</code>, <code>PROMPT_TEMPLATE</code>, <code>RAGBase</code> class (search, build_context, build_prompt, llm, rag)</td></tr>
+    <tr><td><code>01-agentic-rag/ingest.py</code></td><td><code>load_faq_data()</code> (FAQ download), <code>build_index(documents)</code> (minsearch index)</td></tr>
+    <tr><td><code>01-agentic-rag/rag_helper.py</code></td><td><code>INSTRUCTIONS</code>, <code>PROMPT_TEMPLATE</code>, <code>RAGBase</code> class (search, build_context, build_prompt, llm, rag)</td></tr>
   </table>
-  <div class="warn"><b>Enduku notebooks/ folder lo?</b> Notebook <code>notebooks/</code> folder nunchi run avutundi. Same folder lo <code>.py</code> files unte <code>from ingest import ...</code> direct ga pani chestundi, extra setup avasaram ledu.</div>
+  <div class="warn"><b>Enduku notebook pakkane (01-agentic-rag/) .py files?</b> Notebook <code>01-agentic-rag/</code> folder nunchi run avutundi. Same folder lo <code>.py</code> files unte <code>from ingest import ...</code> direct ga pani chestundi, extra setup avasaram ledu.</div>
 
   <h3>15b. Course code nunchi maarchinavi</h3>
   <table>
@@ -984,7 +1103,7 @@ mlops_assistant = RAGBase(index=index, llm_client=groq_client,
 <!-- LAB 09 INGESTION -->
 <section>
   <h2><span class="num">16</span> Lab 09: Data Ingestion (sqlitesearch) <span class="lesson">Lesson 09</span></h2>
-  <span class="where">Ekkada: Terminal (install) + 2 kotha notebooks: <code>notebooks/sqlite-ingest.ipynb</code>, <code>notebooks/sqlite-rag.ipynb</code></span>
+  <span class="where">Ekkada: Terminal (install) + 2 kotha notebooks: <code>01-agentic-rag/sqlite-ingest.ipynb</code>, <code>01-agentic-rag/sqlite-rag.ipynb</code></span>
 
   <h3>16a. Install</h3>
 <pre><code>uv add sqlitesearch</code></pre>
@@ -1011,7 +1130,7 @@ for doc in docs_llm:
     time.sleep(0.5)          # slow ingestion simulate cheyyadaniki
 
 index.close()</code></pre>
-  <div class="expect">Expected: <code>Loaded 1456 documents</code>, <code>LLM Zoomcamp: 161 documents</code>, prathi doc ki <code>Added: ...</code> line, chivarlo <code>Done. Index saved to faq.db</code>. ~80 seconds padutundi. <code>notebooks/faq.db</code> file vastundi.</div>
+  <div class="expect">Expected: <code>Loaded 1456 documents</code>, <code>LLM Zoomcamp: 161 documents</code>, prathi doc ki <code>Added: ...</code> line, chivarlo <code>Done. Index saved to faq.db</code>. ~80 seconds padutundi. <code>01-agentic-rag/faq.db</code> file vastundi.</div>
 
   <h3>16c. Querying notebook (sqlite-rag.ipynb)</h3>
 <pre><code>from sqlitesearch import TextSearchIndex
@@ -1133,7 +1252,7 @@ sqlite_index.close()</code></pre>
 <!-- LAB 12 REVISION -->
 <section>
   <h2><span class="num">19</span> Quick RAG Revision: Olama typo <span class="lesson">Lesson 12</span></h2>
-  <span class="where">Ekkada: <code>notebooks/agents.ipynb</code> (kotha notebook, lessons 12-15 anni ikkade)</span>
+  <span class="where">Ekkada: <code>01-agentic-rag/agents.ipynb</code> (kotha notebook, lessons 12-15 anni ikkade)</span>
   <h3>19a. Setup (Groq client + Responses API)</h3>
 <pre><code>import os, json
 from dotenv import load_dotenv
@@ -1152,7 +1271,7 @@ documents = load_faq_data()
 index = build_index(documents)
 
 assistant = RAGBase(index=index, llm_client=openai_client, instructions=instructions)</code></pre>
-  <div class="warn">Course lo <code>wget</code> tho <code>rag_helper.py</code>, <code>ingest.py</code> download cheyyamani undi. Manaki already <code>notebooks/</code> lo unnayi (Lab 08), download avasaram ledu. Windows PowerShell lo <code>wget</code> different ga pani chestundi, so vaddu.</div>
+  <div class="warn">Course lo <code>wget</code> tho <code>rag_helper.py</code>, <code>ingest.py</code> download cheyyamani undi. Manaki already <code>01-agentic-rag/</code> lo unnayi (Lab 08), download avasaram ledu. Windows PowerShell lo <code>wget</code> different ga pani chestundi, so vaddu.</div>
   <h3>19b. Test</h3>
 <pre><code>assistant.rag("How do I run Ollama locally?")    # works
 assistant.rag("How do I run Olama locally?")     # typo</code></pre>
@@ -1173,7 +1292,7 @@ assistant.rag("How do I run Olama locally?")     # typo</code></pre>
 <!-- LAB 13 FUNCTION CALLING -->
 <section>
   <h2><span class="num">20</span> Function Calling <span class="lesson">Lesson 13</span></h2>
-  <span class="where">Ekkada: <code>notebooks/agents.ipynb</code></span>
+  <span class="where">Ekkada: <code>01-agentic-rag/agents.ipynb</code></span>
 
   <div class="warn"><b>Groq + Responses API:</b> Groq ippudu OpenAI <b>Responses API</b> support chestundi (function calling tho sahaa, mana test lo confirm chesam). So course code almost same. Maarchinavi 3 matrame:
   <ol>
@@ -1264,7 +1383,7 @@ print(response.output_text)</code></pre>
 <!-- LAB 14 AGENT LOOP -->
 <section>
   <h2><span class="num">21</span> The Agentic Loop <span class="lesson">Lesson 14</span></h2>
-  <span class="where">Ekkada: <code>notebooks/agents.ipynb</code></span>
+  <span class="where">Ekkada: <code>01-agentic-rag/agents.ipynb</code></span>
 
   <h3>Agent = 3 parts</h3>
   <table>
@@ -1353,7 +1472,7 @@ print(response.output_text)</code></pre>
 <!-- LAB 15 TOYAIKIT -->
 <section>
   <h2><span class="num">22</span> ToyAIKit <span class="lesson">Lesson 15</span></h2>
-  <span class="where">Ekkada: Terminal (install) + <code>notebooks/agents.ipynb</code></span>
+  <span class="where">Ekkada: Terminal (install) + <code>01-agentic-rag/agents.ipynb</code></span>
 
   <h3>22a. Install</h3>
 <pre><code>uv add toyaikit</code></pre>
@@ -1445,6 +1564,19 @@ result2 = runner.loop(prompt="How do I run a different model?",
   <div class="next"><b>Next:</b> Module 2: Vector Search (kinda, Step 24 nunchi).</div>
 </section>
 
+</details>
+
+<section class="modcard" id="m2">
+  <h2>2. Vector Search</h2>
+  <table class="card">
+    <tr><th>Emi nerchukunnam</th><td>Embeddings, cosine similarity, numpy search, minsearch VectorSearch, RAGVector, sqlitesearch vector index, PGVector (code).</td></tr>
+    <tr><th>Key idea</th><td>Text ni 384 numbers ga marchi meaning compare. "Enroll late" vs "join after start" words veru, meaning same: vector search pattukuntundi.</td></tr>
+    <tr><th>Mana result</th><td>Course numbers exact ga match (0.32, best doc 0.76). PyTorch ki badulu ONNX (Python 3.14).</td></tr>
+    <tr><th>Folder</th><td><code>02-vector-search/</code> (own .venv, Python 3.14)</td></tr>
+    <tr><th>Status</th><td><span class="okt">Done</span> (PGVector Docker kosam)</td></tr>
+  </table>
+</section>
+<details class="group"><summary>2. Vector Search: full steps 24-33 (click chesi open)</summary>
 <!-- MODULE 2 MAP -->
 <section>
   <h2>Module 2: Vector Search map (course README)</h2>
@@ -1509,7 +1641,7 @@ result2 = runner.loop(prompt="How do I run a different model?",
 <!-- M2 SETUP -->
 <section>
   <h2><span class="num">25</span> Module 2 Environment: Python 3.14 + ONNX <span class="lesson">M2 Setup + Lesson 09</span></h2>
-  <span class="where">Ekkada: Terminal, project lo kotha folder <code>module2-vector-search/</code></span>
+  <span class="where">Ekkada: Terminal, project lo kotha folder <code>02-vector-search/</code></span>
 
   <h3>25a. PyTorch enduku pani cheyyadu (mana test results)</h3>
   <table>
@@ -1524,13 +1656,13 @@ result2 = runner.loop(prompt="How do I run a different model?",
   </div>
 
   <h3>25b. Project create (okka sari)</h3>
-  <p><code>module2-vector-search/pyproject.toml</code> lo dependencies:</p>
+  <p><code>02-vector-search/pyproject.toml</code> lo dependencies:</p>
 <pre><code>requires-python = "==3.14.*"
 dependencies = ["minsearch", "numpy", "onnxruntime", "openai", "python-dotenv",
                 "requests", "sqlitesearch", "tokenizers", "tqdm"]
 [dependency-groups]
 dev = ["huggingface-hub", "ipykernel", "nbconvert", "nbformat"]</code></pre>
-<pre><code>cd module2-vector-search
+<pre><code>cd 02-vector-search
 uv sync                        # Python 3.14 automatic ga download chesi .venv create
 uv run python --version        # Python 3.14.9</code></pre>
   <div class="expect">Mana <code>.venv</code> size: <b>489 MB</b>. Course numbers: sentence-transformers 4.8 GB vs ONNX 147 MB. Mana daantlo minsearch (scipy, scikit-learn, pandas) + Jupyter kuda unnayi, anduke 489.</div>
@@ -1540,7 +1672,7 @@ uv run python --version        # Python 3.14.9</code></pre>
     <tr><th>File</th><th>Ekkadi nunchi</th><th>Pani</th></tr>
     <tr><td><code>embedder.py</code></td><td>Course <code>embed/embedder.py</code></td><td><code>Embedder</code> class: tokenize → ONNX run → mean pooling → normalize</td></tr>
     <tr><td><code>download.py</code></td><td>Course <code>embed/download.py</code></td><td>HuggingFace nunchi ONNX model download</td></tr>
-    <tr><td><code>ingest.py</code>, <code>rag_helper.py</code>, <code>minsearch_lite.py</code></td><td>Mana Module 1 <code>notebooks/</code> nunchi copy</td><td>FAQ load, RAGBase (Groq), fallback</td></tr>
+    <tr><td><code>ingest.py</code>, <code>rag_helper.py</code>, <code>minsearch_lite.py</code></td><td>Mana Module 1 <code>01-agentic-rag/</code> nunchi copy</td><td>FAQ load, RAGBase (Groq), fallback</td></tr>
   </table>
 
   <h3>25d. Model download (okka sari)</h3>
@@ -1549,12 +1681,12 @@ uv run python --version        # Python 3.14.9</code></pre>
   <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/09-onnx-embedder-03-model-download-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/09-onnx-embedder-03-model-download-cropped.png" alt="ONNX model download" loading="lazy"></a><figcaption>ONNX model download <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
 
   <h3>25e. VS Code kernel</h3>
-  <div class="warn"><b>Module 2 notebooks open chesinappudu</b> kernel ga <code>module2-vector-search\.venv\Scripts\python.exe</code> (Python 3.14) select cheyyandi. Module 1 <code>.venv</code> (3.15) select cheste <code>No module named 'onnxruntime'</code> vastundi.</div>
+  <div class="warn"><b>Module 2 notebooks open chesinappudu</b> kernel ga <code>02-vector-search\.venv\Scripts\python.exe</code> (Python 3.14) select cheyyandi. Module 1 <code>.venv</code> (3.15) select cheste <code>No module named 'onnxruntime'</code> vastundi.</div>
   <div class="flow">
     <div class="node q">Ye notebook?</div>
     <div class="branches">
-      <div class="branch"><span class="lbl">notebooks/*.ipynb (Module 1)</span><div class="node">.venv (Python 3.15)</div></div>
-      <div class="branch"><span class="lbl">module2-vector-search/*.ipynb</span><div class="node ok">module2-vector-search/.venv (Python 3.14)</div></div>
+      <div class="branch"><span class="lbl">01-agentic-rag/*.ipynb (Module 1)</span><div class="node">.venv (Python 3.15)</div></div>
+      <div class="branch"><span class="lbl">02-vector-search/*.ipynb</span><div class="node ok">02-vector-search/.venv (Python 3.14)</div></div>
     </div>
   </div>
   <div class="next"><b>Next:</b> Step 26 Embeddings.</div>
@@ -1563,7 +1695,7 @@ uv run python --version        # Python 3.14.9</code></pre>
 <!-- M2 L02 -->
 <section>
   <h2><span class="num">26</span> Embeddings <span class="lesson">M2 Lesson 02</span></h2>
-  <span class="where">Ekkada: <code>module2-vector-search/vector_search.ipynb</code></span>
+  <span class="where">Ekkada: <code>02-vector-search/vector_search.ipynb</code></span>
   <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/02-embeddings-01-vector-space-whiteboard-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/02-embeddings-01-vector-space-whiteboard-imagegen.png" alt="Vector space: enroll, join daggara; Docker dooram" loading="lazy"></a><figcaption>Vector space: enroll, join daggara; Docker dooram <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>Code</h3>
 <pre><code>from embedder import Embedder
@@ -1606,7 +1738,7 @@ v2.dot(dv)</code></pre>
 <!-- M2 L03 -->
 <section>
   <h2><span class="num">27</span> Embedding Our Dataset <span class="lesson">M2 Lesson 03</span></h2>
-  <span class="where">Ekkada: <code>module2-vector-search/vector_search.ipynb</code></span>
+  <span class="where">Ekkada: <code>02-vector-search/vector_search.ipynb</code></span>
 <pre><code>from ingest import load_faq_data
 documents = load_faq_data()
 
@@ -1624,7 +1756,7 @@ import numpy as np
 X = np.array(vectors)
 X.shape</code></pre>
   <div class="expect">Mana run: <b>1456</b> documents, <b>36 seconds</b> (CPU), <code>X.shape = (1456, 384)</code>. Course lo 1208 (FAQ perigindi).</div>
-  <div class="warn">Course lo <code>wget ... ingest.py</code> undi. Manaki already <code>module2-vector-search/ingest.py</code> undi (Module 1 nunchi copy), download avasaram ledu.</div>
+  <div class="warn">Course lo <code>wget ... ingest.py</code> undi. Manaki already <code>02-vector-search/ingest.py</code> undi (Module 1 nunchi copy), download avasaram ledu.</div>
   <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/03-embeddings-dataset-05-encoding-progress-done-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/03-embeddings-dataset-05-encoding-progress-done-cropped.png" alt="Batches lo encode, tqdm progress" loading="lazy"></a><figcaption>Batches lo encode, tqdm progress <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <div class="telugu"><b class="t">Telugu lo</b>
     Prathi document ki question + answer kalipi okka text. Appudu query question ki match ainaa, answer ki match ainaa dorukutundi.
@@ -1643,7 +1775,7 @@ X.shape</code></pre>
 <!-- M2 L04 -->
 <section>
   <h2><span class="num">28</span> Vector Search with numpy <span class="lesson">M2 Lesson 04</span></h2>
-  <span class="where">Ekkada: <code>module2-vector-search/vector_search.ipynb</code></span>
+  <span class="where">Ekkada: <code>02-vector-search/vector_search.ipynb</code></span>
 <pre><code>query = "Can I still join the course after the start date?"
 v_query = model.encode(query)
 
@@ -1680,7 +1812,7 @@ top5 = np.argsort(-scores)[:5]</code></pre>
 <!-- M2 L05 -->
 <section>
   <h2><span class="num">29</span> Vector Search with minsearch <span class="lesson">M2 Lesson 05</span></h2>
-  <span class="where">Ekkada: <code>module2-vector-search/vector_search.ipynb</code></span>
+  <span class="where">Ekkada: <code>02-vector-search/vector_search.ipynb</code></span>
 <pre><code>from minsearch import VectorSearch
 
 vindex = VectorSearch(keyword_fields=["course"])
@@ -1719,7 +1851,7 @@ results = vindex.search(query_vector,
 <!-- M2 L06 -->
 <section>
   <h2><span class="num">30</span> RAG with Vector Search <span class="lesson">M2 Lesson 06</span></h2>
-  <span class="where">Ekkada: <code>module2-vector-search/vector_search.ipynb</code></span>
+  <span class="where">Ekkada: <code>02-vector-search/vector_search.ipynb</code></span>
   <h3>30a. Groq client (keys root .env lo)</h3>
 <pre><code>load_dotenv("../.env")    # module2 folder nunchi project root .env
 openai_client = OpenAI(api_key=os.getenv("GROQ_API_KEY"),
@@ -1766,7 +1898,7 @@ vector_assistant.rag("the program has already begun, can I still sign up?")</cod
 <!-- M2 L07 -->
 <section>
   <h2><span class="num">31</span> Vector Search with sqlitesearch <span class="lesson">M2 Lesson 07</span></h2>
-  <span class="where">Ekkada: <code>module2-vector-search/vector_search_persistent.ipynb</code></span>
+  <span class="where">Ekkada: <code>02-vector-search/vector_search_persistent.ipynb</code></span>
   <h3>minsearch 3 problems</h3>
   <ul>
     <li>Prathi startup ki re-index (vector ki model run, mana machine lo 36 seconds).</li>
@@ -1929,6 +2061,19 @@ CREATE INDEX ON documents USING hnsw (embedding vector_cosine_ops);</code></pre>
   <div class="next"><b>Next:</b> Module 3: AI Orchestration (kinda, Step 34 nunchi).</div>
 </section>
 
+</details>
+
+<section class="modcard" id="m3">
+  <h2>3. Orchestration (Kestra)</h2>
+  <table class="card">
+    <tr><th>Emi nerchukunnam</th><td>Context engineering, AI Copilot, RAG flows, AI agents, multi-agent, best practices (Kestra YAML).</td></tr>
+    <tr><th>Key idea</th><td>Module 1 lo chethi tho rasina RAG / agent loop ni platform (Kestra) plugins chestayi: schedule, retries, logs, UI.</td></tr>
+    <tr><th>Mana result</th><td>6 course flows + Groq version of flow 3 ready, <code>start-kestra.ps1</code> dry run OK.</td></tr>
+    <tr><th>Folder</th><td><code>03-orchestration/</code></td></tr>
+    <tr><th>Status</th><td><span class="badt">Docker + Gemini + Tavily kosam wait</span></td></tr>
+  </table>
+</section>
+<details class="group"><summary>3. Orchestration (Kestra): full steps 34-42 (click chesi open)</summary>
 <!-- MODULE 3 MAP -->
 <section>
   <h2>Module 3: AI Orchestration with Kestra map (course README)</h2>
@@ -2011,7 +2156,7 @@ CREATE INDEX ON documents USING hnsw (embedding vector_cosine_ops);</code></pre>
 <!-- M3 L03 -->
 <section>
   <h2><span class="num">36</span> Setting up Kestra (Windows version) <span class="lesson">M3 Lesson 03</span></h2>
-  <span class="where">Ekkada: <code>module3-orchestration/</code> folder + PowerShell</span>
+  <span class="where">Ekkada: <code>03-orchestration/</code> folder + PowerShell</span>
   <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/03-setup-01-secure-kestra-setup-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/03-orchestration/images/03-setup-01-secure-kestra-setup-imagegen.png" alt="Docker Compose tho Kestra, keys environment secrets ga, flows Kestra lo" loading="lazy"></a><figcaption>Docker Compose tho Kestra, keys environment secrets ga, flows Kestra lo <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
   <h3>36a. Folder lo emi undi</h3>
   <table>
@@ -2031,12 +2176,12 @@ CREATE INDEX ON documents USING hnsw (embedding vector_cosine_ops);</code></pre>
   </table>
 
   <h3>36c. Run (Docker install + keys tarvata)</h3>
-<pre><code>cd module3-orchestration
+<pre><code>cd 03-orchestration
 .\start-kestra.ps1 -DryRun     # keys check matrame (ippude run cheyyochu)
 .\start-kestra.ps1             # Kestra start + flows import</code></pre>
   <div class="expect">Mana dry run ippudu: <code>OK GROQ_API_KEY</code>, <code>MISSING GEMINI_API_KEY</code>, <code>MISSING TAVILY_API_KEY</code>. Docker lekunda full run: <code>Docker is not installed. Install Docker Desktop ...</code> ani clear ga aagutundi.</div>
   <div class="expect">Docker + keys tarvata expected: prathi flow ki <code>import ... HTTP 200</code>, chivarlo <code>Kestra UI: http://localhost:8080 (login admin@kestra.io / Admin1234!) namespace: zoomcamp</code>.</div>
-<pre><code>docker compose down          # Kestra aapadaniki (module3-orchestration folder lo)</code></pre>
+<pre><code>docker compose down          # Kestra aapadaniki (03-orchestration folder lo)</code></pre>
 
   <h3>36d. Kestra secrets ela pani chestayi</h3>
   <table>
@@ -2330,11 +2475,24 @@ apiKey: "{{ secret('GEMINI_API_KEY') }}"</code></pre>
   <div class="next"><b>Next:</b> Module 4: Evaluation (kinda, Step 43 nunchi).</div>
 </section>
 
+</details>
+
+<section class="modcard" id="m4">
+  <h2>4. Evaluation</h2>
+  <table class="card">
+    <tr><th>Emi nerchukunnam</th><td>Ground truth generation (structured output), Hit Rate, MRR, boost tuning, LLM-as-a-judge, agent trajectory eval.</td></tr>
+    <tr><th>Key idea</th><td>Guess cheyyakandi, measure cheyyandi. Module 1 lo question boost 3 manchidi anukunnam; data answer boost 2 best ani chupinchindi.</td></tr>
+    <tr><th>Mana result</th><td>Tuning tho hit rate 0.778 → 0.908. RAG judge 15/15 good. Groq judge vs course judge 14/15 agree.</td></tr>
+    <tr><th>Folder</th><td><code>04-evaluation/</code></td></tr>
+    <tr><th>Status</th><td><span class="okt">Done</span> (free tier valla samples)</td></tr>
+  </table>
+</section>
+<details class="group"><summary>4. Evaluation: full steps 43-53 (click chesi open)</summary>
 <!-- MODULE 4 MAP -->
 <section>
   <h2>Module 4: Evaluation map (course README)</h2>
   <p>Course source: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">github.com/DataTalksClub/llm-zoomcamp/04-evaluation</a>. Module 1-2 lo search, RAG, agents build chesam, kani <b>ye approach better</b> ani number tho cheppaledu. Module 4 lo adi measure chestam.</p>
-  <div class="warn"><b>Mana setup:</b> Python only, Docker avasaram ledu. Module 1 root <code>.venv</code> (Python 3.15) + Groq. Code <code>module4-evaluation/</code> folder lo, 4 notebooks.<br>
+  <div class="warn"><b>Mana setup:</b> Python only, Docker avasaram ledu. Module 1 root <code>.venv</code> (Python 3.15) + Groq. Code <code>04-evaluation/</code> folder lo, 4 notebooks.<br>
   <b>Groq free tier limit:</b> prathi model ki roju 1,000 requests, nimishaniki 8,000 tokens. Course full run ~900 LLM calls, okka roju lo kudaradu. So:
   <ul>
     <li><b>Search evaluation (no LLM):</b> full 395 questions tho run.</li>
@@ -2396,11 +2554,11 @@ apiKey: "{{ secret('GEMINI_API_KEY') }}"</code></pre>
 <!-- M4 SETUP -->
 <section>
   <h2><span class="num">44</span> Module 4 Setup (Groq) <span class="lesson">M4 Setup</span></h2>
-  <span class="where">Ekkada: <code>module4-evaluation/</code>, kernel = root <code>.venv</code> (Python 3.15)</span>
+  <span class="where">Ekkada: <code>04-evaluation/</code>, kernel = root <code>.venv</code> (Python 3.15)</span>
 <pre><code>uv add tqdm                       # course lesson 03 (pandas already undi)</code></pre>
   <table>
     <tr><th>File</th><th>Ekkadi nunchi</th></tr>
-    <tr><td><code>ingest.py</code>, <code>rag_helper.py</code>, <code>minsearch_lite.py</code></td><td>Mana Module 1 <code>notebooks/</code> nunchi copy (course <code>wget</code> badulu)</td></tr>
+    <tr><td><code>ingest.py</code>, <code>rag_helper.py</code>, <code>minsearch_lite.py</code></td><td>Mana Module 1 <code>01-agentic-rag/</code> nunchi copy (course <code>wget</code> badulu)</td></tr>
     <tr><td><code>evaluation_utils.py</code></td><td>Course file, Groq ki adapt</td></tr>
     <tr><td><code>data/course/*.csv</code></td><td>Course prepared data (ground truth 395, RAG answers, judge results, agent results)</td></tr>
     <tr><td><code>01-data-gen</code> ... <code>04-agent-eval.ipynb</code></td><td>Course 4 notebooks laage</td></tr>
@@ -2425,7 +2583,7 @@ apiKey: "{{ secret('GEMINI_API_KEY') }}"</code></pre>
 <!-- M4 L02 -->
 <section>
   <h2><span class="num">45</span> Generating Ground Truth (one document) <span class="lesson">M4 Lesson 02</span></h2>
-  <span class="where">Ekkada: <code>module4-evaluation/01-data-gen.ipynb</code></span>
+  <span class="where">Ekkada: <code>04-evaluation/01-data-gen.ipynb</code></span>
   <h3>Structured output (course lo first time)</h3>
 <pre><code>from pydantic import BaseModel
 
@@ -2461,7 +2619,7 @@ response.output_parsed.questions</code></pre>
 <!-- M4 L03 -->
 <section>
   <h2><span class="num">46</span> Ground Truth for All Documents <span class="lesson">M4 Lesson 03</span></h2>
-  <span class="where">Ekkada: <code>module4-evaluation/01-data-gen.ipynb</code></span>
+  <span class="where">Ekkada: <code>04-evaluation/01-data-gen.ipynb</code></span>
 <pre><code>from concurrent.futures import ThreadPoolExecutor
 from evaluation_utils import map_progress, llm_structured_retry, calc_total_price
 
@@ -2495,7 +2653,7 @@ pd.DataFrame(ground_truth).to_csv("data/ground_truth-groq-sample.csv", index=Fal
 <!-- M4 L04-05 -->
 <section>
   <h2><span class="num">47</span> Search Evaluation: relevance lists <span class="lesson">M4 Lesson 04</span></h2>
-  <span class="where">Ekkada: <code>module4-evaluation/02-search-eval.ipynb</code> (LLM calls levu)</span>
+  <span class="where">Ekkada: <code>04-evaluation/02-search-eval.ipynb</code> (LLM calls levu)</span>
 <pre><code>def compute_relevance(q, search_function):
     doc_id = q["document"]
     results = search_function(query=q["question"])
@@ -2511,7 +2669,7 @@ pd.DataFrame(ground_truth).to_csv("data/ground_truth-groq-sample.csv", index=Fal
 
 <section>
   <h2><span class="num">48</span> Hit Rate + MRR <span class="lesson">M4 Lesson 05</span></h2>
-  <span class="where">Ekkada: <code>module4-evaluation/02-search-eval.ipynb</code></span>
+  <span class="where">Ekkada: <code>04-evaluation/02-search-eval.ipynb</code></span>
 <pre><code>def hit_rate(relevance):     # correct doc top 5 lo ekkadaina unna queries fraction
     return sum(1 in line for line in relevance) / len(relevance)
 
@@ -2555,7 +2713,7 @@ def mrr(relevance):          # 1 / (first correct position), average
 <!-- M4 L06 -->
 <section>
   <h2><span class="num">49</span> Search Parameter Tuning <span class="lesson">M4 Lesson 06</span></h2>
-  <span class="where">Ekkada: <code>module4-evaluation/02-search-eval.ipynb</code></span>
+  <span class="where">Ekkada: <code>04-evaluation/02-search-eval.ipynb</code></span>
   <h3>Question boost sweep (mana full 395)</h3>
   <table>
     <tr><th>question boost</th><th>Hit Rate</th><th>MRR</th></tr>
@@ -2604,7 +2762,7 @@ def mrr(relevance):          # 1 / (first correct position), average
 <!-- M4 L12-13 -->
 <section>
   <h2><span class="num">51</span> RAG Answers + LLM as a Judge <span class="lesson">M4 Lessons 12-13</span></h2>
-  <span class="where">Ekkada: <code>module4-evaluation/03-rag-evals.ipynb</code></span>
+  <span class="where">Ekkada: <code>04-evaluation/03-rag-evals.ipynb</code></span>
   <h3>51a. RAG answers (RAGWithUsage, tuned boosts)</h3>
 <pre><code>from evaluation_utils import RAGWithUsage
 assistant = RAGWithUsage(index=index, llm_client=openai_client)   # boosts q=1, a=2, s=0.1
@@ -2649,7 +2807,7 @@ eval_result, usage = llm_structured_retry(openai_client, aqa_judge_instructions,
 <!-- M4 L14 -->
 <section>
   <h2><span class="num">52</span> Agent Evaluation <span class="lesson">M4 Lesson 14</span></h2>
-  <span class="where">Ekkada: <code>module4-evaluation/04-agent-eval.ipynb</code></span>
+  <span class="where">Ekkada: <code>04-evaluation/04-agent-eval.ipynb</code></span>
   <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/14-agent-evaluation-01-agent-evaluation-record-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/14-agent-evaluation-01-agent-evaluation-record-imagegen.png" alt="Agent evaluation record: question, original, generated, tool calls, trajectory" loading="lazy"></a><figcaption>Agent evaluation record: question, original, generated, tool calls, trajectory <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
 <pre><code>runner = OpenAIResponsesRunner(
     tools=agent_tools, developer_prompt=instructions,
@@ -2720,13 +2878,26 @@ tool_calls = extract_tool_calls(result.all_messages)   # [{"name": "search", "ar
   <div class="next"><b>Next:</b> Module 5: Monitoring (kinda, Step 54 nunchi).</div>
 </section>
 
+</details>
+
+<section class="modcard" id="m5">
+  <h2>5. Monitoring</h2>
+  <table class="card">
+    <tr><th>Emi nerchukunnam</th><td>Streamlit chat app, metrics (time, tokens, cost), database, thumbs up/down, online judge, dashboard, synthetic data, Grafana (SQL).</td></tr>
+    <tr><th>Key idea</th><td>Deploy tarvata real users ki system ela pani chestondo chudali: prathi call record chesi dashboard lo chupinchadam.</td></tr>
+    <tr><th>Mana result</th><td>App: answer 1.6 s, judge RELEVANT, +1 saved. Dashboard 22 conversations, 3 charts. SQLite (Postgres switch ready).</td></tr>
+    <tr><th>Folder</th><td><code>05-monitoring/</code></td></tr>
+    <tr><th>Status</th><td><span class="okt">Done</span> (Grafana Docker kosam)</td></tr>
+  </table>
+</section>
+<details class="group"><summary>5. Monitoring: full steps 54-64 (click chesi open)</summary>
 <!-- MODULE 5 MAP -->
 <section>
   <h2>Module 5: Monitoring map (course README)</h2>
   <p>Course source: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">github.com/DataTalksClub/llm-zoomcamp/05-monitoring</a>. Module 4 = <b>offline</b> evaluation (users ki mundu). Module 5 = <b>online</b> evaluation: real users vadutunnappudu live app ni chudadam.</p>
-  <div class="warn"><b>Mana setup:</b> code <code>module5-monitoring/</code>, root <code>.venv</code> (Python 3.15) + <code>streamlit</code>. Course PostgreSQL Docker lo run chestundi, mee machine lo Docker ledu. Course lesson 07 lo author ne cheptaru: <i>"Grafana avasaram lekapothe Postgres badulu SQLite vadi Docker skip cheyyochu"</i>. So mana <code>db_init.py</code> lo switch:
+  <div class="warn"><b>Mana setup:</b> code <code>05-monitoring/</code>, root <code>.venv</code> (Python 3.15) + <code>streamlit</code>. Course PostgreSQL Docker lo run chestundi, mee machine lo Docker ledu. Course lesson 07 lo author ne cheptaru: <i>"Grafana avasaram lekapothe Postgres badulu SQLite vadi Docker skip cheyyochu"</i>. So mana <code>db_init.py</code> lo switch:
   <ul>
-    <li><code>DB_BACKEND=sqlite</code> (default): <code>module5-monitoring/monitoring.db</code> file, ippude pani chestundi.</li>
+    <li><code>DB_BACKEND=sqlite</code> (default): <code>05-monitoring/monitoring.db</code> file, ippude pani chestundi.</li>
     <li><code>DB_BACKEND=postgres</code>: course laage Postgres (Docker + <code>uv add "psycopg[binary]"</code> kavali).</li>
   </ul>
   SQL anni course Postgres SQL; SQLite ki <code>sql()</code> helper 3 chinna maarpulu chestundi (<code>%s</code>→<code>?</code>, <code>SERIAL</code>, timestamp type).</div>
@@ -2776,13 +2947,13 @@ tool_calls = extract_tool_calls(result.all_messages)   # [{"name": "search", "ar
 <!-- M5 L02-03 -->
 <section>
   <h2><span class="num">55</span> Assistant + Chat App <span class="lesson">M5 Lessons 02-03</span></h2>
-  <span class="where">Ekkada: <code>module5-monitoring/</code> terminal</span>
+  <span class="where">Ekkada: <code>05-monitoring/</code> terminal</span>
   <h3>55a. assistant.py</h3>
 <pre><code>def create_assistant():
     documents = load_faq_data()
     index = build_index(documents)
     return RAGWithMetrics(index=index, llm_client=groq_client())   # course: OpenAI()</code></pre>
-<pre><code>cd module5-monitoring
+<pre><code>cd 05-monitoring
 uv run python assistant.py "How do I join the course?"</code></pre>
   <div class="expect">Mana run: Groq answer ("Registration is only used to gauge interest... submit your final project while the submission window is still open...") + <code>saved conversation 1</code>.</div>
   <div class="warn"><b>Makefile:</b> Course <code>make run</code>, <code>make chat</code> vadutundi. Windows lo <code>make</code> ledu, so direct commands vadandi (kinda table).</div>
@@ -2815,7 +2986,7 @@ if st.button("Ask"):
 <!-- M5 L04 -->
 <section>
   <h2><span class="num">56</span> Capturing Metrics <span class="lesson">M5 Lesson 04</span></h2>
-  <span class="where">Ekkada: <code>module5-monitoring/metrics.py</code></span>
+  <span class="where">Ekkada: <code>05-monitoring/metrics.py</code></span>
 <pre><code>@dataclass
 class LLMCallRecord:
     model: str; prompt: str; instructions: str; answer: str
@@ -2861,7 +3032,7 @@ class RAGWithMetrics(RAGBase):
   <span class="where">Ekkada: <code>db_init.py</code>, <code>db_save.py</code>, <code>db_query.py</code></span>
 <pre><code>uv run python db_init.py            # tables create (okka sari; schema maarite --drop)
 uv run python db_query.py           # recent conversations + stats</code></pre>
-  <div class="expect">Mana run: <code>Backend: sqlite (...\module5-monitoring\monitoring.db)</code>, <code>Using timezone: India Standard Time</code>, <code>Database initialized</code>. Query: <code>Stats(total=1, avg_response_time=7.57, total_cost=0.00039, avg_tokens=1311.0)</code>.</div>
+  <div class="expect">Mana run: <code>Backend: sqlite (...\05-monitoring\monitoring.db)</code>, <code>Using timezone: India Standard Time</code>, <code>Database initialized</code>. Query: <code>Stats(total=1, avg_response_time=7.57, total_cost=0.00039, avg_tokens=1311.0)</code>.</div>
   <h3>conversations table (course schema)</h3>
 <pre><code>id SERIAL PRIMARY KEY, question, answer, course, model, instructions, prompt,
 prompt_tokens, completion_tokens, total_tokens, response_time, cost,
@@ -2894,7 +3065,7 @@ timestamp TIMESTAMP WITH TIME ZONE</code></pre>
 <!-- M5 L07 -->
 <section>
   <h2><span class="num">58</span> Streamlit Dashboard <span class="lesson">M5 Lesson 07</span></h2>
-  <span class="where">Ekkada: <code>module5-monitoring/dashboard.py</code></span>
+  <span class="where">Ekkada: <code>05-monitoring/dashboard.py</code></span>
 <pre><code>uv run python -m streamlit run dashboard.py --server.port 8502</code></pre>
 <pre><code>stats = get_stats()        # COUNT, AVG(response_time), SUM(cost), AVG(total_tokens)
 col1.metric("Total conversations", stats.total)
@@ -2948,7 +3119,7 @@ if conversation_id is not None:
 <!-- M5 L09 -->
 <section>
   <h2><span class="num">60</span> Built-in Judge <span class="lesson">M5 Lesson 09</span></h2>
-  <span class="where">Ekkada: <code>module5-monitoring/judge.py</code></span>
+  <span class="where">Ekkada: <code>05-monitoring/judge.py</code></span>
 <pre><code>class RelevanceVerdict(BaseModel):
     relevance: Literal["NON_RELEVANT", "PARTLY_RELEVANT", "RELEVANT"]
     explanation: str
@@ -3009,7 +3180,7 @@ uv run python generate_data.py --count 20   # mana extra option: 20 rows tarvata
     <li>Host: <code>postgres:5432</code> (mana compose service name; course <code>docker run</code> lo <code>course-assistant-pg:5432</code>)</li>
     <li>Database <code>course_assistant</code>, User <code>user</code>, Password <code>password</code>, SSL disable → Save &amp; Test</li>
   </ul>
-  <h3>Panels (anni SQL <code>module5-monitoring/grafana-panels.sql</code> lo)</h3>
+  <h3>Panels (anni SQL <code>05-monitoring/grafana-panels.sql</code> lo)</h3>
   <table>
     <tr><th>Panel</th><th>Type</th><th>Query idea</th></tr>
     <tr><td>Response time</td><td>Time series</td><td><code>timestamp AS time, response_time</code></td></tr>
@@ -3033,8 +3204,8 @@ uv run python generate_data.py --count 20   # mana extra option: 20 rows tarvata
 <!-- M5 L13 -->
 <section>
   <h2><span class="num">63</span> Docker Compose <span class="lesson">M5 Lesson 13</span></h2>
-  <span class="where">Ekkada: <code>module5-monitoring/docker-compose.yml</code> (<b>Docker vachaka</b>)</span>
-<pre><code>cd module5-monitoring
+  <span class="where">Ekkada: <code>05-monitoring/docker-compose.yml</code> (<b>Docker vachaka</b>)</span>
+<pre><code>cd 05-monitoring
 docker compose up -d                          # postgres:17 + grafana
 uv add "psycopg[binary]"                      # Postgres driver
 $env:DB_BACKEND = "postgres"                  # PowerShell (course: env var / .env)
@@ -3084,6 +3255,265 @@ docker compose down                           # stop</code></pre>
   <div class="next"><b>Next:</b> Module 6 (Best Practices).</div>
 </section>
 
+</details>
+
+<section class="modcard" id="m6">
+  <h2>6. Best Practices</h2>
+  <table class="card">
+    <tr><th>Emi nerchukunnam</th><td>5 RAG improvement techniques; hybrid search (text + vector) with Reciprocal Rank Fusion; reranking; LangChain wrapper.</td></tr>
+    <tr><th>Key idea</th><td>Keyword exact words pattukuntundi, vector meaning pattukuntundi: rendu lists ni RRF tho merge. Kani evaluation tho prove cheyyali.</td></tr>
+    <tr><th>Mana result</th><td>315 questions: keyword 0.908, vector 0.943, <b>hybrid 0.959</b> hit rate. MRR lo vector best (0.865).</td></tr>
+    <tr><th>Folder</th><td><code>06-best-practices/</code> (kernel: 02-vector-search .venv)</td></tr>
+    <tr><th>Status</th><td><span class="okt">Done</span> (Elasticsearch badulu minsearch + ONNX)</td></tr>
+  </table>
+</section>
+<details class="group"><summary>6. Best Practices: full steps 65-69 (click chesi open)</summary>
+<!-- M6 L01 -->
+<section>
+  <h2><span class="num">65</span> Best Practices intro: 5 techniques <span class="lesson">M6 Lesson 01</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/06-best-practices/images/01-intro-01-rag-technique-map-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/06-best-practices/images/01-intro-01-rag-technique-map-imagegen.png" alt="RAG improvement map: indexing, retrieval, context" loading="lazy"></a><figcaption>RAG improvement map: indexing, retrieval, context <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/06-best-practices">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <table>
+    <tr><th>#</th><th>Technique</th><th>Simple ga</th><th>Course lo</th></tr>
+    <tr><td>1</td><td>Small-to-big chunks</td><td>Chinna chunks tho search, LLM ki chuttu unna pedda context</td><td>Pointer matrame</td></tr>
+    <tr><td>2</td><td>Document metadata</td><td>Title, topic, date tho filter / boost</td><td>Pointer matrame</td></tr>
+    <tr><td>3</td><td><b>Hybrid search</b></td><td>Keyword + vector kalipi</td><td>Lesson 02</td></tr>
+    <tr><td>4</td><td>Query rewriting</td><td>LLM tho user question ni better search query ga</td><td>Pointer matrame</td></tr>
+    <tr><td>5</td><td><b>Reranking</b></td><td>Retrieved docs ni better score tho re-order</td><td>Lesson 03</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    RAG lo 2 stages: <b>indexing</b> (parse, chunk, embed, store) and <b>retrieval</b> (question embed, search, LLM ki context). Better retrieval = better answer, anduke improvements anni retrieval meeda.
+    Course 2 techniques deep ga: hybrid search + reranking, takkuva effort ki ekkuva gain. Capstone rubric lo hybrid, reranking, query rewriting okkokkati 1 point.
+  </div>
+  <div class="next"><b>Next:</b> Step 66 hybrid search.</div>
+</section>
+
+<!-- M6 L02 -->
+<section>
+  <h2><span class="num">66</span> Hybrid Search + RRF (mana run) <span class="lesson">M6 Lesson 02</span></h2>
+  <span class="where">Ekkada: <code>06-best-practices/hybrid-search.ipynb</code> (kernel: <code>02-vector-search\.venv</code>)</span>
+  <div class="warn"><b>Course vs mana:</b> Course Elasticsearch (Docker) vadutundi. Manam Docker lekunda same idea: Module 4 tuned <b>minsearch keyword</b> + Module 2 <b>ONNX vector</b> + course <b>RRF</b> code. Evaluation Module 4 Hit Rate / MRR, 315 questions (document inka FAQ lo unnavi).</div>
+<pre><code>cd 06-best-practices
+uv run --project ..\02-vector-search python -m nbconvert --to notebook --execute --inplace hybrid-search.ipynb</code></pre>
+  <h3>RRF (Reciprocal Rank Fusion)</h3>
+<pre><code>def rrf(search_results, k=1, num_results=10):
+    scores, doc_map = {}, {}
+    for results in search_results:
+        for rank, doc in enumerate(results):
+            key = doc["id"]                     # course: doc["question"]
+            scores.setdefault(key, 0); doc_map[key] = doc
+            scores[key] += 1 / (k + rank + 1)
+    ranked = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    return [doc_map[key] for key, _ in ranked[:num_results]]
+
+def hybrid_search(query, k=60, num_results=5, depth=10):
+    return rrf([keyword_search(query, depth), vector_search(query, depth)], k=k, num_results=num_results)</code></pre>
+  <div class="expect">Course worked example (text <code>[A,B,C,D,E]</code>, vector <code>[C,B,F,G,A]</code>, k=1) mana code lo: <code>['C', 'A', 'B', 'F', 'D', 'G', 'E']</code>. C rendu lists lo paina, anduke first.</div>
+  <h3>Mana results (315 questions, top 5)</h3>
+  <table>
+    <tr><th>Method</th><th>Hit Rate</th><th>MRR</th></tr>
+    <tr><td>Keyword (tuned boosts)</td><td>0.908</td><td>0.786</td></tr>
+    <tr><td>Vector (ONNX MiniLM)</td><td>0.943</td><td><b>0.865</b></td></tr>
+    <tr><td>Hybrid RRF k=60</td><td>0.946</td><td>0.840</td></tr>
+    <tr><td><b>Hybrid RRF k=1</b></td><td><b>0.959</b></td><td>0.843</td></tr>
+  </table>
+  <div class="warn"><b>Senior lesson:</b> Hybrid ki best hit rate (correct doc top 5 lo vachedi), kani MRR (correct doc first lo) lo vector-only best. "Hybrid eppudu better" ani assume cheyyakandi. Mee use case ki edi mukhyam (top 5 lo unte chalu? first lo undala?) ani decide chesi, measure chesi choose cheyyandi. Customer ki ide cheptaru.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/06-best-practices/images/02-hybrid-search-01-keyword-vector-fusion-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/06-best-practices/images/02-hybrid-search-01-keyword-vector-fusion-imagegen.png" alt="Keyword + vector ranked lists → fusion → final rank" loading="lazy"></a><figcaption>Keyword + vector ranked lists → fusion → final rank <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/06-best-practices">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Weighted sum:</b> <code>alpha * vector + (1 - alpha) * keyword</code>; alpha 1 = pure vector, 0 = pure keyword. Kani rendu scores different scales lo untayi.
+    <b>RRF</b> scores badulu <b>ranks</b> vadutundi: prathi list lo rank r ki <code>1 / (k + r + 1)</code>, anni lists lo kalupu. Rendu lists lo paina unna document gelustundi. <code>k</code> pedda aithe rank differences takkuva matter.
+    Extra example: "Is it possible to enroll late?" keyword ki garbage ("Is it a group project?"), vector correct, hybrid lo correct doc 3rd ki vachindi (keyword noise valla). Ide MRR takkuva ki karanam.
+  </div>
+  <div class="flow h">
+    <div class="node">query</div><div class="arr">→</div>
+    <div class="branches" style="width:auto">
+      <div class="branch" style="min-width:150px"><div class="node">keyword top 10</div></div>
+      <div class="branch" style="min-width:150px"><div class="node">vector top 10</div></div>
+    </div><div class="arr">→</div>
+    <div class="node">RRF</div><div class="arr">→</div>
+    <div class="node ok">top 5</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 67 reranking.</div>
+</section>
+
+<!-- M6 L03 -->
+<section>
+  <h2><span class="num">67</span> Document Reranking <span class="lesson">M6 Lesson 03</span></h2>
+  <span class="where">Ekkada: Reading (course Elasticsearch code)</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/06-best-practices/images/03-reranking-01-rrf-rerank-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/06-best-practices/images/03-reranking-01-rrf-rerank-imagegen.png" alt="Candidate set → ranked views → RRF → reranked results" loading="lazy"></a><figcaption>Candidate set → ranked views → RRF → reranked results <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/06-best-practices">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <ul>
+    <li>Cosine similarity eppudu true relevance kaadu: best document 6th position lo undochu, manam top 5 matrame istam.</li>
+    <li><b>Reranking</b> = retrieval tarvata, better relevance score tho re-order.</li>
+    <li>Elasticsearch 8.9+ lo built-in <code>rank={"rrf": {}}</code>, kani <b>paid subscription</b> kavali. Free tier lo error; course manual RRF chupistundi (mana Step 66 laane, <code>k=60</code>).</li>
+  </ul>
+  <table>
+    <tr><th>Course (Elasticsearch, data-engineering FAQ)</th><th>Hit Rate</th><th>MRR</th></tr>
+    <tr><td>Hybrid without reranking</td><td>0.917</td><td>0.824</td></tr>
+    <tr><td>Hybrid with RRF</td><td>0.925</td><td>0.851</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Gain konchem (konni percent). Pedda data, noisy queries unna production lo ekkuva difference. Inkoka option: <b>cross-encoder reranker</b> model (question + document kalipi score), RRF kanna accurate kani slow. Capstone lo okka reranking method + evaluation = 1 point.
+  </div>
+  <div class="next"><b>Next:</b> Step 68 LangChain.</div>
+</section>
+
+<!-- M6 L04 -->
+<section>
+  <h2><span class="num">68</span> Hybrid Search with LangChain <span class="lesson">M6 Lesson 04</span></h2>
+  <span class="where">Ekkada: Reading (run cheyyaledu)</span>
+  <div class="bad">Run cheyyaledu: Elasticsearch (Docker) + <code>langchain-huggingface</code> (PyTorch, mee machine lo pani cheyyadu, Step 25). Concept ardham chesukunte chalu.</div>
+<pre><code>uv add langchain langchain-elasticsearch langchain-huggingface
+
+hybrid_retriever = ElasticsearchRetriever.from_es_params(
+    url="http://localhost:9200", index_name="course-questions",
+    body_func=hybrid_query, content_field="text")
+results = hybrid_retriever.invoke("I just discovered the course. Can I still join it?")</code></pre>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/06-best-practices/images/04-langchain-01-retriever-wrapper-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/06-best-practices/images/04-langchain-01-retriever-wrapper-imagegen.png" alt="LangChain wrapper and direct query → same Elasticsearch hybrid query" loading="lazy"></a><figcaption>LangChain wrapper and direct query → same Elasticsearch hybrid query <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/06-best-practices">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    LangChain lopala <b>same</b> Elasticsearch query. Results kuda same (0.925 / 0.851). Benefit: clean interface, retrieval ni LLM calls tho chain cheyyadam easy. Module 1 Step 23 lesson: frameworks loop / query ni hide chestayi; manaki lopala emi jarugutundo telusu kabatti e framework ainaa vadagalam.
+  </div>
+  <div class="next"><b>Next:</b> Step 69 next steps.</div>
+</section>
+
+<!-- M6 L05 -->
+<section>
+  <h2><span class="num">69</span> Best Practices: next steps <span class="lesson">M6 Lesson 05</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/06-best-practices/images/05-next-steps-01-retrieval-roadmap-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/06-best-practices/images/05-next-steps-01-retrieval-roadmap-imagegen.png" alt="Retrieval roadmap: hybrid + RRF → small-to-big, metadata, query rewriting" loading="lazy"></a><figcaption>Retrieval roadmap: hybrid + RRF → small-to-big, metadata, query rewriting <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/06-best-practices">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <table>
+    <tr><th>Technique</th><th>Ela try cheyyali</th></tr>
+    <tr><td>Small-to-big</td><td>LangChain <code>ParentDocumentRetriever</code>: chinna chunks embed, parent context return</td></tr>
+    <tr><td>Metadata</td><td>Title / topic / date filterable fields; ranking mundu narrow (mana <code>course</code> filter ide)</td></tr>
+    <tr><td>Query rewriting</td><td>LLM ki "ee question ni clear search query ga rayi" ani adigi tarvata search (Module 1 agent already idi chesindi: Olama → Ollama)</td></tr>
+  </table>
+  <div class="next"><b>Next:</b> Module 7.</div>
+</section>
+
+</details>
+
+<section class="modcard" id="m7">
+  <h2>7. Project Example</h2>
+  <table class="card">
+    <tr><th>Emi nerchukunnam</th><td>Fitness assistant: generated data, search, RAG, evaluation, Flask API, Postgres + Grafana, Docker, chunking for long text.</td></tr>
+    <tr><th>Key idea</th><td>Capstone ela untundo template: chinna RAG nunchi start, tarvata eval, API, monitoring, containers, README.</td></tr>
+    <tr><th>Mana result</th><td>Reading (2024 module). Reference repo: alexeygrigorev/fitness-assistant (~$2 total cost).</td></tr>
+    <tr><th>Folder</th><td><code>07-project-example/</code> (notes)</td></tr>
+    <tr><th>Status</th><td>Reading</td></tr>
+  </table>
+</section>
+<details class="group"><summary>7. Project Example: full steps 70-71 (click chesi open)</summary>
+<!-- M7 OVERVIEW -->
+<section>
+  <h2><span class="num">70</span> End-to-End Project Example: fitness assistant <span class="lesson">M7 Lessons 01-06</span></h2>
+  <span class="where">Ekkada: Reading + reference repo <a href="https://github.com/alexeygrigorev/fitness-assistant">alexeygrigorev/fitness-assistant</a></span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/07-project-example/images/01-intro-01-fitness-rag-project-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/07-project-example/images/01-intro-01-fitness-rag-project-imagegen.png" alt="Fitness assistant: data → index → RAG → API → evaluation → monitoring" loading="lazy"></a><figcaption>Fitness assistant: data → index → RAG → API → evaluation → monitoring <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/07-project-example">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="warn">2024 lo record chesina optional module, update kaaledu. Capstone ela untundo chupinchadaniki.</div>
+  <table>
+    <tr><th>Lesson</th><th>Emi</th><th>Mana repo lo equivalent</th></tr>
+    <tr><td>01 Intro</td><td>LLM tho exercises dataset generate (structured output), minsearch, RAG flow</td><td>Module 1 + Module 4 Step 45</td></tr>
+    <tr><td>02 Evaluating retrieval</td><td>Ground truth, Hit Rate, MRR, boosting</td><td>Module 4 Steps 45-49</td></tr>
+    <tr><td>03 Evaluating RAG</td><td>LLM-as-a-judge, models compare</td><td>Module 4 Step 51</td></tr>
+    <tr><td>04 Interface + ingestion</td><td>Flask API, ingestion pipeline, project structure</td><td>Module 5 Streamlit (API kaadu)</td></tr>
+    <tr><td>05 Monitoring + containers</td><td>Docker Compose, Postgres logging, Grafana</td><td>Module 5 (SQLite now, compose ready)</td></tr>
+    <tr><td>06 Summary</td><td>Total cost ~$2, Grafana provisioning, README polish</td><td>-</td></tr>
+  </table>
+  <h3>Tips (course author)</h3>
+  <ul>
+    <li><b>Start simple:</b> basic RAG first, tarvata eval, monitoring, containers.</li>
+    <li>Real data lekapothe LLM generated data course project ki saripotundi.</li>
+    <li><b>README polish:</b> first ga chusedi adi.</li>
+    <li>Course project criteria ni checklist ga vadandi (Step 72).</li>
+  </ul>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/07-project-example/images/06-summary-01-project-delivery-path-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/07-project-example/images/06-summary-01-project-delivery-path-imagegen.png" alt="Project delivery path: data, search, RAG, evaluation, monitoring, ship" loading="lazy"></a><figcaption>Project delivery path: data, search, RAG, evaluation, monitoring, ship <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/07-project-example">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Mana repo lo Modules 1-6 lo already ee project lo unna anni pieces unnayi, separate folders lo. Capstone ante vaatini <b>okka product</b> ga kalapadam, kotha dataset meeda, okka README tho.
+  </div>
+  <div class="next"><b>Next:</b> Step 71 chunking.</div>
+</section>
+
+<!-- M7 L07 -->
+<section>
+  <h2><span class="num">71</span> Chunking for Longer Texts <span class="lesson">M7 Lesson 07</span></h2>
+  <span class="where">Ekkada: Reading matrame (capstone data ki important)</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/07-project-example/images/07-chunking-01-long-document-chunks-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/07-project-example/images/07-chunking-01-long-document-chunks-imagegen.png" alt="Articles / transcripts → document + chunk IDs → embeddings, search" loading="lazy"></a><figcaption>Articles / transcripts → document + chunk IDs → embeddings, search <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/07-project-example">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <table>
+    <tr><th>Data type</th><th>Strategy</th></tr>
+    <tr><td>Konni articles</td><td>Prathi article ki <code>doc_id</code>, chunks ki <code>chunk_id</code> (<code>abc123_1</code>); hit rate doc + chunk rendu level lo; chunk size eval tho tune</td></tr>
+    <tr><td>Okka pedda transcript / PDF</td><td>Chunks ga split, same evaluation (<code>youtube-transcript-api</code>)</td></tr>
+    <tr><td>Book</td><td>Chapter / section = document; strategies LLM judge tho compare</td></tr>
+    <tr><td>Images, slides</td><td>LLM tho describe; deck = document, slide = chunk; CLIP embeddings</td></tr>
+    <tr><td>Smart chunking</td><td>LLM ki full text ichi logical blocks ga split + names</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Mana FAQ already chinna Q&amp;A pieces, chunking avasaram raledu. Real customer data (PDFs, manuals, transcripts) pedda ga untundi: <b>chunking FDE ki roju pani</b>. Chunk chinnadi aithe context miss, peddadi aithe noise. Evaluation tho size choose.
+  </div>
+  <div class="next"><b>Next:</b> Capstone (Step 72).</div>
+</section>
+
+</details>
+
+<section class="modcard" id="capstone">
+  <h2>★ Capstone project</h2>
+  <table class="card">
+    <tr><th>Emi nerchukunnam</th><td>Sontha dataset tho end-to-end RAG / agent app, peer review rubric.</td></tr>
+    <tr><th>Key idea</th><td>Course FAQ dataset vadakudadu. README tho project rise / fall avutundi.</td></tr>
+    <tr><th>Mana result</th><td>Mana repo already rubric lo chala points cover chestundi (kinda table).</td></tr>
+    <tr><th>Folder</th><td>separate public repo (suggested)</td></tr>
+    <tr><th>Status</th><td>Next (Phase 2: Jan – Mar 2027)</td></tr>
+  </table>
+</section>
+<details class="group"><summary>★ Capstone project: full steps 72 (click chesi open)</summary>
+<!-- CAPSTONE -->
+<section>
+  <h2><span class="num">72</span> Capstone project: rubric + mana status <span class="lesson">project.md</span></h2>
+  <span class="where">Ekkada: kotha public repo (suggested). Source: <a href="https://github.com/DataTalksClub/llm-zoomcamp/blob/main/project.md">project.md</a></span>
+  <div class="bad"><b>Rule:</b> DataTalks.Club course FAQ dataset capstone ki vadakudadu. Vere dataset (or API) choose cheyyali. Vere vaalla code copy = 0 points; course code reuse ok.</div>
+  <h3>Rubric vs mana repo (ippudu)</h3>
+  <table>
+    <tr><th>Criteria</th><th>2 points ki</th><th>Mana repo lo already</th></tr>
+    <tr><td>Problem description</td><td>Clear ga emi solve chestundi</td><td>Kotha dataset tho rayali</td></tr>
+    <tr><td>Retrieval flow</td><td>Knowledge base + LLM</td><td class="ok">Module 1 (RAGBase)</td></tr>
+    <tr><td>Retrieval evaluation</td><td>Multiple approaches evaluate, best vadali</td><td class="ok">Module 4 + 6 (keyword / vector / hybrid)</td></tr>
+    <tr><td>LLM evaluation</td><td>Multiple approaches (prompts / models)</td><td>Judge undi; 2+ prompts compare cheyyali</td></tr>
+    <tr><td>Interface</td><td>UI or API</td><td class="ok">Module 5 Streamlit</td></tr>
+    <tr><td>Ingestion pipeline</td><td>Automated tool (Kestra, dlt, Airflow, Prefect)</td><td>Script (1 pt); Kestra/dlt tho 2</td></tr>
+    <tr><td>Monitoring</td><td>Feedback + dashboard 5+ charts</td><td>Feedback + 3 charts; 2 add cheyyali</td></tr>
+    <tr><td>Containerization</td><td>Anni docker-compose lo</td><td>Docker kosam wait</td></tr>
+    <tr><td>Reproducibility</td><td>Clear instructions, data accessible, versions pinned</td><td class="ok">uv.lock + ee document</td></tr>
+    <tr><td>Best practices (1 each)</td><td>Hybrid search, reranking, query rewriting</td><td class="ok">Hybrid + RRF</td></tr>
+    <tr><td>Bonus</td><td>Cloud deployment (2)</td><td>Phase 2 lo</td></tr>
+  </table>
+  <h3>Dataset ideas (course list)</h3>
+  <ul>
+    <li>Podcast / YouTube transcripts, Wikipedia subset, Notion notes, books, articles, slide decks (OCR).</li>
+    <li>LLM tho generate chesina dataset kuda ok (fitness assistant laaga).</li>
+    <li><b>FDE angle:</b> "customer" laaga anipinche data choose cheyyandi: product manuals, policy documents, support tickets. Interview lo "real business problem" story ki help avutundi.</li>
+  </ul>
+  <h3>README checklist (project rises or falls with it)</h3>
+  <ul>
+    <li>Course chudani vaallaki ardham ayyela: problem, data, flow.</li>
+    <li>Evaluation criteria README lo mention.</li>
+    <li>Screenshots: UI, dashboard, example answers. Chinna demo video.</li>
+    <li>Ela run cheyyali: setup, dependencies, env variables.</li>
+  </ul>
+  <div class="flow h">
+    <div class="node">Dataset choose</div><div class="arr">→</div>
+    <div class="node">Ingest (Kestra / dlt)</div><div class="arr">→</div>
+    <div class="node">Hybrid RAG / agent</div><div class="arr">→</div>
+    <div class="node">Evaluate 2+ ways</div><div class="arr">→</div>
+    <div class="node">UI + monitoring</div><div class="arr">→</div>
+    <div class="node">docker-compose + cloud</div><div class="arr">→</div>
+    <div class="node ok">README + demo</div>
+  </div>
+</section>
+
+</details>
+
+<section class="modcard" id="reference">
+  <h2>Reference</h2>
+  <p>Daily workflow, troubleshooting (anni errors + fixes), changelog.</p>
+</section>
+<details class="group"><summary>Reference: daily workflow, troubleshooting, changelog (click chesi open)</summary>
 <!-- DAILY -->
 <section>
   <h2>Daily workflow (ikapai eppudu)</h2>
@@ -3122,8 +3552,8 @@ docker compose down                           # stop</code></pre>
     <tr><td>toyaikit <code>UnknownModelWarning</code>, <code>result.cost</code> = None</td><td>ToyAIKit price list lo Groq model ledu</td><td><code>PricingConfig().register_model(MODEL, 0.15, 0.60)</code> → runner ki <code>pricing_config=</code></td></tr>
     <tr><td><code>OSError: [WinError 4551] ... torch_python.dll</code></td><td>Smart App Control PyTorch DLL block (Python 3.13/3.14)</td><td>PyTorch vaddu, ONNX <code>Embedder</code> vadandi (Step 25)</td></tr>
     <tr><td>Python crash <code>-1073741819</code> / <code>0xC0000005</code> on <code>SentenceTransformer(...)</code></td><td>Python 3.15 + PyTorch incompatible</td><td>Module 2 Python 3.14 + ONNX folder lo run cheyyandi</td></tr>
-    <tr><td><code>onnxruntime ... no wheels with a matching Python ABI tag (cp315)</code></td><td>onnxruntime ki Python 3.15 version inka ledu</td><td><code>module2-vector-search/</code> (Python 3.14) lo install</td></tr>
-    <tr><td><code>No module named 'onnxruntime'</code> Module 2 notebook lo</td><td>Module 1 kernel (3.15) select ayindi</td><td>Kernel → <code>module2-vector-search\.venv\Scripts\python.exe</code></td></tr>
+    <tr><td><code>onnxruntime ... no wheels with a matching Python ABI tag (cp315)</code></td><td>onnxruntime ki Python 3.15 version inka ledu</td><td><code>02-vector-search/</code> (Python 3.14) lo install</td></tr>
+    <tr><td><code>No module named 'onnxruntime'</code> Module 2 notebook lo</td><td>Module 1 kernel (3.15) select ayindi</td><td>Kernel → <code>02-vector-search\.venv\Scripts\python.exe</code></td></tr>
     <tr><td><code>FileNotFoundError</code> deep inside <code>site-packages\transformers\...</code></td><td>Windows 260-character path limit (LongPathsEnabled=0)</td><td>Project ni chinna path lo unchandi (<code>C:\Users\vasus\Projects\...</code> ok)</td></tr>
     <tr><td><code>Docker is not installed</code> (start-kestra.ps1)</td><td>Module 3 ki Docker Desktop kavali</td><td>Docker Desktop install + start, tarvata script malli</td></tr>
     <tr><td>Kestra <code>429 Resource Exhausted</code></td><td>Gemini free tier rate limit</td><td>Okka nimisham aagi malli run</td></tr>
@@ -3151,55 +3581,6 @@ docker compose down                           # stop</code></pre>
   <div class="telugu"><b class="t">Telugu lo</b>
     Error vachinappudu panic avvakandi. Error message lo last line chadavandi, paina table lo match cheyyandi. 90% errors ee 4 types lo ne untayi: PATH, kernel, key, model.
   </div>
-</section>
-
-<!-- STRUCTURE -->
-<section>
-  <h2>Final folder structure</h2>
-<pre><code>agent-ai-bootcamp/
-├── .env              ← keys (git ignore, commit cheyyakudadu)
-├── .env.example      ← template (commit ok)
-├── .venv/            ← installed packages (git ignore)
-├── pyproject.toml    ← packages list (commit)
-├── uv.lock           ← exact versions (commit)
-├── notebooks/
-│   ├── bootcamp.ipynb
-│   ├── minsearch_lite.py   ← minsearch fallback
-│   ├── ingest.py           ← load_faq_data, build_index
-│   ├── rag_helper.py       ← RAGBase class
-│   ├── sqlite-ingest.ipynb ← Lesson 09 ingestion
-│   ├── sqlite-rag.ipynb    ← Lesson 09 querying
-│   ├── agents.ipynb        ← Lessons 12-15
-│   └── faq.db              ← sqlitesearch index (git ignore)
-├── module2-vector-search/      ← Module 2 (Python 3.14, separate .venv)
-│   ├── pyproject.toml, uv.lock
-│   ├── embedder.py, download.py ← ONNX embedder (course embed/)
-│   ├── ingest.py, rag_helper.py, minsearch_lite.py ← Module 1 nunchi copy
-│   ├── vector_search.ipynb      ← Lessons 02-06
-│   ├── vector_search_persistent.ipynb ← Lesson 07
-│   ├── models/                  ← ONNX model (git ignore)
-│   └── faq_vectors2.db          ← vector index (git ignore)
-├── module3-orchestration/      ← Module 3 (Kestra, Docker kavali)
-│   ├── docker-compose.yml       ← course file + SECRET_GROQ_API_KEY
-│   ├── start-kestra.ps1         ← Windows: .env → SECRET_* → compose up → import flows
-│   └── flows/                   ← course 6 flows + 3_rag_with_websearch_groq.yaml
-├── module4-evaluation/         ← Module 4 (root .venv)
-│   ├── evaluation_utils.py      ← course file, Groq prices + 429 retry
-│   ├── ingest.py, rag_helper.py, minsearch_lite.py
-│   ├── 01-data-gen … 04-agent-eval.ipynb
-│   └── data/                    ← mana *-groq-sample.csv + course/ (prepared CSVs)
-├── module5-monitoring/         ← Module 5 (root .venv + streamlit)
-│   ├── assistant.py, metrics.py, judge.py
-│   ├── db_init.py (SQLite/Postgres switch), db_save.py, db_feedback.py, db_query.py
-│   ├── app.py (chat), dashboard.py, generate_data.py
-│   ├── docker-compose.yml, grafana-panels.sql   ← Docker vachaka
-│   └── monitoring.db            ← SQLite (git ignore)
-├── labs/             ← lab notes
-│   ├── 00-environment-setup.html   ← ee file (Setup + Modules 1-5)
-│   └── 01 ... 05 .md
-├── src/              ← agent code
-├── data/             ← docs + evals
-└── tests/</code></pre>
 </section>
 
 <!-- CHANGELOG -->
@@ -3231,11 +3612,14 @@ docker compose down                           # stop</code></pre>
     <tr><td>2026-10-27</td><td>Module 3 Kestra: anni 9 lessons documented, 6 flows explained, Groq flow 3, Windows start script. Run pending: Docker + Gemini + Tavily</td><td>Steps 34-42</td></tr>
     <tr><td>2026-10-27</td><td>Module 4 Evaluation: ground truth (Groq sample + course 395), search eval full + tuning, RAG judge sample + judge-vs-judge, agent eval sample</td><td>Steps 43-53</td></tr>
     <tr><td>2026-10-27</td><td>Module 5 Monitoring: assistant, Streamlit chat + dashboard, metrics, SQLite db (Postgres switch), feedback, judge, synthetic data run; Grafana + compose files ready (Docker pending)</td><td>Steps 54-64</td></tr>
+    <tr><td>2026-10-27</td><td>Repo course laage reorganize (01-07 folders, docs/). Document: Start here, FDE roadmap, module cards, collapsible steps. Module 6 hybrid + RRF run, Module 7 + Capstone notes</td><td>Top, Steps 65-72</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.
   </div>
 </section>
+
+</details>
 
 </div>
 </body></html>
