@@ -822,6 +822,92 @@ print(rag("How do I get a certificate?"))</code></pre>
   <div class="next"><b>Next:</b> Lab 08 RAG helper.</div>
 </section>
 
+<!-- LAB 08 RAG HELPER -->
+<section>
+  <h2><span class="num">15</span> Lab 08: RAG Helper (reusable files)</h2>
+  <span class="where">Ekkada: <code>notebooks/</code> folder lo 2 kotha .py files + notebook</span>
+
+  <h3>15a. Files create</h3>
+  <table>
+    <tr><th>File</th><th>Lopala emi undi</th></tr>
+    <tr><td><code>notebooks/ingest.py</code></td><td><code>load_faq_data()</code> (FAQ download), <code>build_index(documents)</code> (minsearch index)</td></tr>
+    <tr><td><code>notebooks/rag_helper.py</code></td><td><code>INSTRUCTIONS</code>, <code>PROMPT_TEMPLATE</code>, <code>RAGBase</code> class (search, build_context, build_prompt, llm, rag)</td></tr>
+  </table>
+  <div class="warn"><b>Enduku notebooks/ folder lo?</b> Notebook <code>notebooks/</code> folder nunchi run avutundi. Same folder lo <code>.py</code> files unte <code>from ingest import ...</code> direct ga pani chestundi, extra setup avasaram ledu.</div>
+
+  <h3>15b. Course code nunchi maarchinavi</h3>
+  <table>
+    <tr><th>File</th><th>Course</th><th>Manam</th></tr>
+    <tr><td><code>ingest.py</code></td><td><code>from minsearch import Index</code></td><td><code>try</code> minsearch, block aithe <code>minsearch_lite</code></td></tr>
+    <tr><td><code>rag_helper.py</code></td><td><code>model="gpt-5.4-mini"</code></td><td><code>model="openai/gpt-oss-120b"</code></td></tr>
+    <tr><td><code>rag_helper.py</code> <code>llm()</code></td><td><code>llm_client.responses.create(input=...)</code> → <code>.output_text</code></td><td><code>llm_client.chat.completions.create(messages=...)</code> → <code>.choices[0].message.content</code></td></tr>
+    <tr><td>Notebook</td><td><code>openai_client = OpenAI()</code></td><td><code>groq_client = OpenAI(api_key=os.getenv("GROQ_API_KEY"), base_url="https://api.groq.com/openai/v1")</code></td></tr>
+  </table>
+
+  <h3>15c. Notebook lo vadadam</h3>
+<pre><code>from dotenv import load_dotenv
+load_dotenv()
+
+import os
+from openai import OpenAI
+from ingest import load_faq_data, build_index
+from rag_helper import RAGBase
+
+documents = load_faq_data()
+index = build_index(documents)
+
+groq_client = OpenAI(
+    api_key=os.getenv("GROQ_API_KEY"),
+    base_url="https://api.groq.com/openai/v1",
+)
+
+assistant = RAGBase(index=index, llm_client=groq_client)
+print(assistant.rag("I just discovered the course. Can I join now?"))</code></pre>
+  <div class="expect">Expected: <code>Yes—you can still join the course. Just keep in mind that if you want to earn a certificate, you'll need to submit your capstone project before the submission window closes.</code></div>
+
+  <h3>15d. Custom instructions + vere course</h3>
+<pre><code>assistant = RAGBase(index=index, llm_client=groq_client,
+                    instructions=custom_instructions)
+
+mlops_assistant = RAGBase(index=index, llm_client=groq_client,
+                          course="mlops-zoomcamp")</code></pre>
+  <div class="expect">MLOps assistant "Can I still join after it started?" ki MLOps FAQ nunchi answer ichindi (registration avasaram ledu, homework form open unnantha varaku submit cheyyochu). Code maarchakunda, okka argument tho course maarindi.</div>
+
+  <h3>RAGBase constructor arguments</h3>
+  <table>
+    <tr><th>Argument</th><th>Default</th><th>Eppudu maarchali</th></tr>
+    <tr><td><code>index</code></td><td>(required)</td><td><code>search()</code> method unna edaina: minsearch, sqlitesearch...</td></tr>
+    <tr><td><code>llm_client</code></td><td>(required)</td><td>Groq / OpenAI client</td></tr>
+    <tr><td><code>instructions</code></td><td><code>INSTRUCTIONS</code></td><td>LLM behaviour maarchali ante</td></tr>
+    <tr><td><code>prompt_template</code></td><td><code>PROMPT_TEMPLATE</code></td><td>Prompt format maarchali ante</td></tr>
+    <tr><td><code>course</code></td><td><code>"llm-zoomcamp"</code></td><td>Vere course FAQ kavalante</td></tr>
+    <tr><td><code>model</code></td><td><code>"openai/gpt-oss-120b"</code></td><td>Chinna/fast model kavalante <code>openai/gpt-oss-20b</code></td></tr>
+  </table>
+  <div class="warn">Gamanika: <code>RAGBase.search()</code> lo <code>question</code> boost <b>3.0</b> (Lab 05 lo 2.0). Course code lo ala ne undi.</div>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Ippati varaku search, prompt, LLM code anni notebook cells lo unnayi. Prathi kotha notebook lo malli copy-paste cheyyali. Ide problem.
+    <b>Solution:</b> Code ni 2 <code>.py</code> files lo pettadam. Notebook lo just <code>import</code> chesi vadadam.
+    <b>ingest.py</b> = data load + index build (search cheyyadaniki mundu kavalsinavi). <b>rag_helper.py</b> = RAG logic.
+    <b>Class enduku?</b> Notebook lo <code>index</code>, <code>openai_client</code> global variables. Separate file ki move cheste avi akkada undavu. Class lo <b>constructor arguments</b> ga pampite, edaina index, edaina client pass cheyyochu. Code reuse easy.
+    <b>Subclass:</b> Class kabatti, tarvata okka method (e.g. <code>llm()</code>) matrame override chesi local model ki maarchochu, migatha code touch cheyyakunda.
+    <b>Mana advantage:</b> Groq adaptation ippudu okka chota (<code>rag_helper.py</code> lo <code>llm()</code>) matrame undi. Ikapai prathi notebook automatic ga Groq vadutundi.
+  </div>
+  <div class="flow">
+    <div class="node">ingest.py</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">1</span><div class="node">load_faq_data()<br><small>1456 docs</small></div></div>
+      <div class="branch"><span class="lbl">2</span><div class="node">build_index(docs)<br><small>minsearch Index</small></div></div>
+    </div>
+    <div class="arr">↓</div>
+    <div class="node">RAGBase(index, groq_client)</div><div class="arr">↓</div>
+    <div class="node">assistant.rag(query)</div><div class="arr">↓</div>
+    <div class="node">self.search() → self.build_prompt() → self.llm()</div><div class="arr">↓</div>
+    <div class="node ok">Answer</div>
+  </div>
+  <div class="next"><b>Next:</b> Lab 09 Data ingestion (sqlitesearch, persistent index).</div>
+</section>
+
 <!-- DAILY -->
 <section>
   <h2>Daily workflow (ikapai eppudu)</h2>
@@ -885,7 +971,9 @@ print(rag("How do I get a certificate?"))</code></pre>
 ├── uv.lock           ← exact versions (commit)
 ├── notebooks/
 │   ├── bootcamp.ipynb
-│   └── minsearch_lite.py   ← minsearch fallback
+│   ├── minsearch_lite.py   ← minsearch fallback
+│   ├── ingest.py           ← load_faq_data, build_index
+│   └── rag_helper.py       ← RAGBase class
 ├── labs/             ← lab notes
 │   ├── 00-environment-setup.html   ← ee file
 │   └── 01 ... 05 .md
@@ -910,6 +998,7 @@ print(rag("How do I get a certificate?"))</code></pre>
     <tr><td>2026-10-27</td><td>Lab 05 Search: minsearch index, boost, filter, search(). scipy DLL block + minsearch_lite fallback</td><td>Step 12</td></tr>
     <tr><td>2026-10-27</td><td>Lab 06 Prompt: INSTRUCTIONS, USER_PROMPT_TEMPLATE, build_context(), build_prompt()</td><td>Step 13</td></tr>
     <tr><td>2026-10-27</td><td>Lab 07 LLM: chat.completions (Groq), usage + cost, developer/user messages, llm(), full rag()</td><td>Step 14</td></tr>
+    <tr><td>2026-10-27</td><td>Lab 08 RAG helper: ingest.py, rag_helper.py (RAGBase, Groq llm), custom instructions, course switch</td><td>Step 15</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.
