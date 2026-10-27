@@ -397,6 +397,69 @@ git push</code></pre>
   <div class="next"><b>Next:</b> Setup ayipoyindi. Ikapai daily workflow.</div>
 </section>
 
+<!-- LAB 03 RAG -->
+<section>
+  <h2><span class="num">10</span> Lab 03: RAG (Retrieval-Augmented Generation)</h2>
+  <span class="where">Ekkada: notebooks/bootcamp.ipynb (Cell 1 run chesaka)</span>
+
+  <h3>10a. llm() function (Groq version)</h3>
+  <p>Course notes lo <code>openai_client.responses.create(model="gpt-5.4-mini")</code> undi. Adi OpenAI ki matrame. Groq lo <code>responses</code> API ledu, so <code>chat.completions</code> vadutam:</p>
+<pre><code>MODEL = "openai/gpt-oss-120b"
+
+def llm(prompt):
+    response = openai_client.chat.completions.create(
+        model=MODEL,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return response.choices[0].message.content
+
+llm("Hey, what's up?")</code></pre>
+  <div class="expect">Expected: <code>"Hey there! I'm doing great..."</code> lanti reply.</div>
+
+  <h3>10b. Plain LLM test (context lekunda)</h3>
+<pre><code>question = "I just discovered the course. Can I join now?"
+print(llm(question))</code></pre>
+  <div class="warn">Expected: Generic answer ("Enroll Now button click cheyyandi..."). Model ki mana Zoomcamp gurinchi em teliyadu, anduke guess chestundi.</div>
+
+  <h3>10c. Context manually add chesi test</h3>
+  <p>Notebook lo <code>context</code> (FAQ entries) + <code>prompt</code> (question + context + "I don't know" rule) cells run cheyyandi, tarvata:</p>
+<pre><code>print(llm(prompt))</code></pre>
+  <div class="expect">Expected: <code>Yes, you can still join the course. If you'd like to earn a certificate, submit your project before the deadline.</code> ← Correct answer, FAQ nunchi.</div>
+
+  <h3>10d. RAG skeleton</h3>
+<pre><code>def rag(question):
+    search_results = search(question)          # 1. Retrieval
+    user_prompt = build_prompt(question, search_results)  # 2. Prompt
+    return llm(user_prompt)                    # 3. Generation</code></pre>
+  <div class="warn"><code>search()</code> and <code>build_prompt()</code> next section (dataset + minsearch) lo vastayi. Ippudu <code>rag()</code> call cheste <code>NameError</code> vastundi, adi expected.</div>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Problem:</b> LLM ki general knowledge undi (salmon ela cook cheyyali), kani mana private data (Zoomcamp FAQ) teliyadu. Direct ga adigite generic, wrong answer istundi.
+    <b>Solution:</b> Question tho paatu relevant FAQ text ni prompt lo pettali. Appudu LLM aa text chadivi correct answer istundi. Ide RAG.
+    <b>RAG = Retrieval + Augmented + Generation.</b> Retrieval ante search (knowledge base lo relevant documents vethakadam). Augmented ante aa documents ni prompt ki add cheyyadam. Generation ante LLM answer rayadam.
+    10c lo manam context ni chethi tho paste chesam. Asalu RAG lo search automatic ga chestundi. Adi next lab.
+    <b>Key point:</b> LLM ki manam icchina documents matrame kanipistayi. Search wrong document isthe answer kuda wrong. So search quality = answer quality.
+    <b>Flexible:</b> 3 pieces independent. Groq badulu Anthropic kavalante <code>llm()</code> matrame marchali. minsearch badulu Elasticsearch kavalante <code>search()</code> matrame marchali.
+  </div>
+  <div class="flow h">
+    <div class="node">User question</div><div class="arr">→</div>
+    <div class="node">search()<br><small>knowledge base</small></div><div class="arr">→</div>
+    <div class="node">Top documents</div><div class="arr">→</div>
+    <div class="node">build_prompt()<br><small>question + context</small></div><div class="arr">→</div>
+    <div class="node">llm()</div><div class="arr">→</div>
+    <div class="node ok">Grounded answer</div>
+  </div>
+  <div class="flow">
+    <div class="node q">Context undi?</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">NO</span><div class="node bad">Generic / guess answer</div></div>
+      <div class="branch"><span class="lbl">YES, correct doc</span><div class="node ok">Correct answer</div></div>
+      <div class="branch"><span class="lbl">YES, wrong doc</span><div class="node bad">Wrong answer</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Lab 04 Dataset (FAQ documents load chesi minsearch tho search).</div>
+</section>
+
 <!-- DAILY -->
 <section>
   <h2>Daily workflow (ikapai eppudu)</h2>
@@ -429,6 +492,7 @@ git push</code></pre>
     <tr><td><code>GROQ_API_KEY=... not recognized</code></td><td>Linux syntax PowerShell lo vadaru</td><td><code>.env</code> file lo pettandi</td></tr>
     <tr><td><code>ModuleNotFoundError: openai</code></td><td>Wrong kernel</td><td>Select Kernel → <code>.venv</code></td></tr>
     <tr><td><code>401 Unauthorized</code></td><td>Key wrong / placeholder / revoked</td><td><code>.env</code> check → kernel restart</td></tr>
+    <tr><td><code>Failed to spawn: jupyter</code> / <code>os error 4551</code></td><td>Smart App Control <code>.venv\Scripts\jupyter.exe</code> ni block chesindi</td><td><code>uv run python -m jupyter lab</code> or <code>uv run python -m nbconvert ...</code> vadandi. VS Code notebook direct ga open cheste problem ledu.</td></tr>
     <tr><td><code>404 model_not_found</code></td><td>Model Groq lo ledu</td><td><code>openai/gpt-oss-120b</code> vadandi</td></tr>
     <tr><td><code>.env</code> change work avvatledu</td><td>Kernel old key cache chesindi</td><td>Kernel restart → Cell 1 malli run</td></tr>
   </table>
@@ -477,6 +541,7 @@ git push</code></pre>
     <tr><td>2026-10-23</td><td>dirdotenv install + PowerShell profile hook</td><td>Step 6e</td></tr>
     <tr><td>2026-10-23</td><td>Notebook create, kernel select, Groq client test (gpt-oss-120b)</td><td>Steps 7-8</td></tr>
     <tr><td>2026-10-23</td><td>Git commit + push, daily workflow, troubleshooting</td><td>Step 9+</td></tr>
+    <tr><td>2026-10-27</td><td>Lab 03 RAG: llm() Groq version, plain vs context answer, rag() skeleton. jupyter.exe block fix</td><td>Step 10</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.
