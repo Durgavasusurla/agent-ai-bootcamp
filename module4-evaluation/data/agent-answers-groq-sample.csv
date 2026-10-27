@@ -1,0 +1,378 @@
+question,answer_agent,answer_orig,tool_calls,cost,document
+Why am I getting `JSONDecodeError: Expecting value` when I try to parse the LLM output with `json.loads`?,"You’re seeing  
+
+```
+JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+```  
+
+because the string you pass to `json.loads` isn’t pure JSON.  
+LLM providers (OpenAI, Gemini, Groq, etc.) often wrap their answer in
+
+* a Markdown code fence (```json … ```), or  
+* extra prose like “Here is the JSON you asked for:” before the actual JSON.
+
+When `json.loads` tries to read that text it finds a non‑JSON character at the very start, so it raises the “Expecting value” error.
+
+### How to fix it
+
+1. **Ask the model to return raw JSON** – tell it explicitly in the prompt and, if the provider supports it, use the built‑in JSON‑response format.
+
+   ```python
+   response = openai_client.chat.completions.create(
+       model=""gpt-4o-mini"",
+       messages=[{""role"": ""user"", ""content"": prompt}],
+       response_format={""type"": ""json_object""}   # forces pure JSON output
+   )
+   parsed = json.loads(response.choices[0].message.content)
+   ```
+
+   (For Gemini use `response_mime_type=""application/json""`, for Groq use `response_format`, etc.)
+
+2. **Make the prompt unambiguous** – e.g.
+
+   ```
+   Output a JSON object with a single key ""questions"" whose value is a list of 5 strings.
+   Do not include any extra text, explanation, or formatting.
+   ```
+
+3. **If you can’t use a response‑format flag**, strip the unwanted wrapper before parsing:
+
+   ```python
+   import json, re
+
+   txt = response.choices[0].message.content
+   # Remove a surrounding markdown fence if present
+   txt = re.sub(r""^```json\s*|\s*```$"", """", txt, flags=re.MULTILINE)
+
+   data = json.loads(txt)
+   ```
+
+4. **Check the raw output** – print the whole response first to verify whether it contains fences or prose.
+
+   ```python
+   print(response.choices[0].message.content)
+   ```
+
+By ensuring the LLM returns *only* the JSON payload (or by cleaning the output yourself), `json.loads` will succeed and the `JSONDecodeError` will disappear.","The LLM sometimes wraps the JSON in a markdown code fence or adds prose around it, so `json.loads(response)` fails with:
+
+```
+JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+```
+
+Force JSON output with OpenAI's `response_format`:
+
+```python
+response = openai_client.chat.completions.create(
+    model='gpt-4o-mini',
+    messages=[{""role"": ""user"", ""content"": prompt}],
+    response_format={""type"": ""json_object""},
+)
+parsed = json.loads(response.choices[0].message.content)
+```
+
+Also be explicit in the prompt about the expected shape:
+
+```
+Output a JSON object with a single key ""questions"" whose value is a list of 5 strings.
+Do not include any extra text, explanation, or formatting.
+```
+
+Most providers have an equivalent (Gemini's `response_mime_type=""application/json""`, Groq's `response_format`, etc.).","[{""name"": ""search"", ""arguments"": ""{\""query\"":\""JSONDecodeError Expecting value when parsing LLM output json.loads\""}""}]",0.0007302,a3c7e1b4f9
+How can I point Python to the right .env path and get the key value?,"Here’s a quick, step‑by‑step way to tell your Python code exactly where your `.env` file lives and then read a key from it.
+
+---
+
+## 1. Install `python‑dotenv` (if you haven’t already)
+
+```bash
+pip install python-dotenv
+```
+
+> The course FAQ “How to store and load API keys using .env file” recommends this library for safely loading secrets.
+
+---
+
+## 2. Put your secrets in a `.env` file  
+
+```
+# .env  (any location you like)
+OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxx
+GROQ_API_KEY=gsk_yyyyyyyyyyyyyyyy
+```
+
+> **Important** – add the file to `.gitignore` so it never gets committed.
+
+---
+
+## 3. Point `load_dotenv` to the exact file
+
+```python
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Example: the .env file lives in the project root’s `config/` folder
+env_path = Path(__file__).parent / ""config"" / "".env""
+
+# Load the variables from that specific file
+load_dotenv(dotenv_path=env_path)      # <-- this is the “right .env path”
+# or, if you want to be flexible:
+# load_dotenv(dotenv_path=str(env_path), override=True)
+```
+
+* `load_dotenv()` without arguments looks for a `.env` file in the current working directory or its parents.  
+* By passing `dotenv_path` you can load a file that lives anywhere on disk (e.g., `../secrets/.env`, `/tmp/myproject/.env`, etc.).
+
+---
+
+## 4. Retrieve the value you need
+
+```python
+openai_key = os.getenv(""OPENAI_API_KEY"")   # returns the string or None
+groq_key   = os.getenv(""GROQ_API_KEY"")
+print(openai_key)   # just to verify it’s been loaded
+```
+
+If you prefer a one‑liner:
+
+```python
+openai_key = os.getenv(""OPENAI_API_KEY"", default=""missing"")
+```
+
+---
+
+## 5. Common pitfalls & tips (from the FAQ)
+
+| Issue | Why it happens | Fix |
+|-------|----------------|-----|
+| **Key returns `None`** | The `.env` file wasn’t loaded (wrong path, not called, or loaded after you tried to read). | Call `load_dotenv` **before** any `os.getenv` call and double‑check the path. |
+| **Wrong key name** | Variable name in `.env` doesn’t exactly match what you ask for (`OPENAI_API_KEY` vs `OPENAI_APIKEY`). | Keep the name **exactly** the same, case‑sensitive, and avoid extra spaces. |
+| **Running in a Jupyter notebook** | The notebook’s current working directory can be different from the script’s folder. | Use an absolute path or `Path(__file__)`‑style logic, or `load_dotenv(dotenv_path=""/full/path/to/.env"")`. |
+| **Multiple `.env` files** | You might have a global `.env` that shadows the one you want. | Pass `override=True` to `load_dotenv` if you need the later file to win. |
+
+---
+
+## 6. Full minimal example
+
+```python
+# demo.py
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# 1️⃣ Tell dotenv where the file is
+env_file = Path(__file__).parent / ""secrets"" / "".env""
+load_dotenv(dotenv_path=env_file)   # <- explicit path
+
+# 2️⃣ Grab the key
+openai_key = os.getenv(""OPENAI_API_KEY"")
+
+if not openai_key:
+    raise RuntimeError(""OPENAI_API_KEY not found – check .env and path"")
+
+print(""✅ OPENAI_API_KEY loaded:"", openai_key[:4] + ""…"" )
+```
+
+Run it:
+
+```bash
+python demo.py
+```
+
+You should see the masked key printed, confirming that Python is now pointing at the correct `.env` file and retrieving the value.
+
+---
+
+### TL;DR
+
+```python
+from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv(dotenv_path=Path(""/my/custom/path/.env""))   # point to the right file
+my_key = os.getenv(""MY_KEY"")                           # read the value
+```
+
+That’s all you need to reliably load any secret from a `.env` located wherever you choose. Happy coding!","Store API keys in a `.env` file and load them with `python-dotenv`, as recommended in the course.
+
+Add `.env` to `.gitignore` so keys are never committed:
+
+```gitignore
+.env
+```
+
+Create a `.env` file:
+
+```bash
+OPENAI_API_KEY=sk-...
+GROQ_API_KEY=gsk_...
+GEMINI_API_KEY=...
+```
+
+Install `python-dotenv` if needed:
+
+```bash
+pip install python-dotenv
+```
+
+Load the keys in Python:
+
+```python
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+openai_api_key = os.getenv(""OPENAI_API_KEY"")
+groq_api_key = os.getenv(""GROQ_API_KEY"")
+```","[{""name"": ""search"", ""arguments"": ""{\""query\"":\"".env path python get key value\""}""}]",0.0009759,233dabe430
+How can I find a column’s percentile value in Pandas without using numpy?,"You can compute a percentile (i.e. a quantile) directly with Pandas – you don’t need to import NumPy yourself. Pandas’ `Series.quantile` (and the DataFrame shortcut `df[col].quantile`) does the work for you.
+
+**Example**
+
+```python
+import pandas as pd
+
+# sample data
+df = pd.DataFrame({
+    ""score"": [12, 45, 23, 67, 34, 89, 54, 31]
+})
+
+# 75 th percentile (same as the 0.75 quantile)
+p75 = df[""score""].quantile(q=0.75)
+print(p75)      # → 54.0
+```
+
+**Key points**
+
+| Aspect | Details |
+|--------|----------|
+| **Function** | `Series.quantile(q, interpolation='linear')` |
+| **`q` argument** | Desired percentile expressed as a fraction (e.g., `0.25` for the 25th percentile, `0.90` for the 90th). |
+| **Multiple percentiles** | Pass a list‑like object: `df[""score""].quantile([0.25, 0.5, 0.75])`. |
+| **No explicit NumPy import** | The method is built into Pandas; you can simply `import pandas as pd`. |
+| **Interpolation** | Controls how the value is computed when the exact rank isn’t an integer (`linear` is the default). |
+
+So, to find any column’s percentile value in Pandas without manually using NumPy, just call `.quantile()` on the column (a Pandas Series). This matches the FAQ entry **“How to compute the quantile or percentile of Pandas DataFrame column (or Pandas Series)?”**.","To compute the 75% percentile or 0.75 quantile:
+
+```python
+quantile = df[""col""].quantile(q=0.75)
+```","[{""name"": ""search"", ""arguments"": ""{\""query\"":\""percentile column pandas without numpy\""}""}]",0.000654,b4c8ac5a0c
+Is peer-review of the capstone project required in order to receive the certificate?,"Yes. To earn the LLM Zoomcamp certificate you must:
+
+1. **Submit a capstone project** that meets the minimum score (e.g., 11 points for the current cohort), **and**  
+2. **Complete all peer‑reviews that are assigned to you** during the peer‑review window.
+
+Finishing the project alone is not enough; the peer‑review step is a separate, mandatory requirement (homework is optional). You can work on the material in self‑paced mode, but the project submission and the required peer reviews must be done while a live cohort is open.","No, you can only get a certificate if you finish the course with a ""live"" cohort.
+
+To get the certificate, you need to finish a capstone project and complete the
+required peer reviews. Homework is not required. You can work through the
+material and prepare your project in self-paced mode, but project submission and
+peer review must happen while a live cohort is accepting them.","[{""name"": ""search"", ""arguments"": ""{\""query\"":\""peer-review capstone project certificate required\""}""}]",0.0003501,69d122f12e
+"Will there be another run of this course, and if so, when?","Yes – the LLM Zoomcamp is offered once a year.  
+The next live cohort is expected to start around **May‑June 2027**.  
+
+In the meantime you can work through the existing materials in self‑paced mode.","LLM Zoomcamp runs once a year. The next live cohort is expected around
+May-June 2027.
+
+Until then, you can go through the materials in self-paced mode.","[{""name"": ""search"", ""arguments"": ""{\""query\"":\""another run of this course when\""}""}, {""name"": ""search"", ""arguments"": ""{\""query\"":\""another run of this course when will there be another run\""}""}, {""name"": ""search"", ""arguments"": ""{\""query\"":\""another run of the course will there be another run\""}""}, {""name"": ""search"", ""arguments"": ""{\""query\"":\""when is the next run of the course\""}""}]",0.00185625,bd31146b0e
+"How do I make the project easier and cheaper for reviewers to run, like with model choice and pinned versions?","Below are the concrete steps you can take to keep your capstone project **easy to set‑up and inexpensive for reviewers**:
+
+| Goal | What to do | Why it helps |
+|------|------------|--------------|
+| **Never expose secrets** | • Add a `.env.example` file that lists the required environment variables (e.g., `OPENAI_API_KEY`, `GROQ_API_KEY`).<br>• Put the real `.env` file in `.gitignore` so no keys are ever committed.<br>• In the README tell reviewers to copy `.env.example` → `.env` and paste **their own** keys. | Reviewers can run the code with their own (free‑tier) credentials and you stay compliant with the “no API keys in repo” rule. |
+| **Choose a cheap model** | • Use a low‑cost, high‑throughput model for the bulk of your work (e.g., `gpt‑4o‑mini`, `groq‑llama‑3.1‑70b`, `mistral‑tiny`).<br>• If you need a higher‑tier model for a demo, keep that part optional (e.g., guard it behind a flag). | Reviewers won’t burn a lot of credits when they run your notebook or script. |
+| **Pin dependency versions** | • Export a lock file (`requirements.txt`, `requirements-dev.txt`, `poetry.lock`, or `Pipfile.lock`).<br>• Mention the exact Python version (e.g., `python==3.11`) and any other runtime tools (Docker, Poetry, etc.) in the README.<br>• If you use Docker, provide a `Dockerfile` that builds from a specific base image tag. | Guarantees the same package versions everywhere, eliminating “works on my machine” problems. |
+| **Automate data ingestion** | • Include a short script/notebook (`ingest.py` or `make_data.ipynb`) that downloads or builds the dataset and creates the search index locally.<br>• Make the script runnable with a single command, e.g., `python ingest.py`. | Reviewers can reproduce the knowledge base without manual steps. |
+| **Document everything clearly** | • In the top‑level `README.md` list: <br>  1. Prerequisites (Python version, Docker, etc.)<br>  2. How to set up the environment (`pip install -r requirements.txt` or `poetry install`).<br>  3. How to create the `.env` file.<br>  4. How to run the ingestion script.<br>  5. How to launch the app (`python app.py` or `docker compose up`).<br>• Add a “Quick‑start” section with a copy‑pasteable command chain. | Reduces friction; reviewers can follow a linear checklist and get the project running in minutes. |
+| **Optional: Provide a lightweight demo** | • If the full pipeline is heavy, add a “demo mode” that uses a tiny subset of the data (e.g., 10 documents) and a cheap model. | Allows reviewers to see the workflow quickly, then they can run the full version if they want. |
+
+### Example snippet for the README
+
+```markdown
+## Quick start (Linux/macOS)
+
+```bash
+# 1️⃣ Clone the repo
+git clone https://github.com/yourname/llm‑capstone.git
+cd llm‑capstone
+
+# 2️⃣ Create a virtual environment (Python 3.11)
+python -m venv .venv
+source .venv/bin/activate
+
+# 3️⃣ Install pinned dependencies
+pip install -r requirements.txt   # uses exact versions from the lock file
+
+# 4️⃣ Set up your API keys
+cp .env.example .env
+# Open .env and paste your own OPENAI_API_KEY (or GROQ_API_KEY)
+
+# 5️⃣ Build the knowledge base (runs locally, no external service)
+python ingest.py   # downloads data and creates the vector store
+
+# 6️⃣ Run the app (uses the cheap gpt‑4o‑mini model)
+python app.py
+```
+
+The app will start on http://localhost:8000. It uses `gpt‑4o‑mini` by default, which costs less than $0.01 per 1 M tokens. If you prefer a higher‑tier model, set `MODEL=groq/llama3‑70b` in `.env`.
+```
+
+Following these practices will satisfy the reproducibility criteria in the capstone rubric, keep reviewers’ credit usage low, and make your project a breeze to run. Good luck!","Never share API keys or hosted-service credentials in your repo. Reproducibility means a peer reviewer can clone the repo and follow your README to recreate the system from scratch — using their own credentials.
+
+Concretely:
+
+- Provide a script (or notebook) that ingests the dataset and (re)builds the search index locally.
+- Ship a `.env.example` with the variable names but no values; have the reviewer create their own `.env` with their own keys. Keep `.env` in `.gitignore`.
+- Use a cheap model (`gpt-4o-mini`, Groq, etc.) so reviewers don't burn through credits when running your project.
+- Pin dependency versions (`requirements.txt` / `pyproject.toml` lock file) and document the Python version (and Docker version, if used).","[{""name"": ""search"", ""arguments"": ""{\""query\"":\""make project easier cheaper for reviewers to run model choice pinned versions\""}""}]",0.00085575,e5d8a2c761
+What do I need to write in .wslconfig to set WSL2 memory to 8GB?,"To allocate 8 GB of RAM to WSL 2, create (or edit) a **`.wslconfig`** file in your Windows user profile folder (e.g., `C:\Users\<YourUsername>\.wslconfig`) and add the following lines:
+
+```ini
+[wsl2]
+memory=8GB
+```
+
+After saving the file, restart WSL so the new setting takes effect:
+
+```bash
+wsl --shutdown
+```
+
+You can then verify the memory allocation inside WSL (e.g., with `free -h`).","Your WSL2 is set to use Y.Y GiB, not all your computer memory. To allocate more RAM, follow these steps:
+
+1. Create a `.wslconfig` file under your Windows user profile directory: `C:\Users\YourUsername\.wslconfig`.
+
+2. Include the desired RAM allocation in the file:
+
+   ```ini
+   [wsl2]
+   memory=8GB
+   ```
+
+3. Restart WSL using the command:
+
+   ```bash
+   wsl --shutdown
+   ```
+
+4. Run the `free` command in WSL to verify the changes.
+
+For more details, read [this article](https://www.aleksandrhovhannisyan.com/blog/limiting-memory-usage-in-wsl-2/).","[{""name"": ""search"", ""arguments"": ""{\""query\"":\"".wslconfig memory 8GB\""}""}]",0.00028455,f3dd94f323
+What should I change in my .env file if postgres host is not found when running the monitoring prep script?,"The error occurs because the script is trying to connect to a host named **`postgres`**, which isn’t reachable on your machine.  
+
+Open your `.env` file and update the PostgreSQL host variable:
+
+```ini
+# .env
+POSTGRES_HOST=localhost   # ← change this from ""postgres"" to ""localhost""
+```
+
+Save the file and rerun the monitoring `prep.py` script. The connection should now succeed.","To resolve this error, update the `.env` file:
+
+- Change the `POSTGRES_HOST` variable to `localhost`.
+
+```ini
+POSTGRES_HOST=localhost
+```","[{""name"": ""search"", ""arguments"": ""{\""query\"":\""postgres host not found monitoring prep script .env change\""}""}]",0.00035955,4b65d5542d

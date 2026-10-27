@@ -1,0 +1,342 @@
+question,answer_llm,answer_orig,document
+I’m seeing an OpenAI API error about credits when testing chat completions — what should I check?,"The error you’re seeing (e.g., `OpenAI API Error: Insufficient credits` or a `RateLimitError … insufficient_quota`) means the account you’re using has run out of paid quota.  
+
+**What to check**
+
+1. **Account balance** – Log into [platform.openai.com](https://platform.openai.com) → **Billing → Overview** and verify that you have enough credits. If the balance is $0, you’ll need to add funds (the minimum is usually $5).
+
+2. **Add funds** – Click **Add credits / Pay‑as‑you‑go** and attach a valid credit‑card or payment method. After the purchase completes, the quota should be refreshed.
+
+3. **Model availability** – In the call (e.g., `responses.create(model='gpt-4o', …)`), make sure you’re requesting a model that is included in your plan. If you added a new model, you may need to switch to one you have access to.
+
+4. **API key** – Some billing changes require a new key to be generated.  
+   * Go to **API Keys**, create a fresh key, and replace the old one in your environment (e.g., in `.env` or wherever you set `OPENAI_API_KEY`).
+
+5. **Retry the request** – After the above steps, re‑run your Python code. The request should now succeed and return a normal response.
+
+If you’ve confirmed that credits are present, the model is allowed, and the API key is up‑to‑date, but you still get the same error, double‑check that you’re using the correct OpenAI account (especially if you belong to an organization with multiple billing settings). Otherwise, the issue is likely still a quota problem.","You may receive the following error when running the OpenAI `responses.create` command due to insufficient credits in your OpenAI account:
+
+```
+OpenAI API Error: Insufficient credits
+```",f5df151c59
+"Is the Zoom link for the workshop shared with students, or only with the teaching team?","The Zoom link is **only shared with the teaching team** (instructors, presenters, and TAs). Students join the workshop via YouTube Live and submit questions through Slido.","The zoom link is only published to instructors/presenters/TAs.
+
+Students participate via YouTube Live and submit questions to Slido (link is pinned in the chat when live). The video URL should be posted in the [announcements channel on Telegram and Slack](https://t.me/dezoomcamp) before it begins. You can also watch live on the DataTalksClub [YouTube Channel](https://www.youtube.com/c/DataTalksClub).
+
+Don’t post questions in chat as they may be missed if the room is very active.",489dd1c9d9
+How do I get rid of the warning about multi-qa-mpnet-base-dot-v1 and sentence-transformers bet?,"To suppress that warning, upgrade the **sentence‑transformers** package to version 3.0.0 or newer:
+
+```bash
+pip install ""sentence-transformers>=3.0.0""
+```
+
+After installing the newer version (or a later one), the warning about *“model ‘multi‑qa‑mpnet‑base‑dot‑v1’ was made on sentence‑transformers v3.0.0 bet”* will no longer appear.","To suppress the warning, upgrade `sentence-transformers` to version 3.0.0 or higher. You can do this by running the following command:
+
+```bash
+pip install sentence-transformers>=3.0.0
+```",aa3f597424
+Why do I get `AttributeError: 'str' object has no attribute 'output'` when I call OpenAI Responses API with a non-OpenAI model?,"The error occurs because you are trying to use **OpenAI’s new Responses API** (`client.responses.create(...)` and then reading `response.output`) with a model that is **not hosted by OpenAI**.  
+
+The Responses endpoint is **only implemented by OpenAI**.  
+Other providers – Mistral, Groq, Gemini, Anthropic, etc. – expose the standard **Chat‑Completions** endpoint (`chat.completions.create`) and they return their results in the usual `choices[0].message` shape. Since those providers do not have an `output` attribute, the SDK ends up treating the whole response as a plain string, and when you later do `response.output` you get:
+
+```
+AttributeError: 'str' object has no attribute 'output'
+```
+
+### What to do instead
+
+1. **Switch to the chat‑completions API** for non‑OpenAI models.  
+   ```python
+   response = client.chat.completions.create(
+       model=""<provider‑model>"",
+       messages=[{""role"": ""user"", ""content"": prompt}],
+       tools=tools_schema,   # adapt the schema to the provider if needed
+   )
+   result = response.choices[0].message.content
+   ```
+
+2. If you need tool‑calling, read the calls from  
+   `response.choices[0].message.tool_calls` (or `getattr(..., ""tool_calls"", None)`).
+
+3. Keep using the older `chat.completions` flow for homework or projects when the provider’s native API works better than the Responses API.
+
+In short: **the Responses API is OpenAI‑only; use `chat.completions` for any non‑OpenAI model** to avoid the `AttributeError`.","The new OpenAI Responses API (`client.responses.create(...)`, accessed via `response.output`) is OpenAI-specific. Other providers (Mistral, Groq, Gemini, etc.) don't implement it.
+
+For non-OpenAI providers, use the chat-completions API and read `response.choices[0].message.content`:
+
+```python
+response = client.chat.completions.create(
+    model=""<provider-model>"",
+    messages=[{""role"": ""user"", ""content"": prompt}],
+    tools=tools_schema,  # may need adapting per provider
+)
+return response.choices[0].message.content
+```
+
+You'll also have to adapt the tools schema to whatever shape your provider expects.
+
+It is okay to use the older `chat.completions` API for homework or projects if your provider supports that interface better than the Responses API.",9e7b3f0c25
+What’s the simplest example of calling Ollama chat from Python with a prompt?,"The simplest way to call Ollama’s chat API from Python is:
+
+```python
+# 1️⃣ Install the Python client (once)
+# pip install ollama
+
+import ollama
+
+# Your prompt can be any string
+your_prompt = ""Explain the benefits of retrieval‑augmented generation.""
+
+# Call the model (e.g., llama3) with a single user message
+response = ollama.chat(
+    model=""llama3"",
+    messages=[{""role"": ""user"", ""content"": your_prompt}]
+)
+
+# Print the model’s answer
+print(response[""message""][""content""])
+```
+
+**What it does**
+
+1. **Installs** the `ollama` Python package.  
+2. Sends a chat request to the locally‑running Ollama server (`http://localhost:11434`).  
+3. Provides the prompt as a user‑role message.  
+4. Returns the assistant’s reply, which is printed from `response[""message""][""content""]`.
+
+That’s all you need for a minimal, working example.","First, install Ollama by visiting [https://ollama.com/download](https://ollama.com/download) and choosing your operating system:
+
+- **macOS**: Download the `.pkg` and install it.
+- **Windows**: Download the `.msi` and install it.
+- **Linux**: Run the following command in the terminal:
+
+  ```bash
+  curl -fsSL https://ollama.com/install.sh | sh
+  ```
+
+Once installed, open a terminal and type:
+
+```bash
+ollama run llama3
+```
+
+This command will:
+
+- Download the LLaMA 3 model (~4GB).
+- Start the model locally.
+- Open a chat-like interface where you can type questions.
+
+To test the Ollama local server, run the following command:
+
+```bash
+curl http://localhost:11434
+```
+
+You should receive a response similar to:
+
+```json
+{""models"": [...]}  
+```
+
+Then, install the Python client with:
+
+```bash
+pip install ollama
+```
+
+Here is a minimal Python example:
+
+```python
+import ollama
+
+response = ollama.chat(
+    model='llama3',
+    messages=[{""role"": ""user"", ""content"": your_prompt}]
+)
+
+print(response['message']['content'])
+```",1d0b969028
+"For the LLM Zoomcamp assignments, is a paid OpenAI subscription required, or can I rely on the free alternatives from the course repo?",No—you don’t need a paid OpenAI subscription to complete the Zoomcamp assignments. The homework is designed to work with free or low‑cost alternatives that are listed in the course repository (see the “OpenAI API alternatives” section of the awesome‑llms.md file). You can pick any of those providers (or a local model) and still earn full credit.,"No, you don't have to pay for this service in order to complete the course homeworks. You can use free or low-cost alternatives listed in the course GitHub repo.
+
+See the course list of [OpenAI API alternatives](https://github.com/DataTalksClub/llm-zoomcamp/blob/main/awesome-llms.md#openai-api-alternatives).",85384a18e5
+Why start without a framework like LangChain when building LLM apps?,"We start without a framework like LangChain so we can build and understand the core pieces ourselves—prompting, retrieval, indexing, and evaluation. Just as you learn HTML, CSS, and JavaScript before using a higher‑level library such as React, learning the fundamentals of LLM‑powered apps gives you the insight into what the framework is actually automating. Once you grasp those building blocks, using a framework becomes much easier and more effective.","LangChain is a framework for building LLM-powered apps. In this course, we first build the core pieces ourselves: prompting, retrieval, indexing, and evaluation.
+
+Think of it like learning HTML, CSS, and JavaScript before using React or Angular. Frameworks are easier to use well once you understand what they automate.",b7cdde6b25
+"If I want to use dlt directly in my own project, do I need any special permission, or can I just go ahead and do it?","You don’t need any special permission—dlt is open‑source, so you can go ahead and use it directly in your own projects (and even share the workshop materials).","Since dlt is open-source, you can use the content of this workshop for a capstone project. As the main goal of dlt is to load and store data easily, you can even use it for other Zoomcamps (like the MLOps Zoomcamp project). Feel free to ask questions or use it directly in your projects.",d850a0e7ea
+"Where are the lecture videos linked, and what should I check first?","The lecture videos are linked directly on the lesson pages inside the **LLM Zoomcamp GitHub repository**.  
+
+- Go to the **[LLM Zoomcamp GitHub repo](https://github.com/DataTalksClub/llm-zoomcamp)**.  
+- Open the folder for the lesson you’re interested in; each lesson’s README has the video link at the very top.
+
+**What to check first:** Start with the GitHub repository itself. It’s the primary, always‑up‑to‑date source for both the notebooks and the video links, so checking the repo before looking elsewhere (e.g., a YouTube playlist) ensures you get the correct, current material.","Use the [LLM Zoomcamp GitHub repository](https://github.com/DataTalksClub/llm-zoomcamp) as the main entry point.
+
+Open the lesson folders in the repo. Each lesson page has the relevant videos linked at the top.
+
+<{IMAGE:lessons}>
+
+When in doubt, follow the GitHub repo first, because it is easier to keep updated than the YouTube playlist.",31456f4b5f
+Are there official dlt connectors available for ClickHouse and StarRocks?,"No. At the moment DLT does not provide official connectors for ClickHouse or StarRocks. The project is open‑source, so community contributions are welcome if you’d like to add those connectors.","Currently, DLT does not have connectors for ClickHouse or StarRocks but is open to contributions from the community to add these connectors.",cd19f122f3
+"Do I need a Dockerfile when running a streamlit app with docker-compose, or is compose config enough?","Yes – you still need a **Dockerfile**.  
+Docker‑Compose can tell Docker *how* to build the image (the `build:` section, any `target:` you want, environment variables, ports, etc.), but it doesn’t create the image for you. If you don’t supply a Dockerfile, Compose has nothing to build and the resulting container won’t have the `streamlit` executable in its `$PATH`, which is why you see the “executable file not found” error.
+
+**Typical steps**
+
+1. **Create a Dockerfile** that installs Streamlit (and any other dependencies) and sets the proper entry‑point, e.g.:
+
+   ```dockerfile
+   FROM python:3.11-slim
+
+   WORKDIR /app
+   COPY requirements.txt .
+   RUN pip install --no-cache-dir -r requirements.txt
+   COPY . .
+
+   EXPOSE 8501
+   CMD [""streamlit"", ""run"", ""app.py"", ""--server.address=0.0.0.0"", ""--server.port=8501""]
+   ```
+
+2. **Reference that Dockerfile in `docker‑compose.yml`**:
+
+   ```yaml
+   services:
+     ui:
+       build: .
+       ports:
+         - ""8501:8501""
+   ```
+
+3. **Re‑build and start** the stack so the new image is used:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+Only after the image is built from the Dockerfile will the `streamlit` command be available inside the container. The Compose file alone can’t replace the Dockerfile.","To resolve this issue:
+
+1. Ensure you have created a `Dockerfile`.
+2. Add `streamlit` to the `docker-compose` configuration.
+3. Run the following command to rebuild and start the application:
+
+   ```bash
+   docker-compose up --build
+   ```",e8df9f0d12
+Why does the leaderboard show some random nickname instead of my real name?,"The leaderboard doesn’t use the name you entered for your certificate.  
+When your account is created you’re automatically given a random **display name** (e.g., “Lucid Elbakyan”). That nickname is what appears on the public leaderboard, and it’s anonymous by default.
+
+You can see or change this nickname in **Edit Course Profile**:
+
+1. Click **Edit Course Profile**.  
+2. The **first field** is your “nickname / displayed name” – this is what the leaderboard shows.  
+3. If you want a different name (e.g., your Slack or GitHub handle) you can edit it there.  
+
+The **second field** is the official name that will appear on your certificate and is kept private from the leaderboard.  
+
+So the “random” nickname you see is simply the default display name assigned to keep the leaderboard anonymous. If you prefer a different name, just update the first field in your profile.","When you set up your account, you are automatically assigned a random name, such as “Lucid Elbakyan.” Click on the ""Jump to your record on the leaderboard"" link to find your entry.
+
+If you want to see what your Display name is, click on the ""Edit Course Profile"" button.
+
+<{IMAGE:image_1}>
+
+- **First field:** This is your nickname/displayed name. You can change it if you want to be known by your Slack username, GitHub username, or any other nickname of your choice. This is useful if you want to remain anonymous.
+- **Second field:** Change this to your official name as in your identification documents—passport, national ID card, driver's license, etc. This is mandatory if you do not want ""Lucid Elbakyan"" on your certificate. This name will appear on your Certificate!",c2903069a0
+How do I find my row on the leaderboard if I can’t see my name right away?,"When you set up your account you were given a random nickname (e.g., “Lucid Elbakyan”).  
+To jump straight to your entry on the leaderboard:
+
+1. Open the leaderboard page.  
+2. Click the **“Jump to your record on the leaderboard”** link. This will scroll the page directly to the row that belongs to your random nickname.  
+
+If you’re not sure what nickname you’re using, you can view or change it by clicking **“Edit Course Profile”** and looking at the first field (your display name). Once you know the name, the “Jump to your record” link will take you right to your row even if you don’t see it in the list at first glance.","When you set up your account, you are automatically assigned a random name, such as “Lucid Elbakyan.” Click on the ""Jump to your record on the leaderboard"" link to find your entry.
+
+If you want to see what your Display name is, click on the ""Edit Course Profile"" button.
+
+<{IMAGE:image_1}>
+
+- **First field:** This is your nickname/displayed name. You can change it if you want to be known by your Slack username, GitHub username, or any other nickname of your choice. This is useful if you want to remain anonymous.
+- **Second field:** Change this to your official name as in your identification documents—passport, national ID card, driver's license, etc. This is mandatory if you do not want ""Lucid Elbakyan"" on your certificate. This name will appear on your Certificate!",c2903069a0
+Where should I put a .wslconfig file to give WSL2 more memory?,"You should place the `.wslconfig` file in your Windows user‑profile folder:
+
+```
+C:\Users\<YourUsername>\.wslconfig
+```
+
+(Replace `<YourUsername>` with the name of the account you’re logged in with.)
+
+After creating the file there (e.g., with `memory=8GB` under a `[wsl2]` section) restart WSL (`wsl --shutdown`) and the new memory limit will take effect.","Your WSL2 is set to use Y.Y GiB, not all your computer memory. To allocate more RAM, follow these steps:
+
+1. Create a `.wslconfig` file under your Windows user profile directory: `C:\Users\YourUsername\.wslconfig`.
+
+2. Include the desired RAM allocation in the file:
+
+   ```ini
+   [wsl2]
+   memory=8GB
+   ```
+
+3. Restart WSL using the command:
+
+   ```bash
+   wsl --shutdown
+   ```
+
+4. Run the `free` command in WSL to verify the changes.
+
+For more details, read [this article](https://www.aleksandrhovhannisyan.com/blog/limiting-memory-usage-in-wsl-2/).",f3dd94f323
+What should I run after installing Ollama to download and start LLaMA 3 locally?,"After installing Ollama, open a terminal and run:
+
+```bash
+ollama run llama3
+```
+
+This command will download the LLaMA 3 model (≈4 GB) and start it locally, giving you a chat‑like interface to interact with the model.","First, install Ollama by visiting [https://ollama.com/download](https://ollama.com/download) and choosing your operating system:
+
+- **macOS**: Download the `.pkg` and install it.
+- **Windows**: Download the `.msi` and install it.
+- **Linux**: Run the following command in the terminal:
+
+  ```bash
+  curl -fsSL https://ollama.com/install.sh | sh
+  ```
+
+Once installed, open a terminal and type:
+
+```bash
+ollama run llama3
+```
+
+This command will:
+
+- Download the LLaMA 3 model (~4GB).
+- Start the model locally.
+- Open a chat-like interface where you can type questions.
+
+To test the Ollama local server, run the following command:
+
+```bash
+curl http://localhost:11434
+```
+
+You should receive a response similar to:
+
+```json
+{""models"": [...]}  
+```
+
+Then, install the Python client with:
+
+```bash
+pip install ollama
+```
+
+Here is a minimal Python example:
+
+```python
+import ollama
+
+response = ollama.chat(
+    model='llama3',
+    messages=[{""role"": ""user"", ""content"": your_prompt}]
+)
+
+print(response['message']['content'])
+```",1d0b969028

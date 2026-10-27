@@ -27,3 +27,8 @@ Thumbs.db
 
 # Module 2 ONNX model files (re-download with module2-vector-search/download.py)
 models/
+
+# Module 4 course-prepared data (DataTalksClub repo, no license; not redistributed). Re-download:
+#   cd module4-evaluation\data\course
+#   foreach ($f in 'ground_truth-new.csv','rag-answers-new.csv','rag-evaluations-new.csv','agent-answers.csv','agent-evaluations.csv') { curl.exe -sSL -o $f https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/data/$f }
+module4-evaluation/data/course/

@@ -1,0 +1,43 @@
+# Course lessons 05, 12, 13: PostgreSQL + Grafana (needs Docker Desktop).
+# Not tested on this machine yet (no Docker).
+#
+#   docker compose up -d
+#   $env:DB_BACKEND = "postgres"; uv add "psycopg[binary]"
+#   uv run python db_init.py
+#   uv run python -m streamlit run app.py
+#   Grafana: http://localhost:3000 (admin / admin), datasource host: postgres:5432
+#
+# The course's Streamlit container (Dockerfile) is left out: the app runs
+# locally with uv and talks to Postgres on localhost:5432.
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: course_assistant
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d course_assistant"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  grafana_data:

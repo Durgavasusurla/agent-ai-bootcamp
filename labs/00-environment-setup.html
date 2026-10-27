@@ -66,7 +66,7 @@
 <div class="wrap">
 
 <h1>LLM Zoomcamp Bootcamp Notes</h1>
-<p class="sub">Setup + Module 1 (Agentic RAG) + Module 2 (Vector Search) + Module 3 (Orchestration), okke document lo. Windows 11 · Python 3.15 / 3.14 · uv · Groq · VS Code. Prathi step lo: <b>ekkada</b> cheyyali, <b>emi</b> cheyyali, <b>emi command</b> run cheyyali, <b>emi vastundi</b>, <b>next emi</b>.<br>Ee file repo lo <code>labs/00-environment-setup.html</code> lo undi. Manam kotha step chesina prathi sari idi update avutundi (chivarlo Changelog chudandi). Open cheyyali ante VS Code Explorer lo file meeda right-click → Reveal in File Explorer → double-click.</p>
+<p class="sub">Setup + Module 1 (Agentic RAG) + Module 2 (Vector Search) + Module 3 (Orchestration) + Module 4 (Evaluation) + Module 5 (Monitoring), okke document lo. Windows 11 · Python 3.15 / 3.14 · uv · Groq · VS Code. Prathi step lo: <b>ekkada</b> cheyyali, <b>emi</b> cheyyali, <b>emi command</b> run cheyyali, <b>emi vastundi</b>, <b>next emi</b>.<br>Ee file repo lo <code>labs/00-environment-setup.html</code> lo undi. Manam kotha step chesina prathi sari idi update avutundi (chivarlo Changelog chudandi). Open cheyyali ante VS Code Explorer lo file meeda right-click → Reveal in File Explorer → double-click.</p>
 
 <!-- TOC -->
 <section>
@@ -77,13 +77,17 @@
     <tr><td><b>Module 1: Agentic RAG</b></td><td>10-23</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">01-agentic-rag</a> lessons 03-16</td><td><code>notebooks/</code> (Python 3.15)</td></tr>
     <tr><td><b>Module 2: Vector Search</b></td><td>24-33</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">02-vector-search</a> lessons 01-10</td><td><code>module2-vector-search/</code> (Python 3.14)</td></tr>
     <tr><td><b>Module 3: AI Orchestration (Kestra)</b></td><td>34-42</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/03-orchestration">03-orchestration</a> lessons 01-09</td><td><code>module3-orchestration/</code> (Docker + Kestra)</td></tr>
+    <tr><td><b>Module 4: Evaluation</b></td><td>43-53</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">04-evaluation</a> lessons 01-06, 11-15</td><td><code>module4-evaluation/</code> (root .venv, Python 3.15)</td></tr>
+    <tr><td><b>Module 5: Monitoring</b></td><td>54-64</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">05-monitoring</a> lessons 01-14</td><td><code>module5-monitoring/</code> (root .venv, SQLite; Postgres/Grafana Docker kavali)</td></tr>
     <tr><td>Daily workflow, Troubleshooting, Folder structure, Changelog</td><td>chivarlo</td><td></td><td></td></tr>
   </table>
   <div class="flow h">
     <div class="node">Setup<br><small>Steps 0-9</small></div><div class="arr">→</div>
     <div class="node">Module 1: keyword RAG + agents<br><small>Steps 10-23</small></div><div class="arr">→</div>
     <div class="node">Module 2: vector (meaning) search<br><small>Steps 24-33</small></div><div class="arr">→</div>
-    <div class="node ok">Module 3: Kestra workflows + agents<br><small>Steps 34-42</small></div>
+    <div class="node">Module 3: Kestra workflows + agents<br><small>Steps 34-42</small></div><div class="arr">→</div>
+    <div class="node">Module 4: evaluation (measure everything)<br><small>Steps 43-53</small></div><div class="arr">→</div>
+    <div class="node ok">Module 5: monitoring (live app)<br><small>Steps 54-64</small></div>
   </div>
 </section>
 
@@ -2323,7 +2327,761 @@ apiKey: "{{ secret('GEMINI_API_KEY') }}"</code></pre>
     <div class="node">Agents<br><small>dynamic tasks</small></div><div class="arr">→</div>
     <div class="node ok">Multi-agent<br><small>complex goals</small></div>
   </div>
-  <div class="next"><b>Next:</b> Module 4 (Evaluation).</div>
+  <div class="next"><b>Next:</b> Module 4: Evaluation (kinda, Step 43 nunchi).</div>
+</section>
+
+<!-- MODULE 4 MAP -->
+<section>
+  <h2>Module 4: Evaluation map (course README)</h2>
+  <p>Course source: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">github.com/DataTalksClub/llm-zoomcamp/04-evaluation</a>. Module 1-2 lo search, RAG, agents build chesam, kani <b>ye approach better</b> ani number tho cheppaledu. Module 4 lo adi measure chestam.</p>
+  <div class="warn"><b>Mana setup:</b> Python only, Docker avasaram ledu. Module 1 root <code>.venv</code> (Python 3.15) + Groq. Code <code>module4-evaluation/</code> folder lo, 4 notebooks.<br>
+  <b>Groq free tier limit:</b> prathi model ki roju 1,000 requests, nimishaniki 8,000 tokens. Course full run ~900 LLM calls, okka roju lo kudaradu. So:
+  <ul>
+    <li><b>Search evaluation (no LLM):</b> full 395 questions tho run.</li>
+    <li><b>LLM steps:</b> chinna samples tho Groq lo nijanga run (10 docs, 15 RAG, 8 agent).</li>
+    <li><b>Full-size numbers:</b> course prepared CSV files (<code>data/course/</code>), course "generate cheyyakapothe download cheyyandi" ani cheptundi.</li>
+  </ul></div>
+  <table>
+    <tr><th>Lesson</th><th>Topic</th><th>Step</th><th>Notebook</th><th>Mana run</th></tr>
+    <tr><td>01</td><td>Why evaluation</td><td>43</td><td>-</td><td>Reading</td></tr>
+    <tr><td>(setup)</td><td>Module 4 folder, Groq evaluation_utils</td><td>44</td><td>-</td><td class="ok">Done</td></tr>
+    <tr><td>02-03</td><td>Ground truth generation</td><td>45-46</td><td>01-data-gen</td><td class="ok">10 docs → 50 questions</td></tr>
+    <tr><td>04-05</td><td>Search evaluation, Hit Rate, MRR</td><td>47-48</td><td>02-search-eval</td><td class="ok">Full 395</td></tr>
+    <tr><td>06</td><td>Boost tuning</td><td>49</td><td>02-search-eval</td><td class="ok">Full grid (36 combos)</td></tr>
+    <tr><td>11</td><td>RAG + agent evaluation intro</td><td>50</td><td>-</td><td>Reading</td></tr>
+    <tr><td>12-13</td><td>RAG answers + LLM judge</td><td>51</td><td>03-rag-evals</td><td class="ok">15 sample + judge vs judge</td></tr>
+    <tr><td>14</td><td>Agent evaluation</td><td>52</td><td>04-agent-eval</td><td class="ok">8 sample</td></tr>
+    <tr><td>15</td><td>Next steps</td><td>53</td><td>-</td><td>Reading</td></tr>
+  </table>
+</section>
+
+<!-- M4 L01 -->
+<section>
+  <h2><span class="num">43</span> Why Evaluation <span class="lesson">M4 Lesson 01</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/01-intro-05-rag-evaluation-diagram-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/01-intro-05-rag-evaluation-diagram-cropped.png" alt="RAG evaluation: A → Q* → A'" loading="lazy"></a><figcaption>RAG evaluation: A → Q* → A' <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>A → Q* → A' pattern</h3>
+  <table>
+    <tr><th>Symbol</th><th>Artham</th></tr>
+    <tr><td>A</td><td>FAQ lo original answer</td></tr>
+    <tr><td>Q*</td><td>A nunchi LLM generate chesina question</td></tr>
+    <tr><td>A'</td><td>Q* ki mana RAG system ichina answer</td></tr>
+  </table>
+  <ul>
+    <li><b>Search eval:</b> Q* tho search cheste A unna document results lo vachinda?</li>
+    <li><b>RAG eval:</b> A' and A same meaning aa?</li>
+  </ul>
+  <h3>3 levels</h3>
+  <table>
+    <tr><th>Level</th><th>Question</th><th>Metric</th></tr>
+    <tr><td>Search</td><td>Correct document vachinda?</td><td>Hit Rate, MRR</td></tr>
+    <tr><td>RAG</td><td>Answer correct aa?</td><td>LLM-as-a-judge</td></tr>
+    <tr><td>Agent</td><td>Answer + tools sariga vadinda?</td><td>Judge on answer + trajectory</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Ippati varaku konni questions chethi tho try chesi "baagundi" anukunnam. Adi scale avvadu, compare cheyyadaniki number ivvadu. <b>Evaluation</b> = systematic ga, number tho measure. Course author: <b>course lo idi most important part, and most boring part</b>. Prompt maarchina, model maarchina, idi tho ne system inka pani chestondo telustundi.
+    <b>Offline evaluation:</b> test dataset meeda, users ki pampaka mundu. <b>Online:</b> production lo real users feedback, logs (Module 5).
+    <b>Search ki ekkuva time enduku?</b> Search wrong document isthe, e prompt, e model ainaa answer save cheyyalevu.
+    Synthetic questions FAQ text ki chala daggara ga untayi, metrics inflate avutayi. Real user questions vachaka avi vadandi.
+  </div>
+  <div class="flow h">
+    <div class="node">A (FAQ answer)</div><div class="arr">→ <small>LLM</small></div>
+    <div class="node">Q* (generated question)</div><div class="arr">→ <small>our RAG</small></div>
+    <div class="node">A' (RAG answer)</div><div class="arr">→ <small>judge</small></div>
+    <div class="node ok">A' ≈ A ?</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 44 setup.</div>
+</section>
+
+<!-- M4 SETUP -->
+<section>
+  <h2><span class="num">44</span> Module 4 Setup (Groq) <span class="lesson">M4 Setup</span></h2>
+  <span class="where">Ekkada: <code>module4-evaluation/</code>, kernel = root <code>.venv</code> (Python 3.15)</span>
+<pre><code>uv add tqdm                       # course lesson 03 (pandas already undi)</code></pre>
+  <table>
+    <tr><th>File</th><th>Ekkadi nunchi</th></tr>
+    <tr><td><code>ingest.py</code>, <code>rag_helper.py</code>, <code>minsearch_lite.py</code></td><td>Mana Module 1 <code>notebooks/</code> nunchi copy (course <code>wget</code> badulu)</td></tr>
+    <tr><td><code>evaluation_utils.py</code></td><td>Course file, Groq ki adapt</td></tr>
+    <tr><td><code>data/course/*.csv</code></td><td>Course prepared data (ground truth 395, RAG answers, judge results, agent results)</td></tr>
+    <tr><td><code>01-data-gen</code> ... <code>04-agent-eval.ipynb</code></td><td>Course 4 notebooks laage</td></tr>
+  </table>
+  <h3>evaluation_utils.py: course vs mana</h3>
+  <table>
+    <tr><th></th><th>Course</th><th>Mana (Groq)</th></tr>
+    <tr><td>Model</td><td><code>gpt-5.4-mini</code></td><td><code>openai/gpt-oss-120b</code></td></tr>
+    <tr><td>Price per 1M</td><td>$0.75 in / $4.50 out</td><td>$0.15 in / $0.60 out</td></tr>
+    <tr><td>Retry</td><td>3 tries, 1-4 s</td><td>8 tries, 429 ki 10-80 s wait (server <code>retry-after</code> follow)</td></tr>
+    <tr><td>Structured output</td><td><code>responses.parse(text_format=...)</code></td><td>Same, Groq support chestundi (test chesam)</td></tr>
+    <tr><td>Workers</td><td>6</td><td>2 (free tier)</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Module 4 ki Docker, kotha Python avasaram ledu. Root project <code>.venv</code> chalu, <code>tqdm</code> (progress bar) matrame add chesam.
+    Groq ippudu OpenAI <b>Responses API</b> + <b>structured output</b> rendu support chestundi, so course code daadapu same. Maarinavi: model peru, prices, rate limit retry.
+    <b>Rate limit</b> ante provider nimishaniki / rojuki entha use cheyyochu ani pettina limit. Daatite <code>429</code> error. Mana retry aagi malli try chestundi.
+  </div>
+  <div class="next"><b>Next:</b> Step 45 ground truth.</div>
+</section>
+
+<!-- M4 L02 -->
+<section>
+  <h2><span class="num">45</span> Generating Ground Truth (one document) <span class="lesson">M4 Lesson 02</span></h2>
+  <span class="where">Ekkada: <code>module4-evaluation/01-data-gen.ipynb</code></span>
+  <h3>Structured output (course lo first time)</h3>
+<pre><code>from pydantic import BaseModel
+
+class Questions(BaseModel):
+    questions: list[str]
+
+response = openai_client.responses.parse(
+    model=MODEL,                  # course: "gpt-5.4-mini"
+    input=messages,               # developer: data_gen_instructions, user: json.dumps(doc)
+    text_format=Questions
+)
+response.output_parsed.questions</code></pre>
+  <div class="expect">Mana run, document <code>74eb249bbf</code> ("I just discovered the course. Can I still join?"):<br>
+  "Is it possible to enroll in the course now that I've just found out about it?" · "Can I still sign up for the LLM Zoomcamp if I discovered it recently?" · "Am I allowed to join the class after it has already started?" · "Do I need to meet any deadlines to get a certificate if I join late?" · "What are the requirements for getting the certificate if I enroll late?"<br>
+  Tokens: 336 in / 402 out → <b>$0.00029</b>.</div>
+<pre><code>records = [{"question": q, "document": doc["id"]} for q in result.questions]</code></pre>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/02-ground-truth-06-parsed-questions-output-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/02-ground-truth-06-parsed-questions-output-cropped.png" alt="Parsed questions output" loading="lazy"></a><figcaption>Parsed questions output <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Ground truth</b> = "ee question ki correct document idi" ani teliyadam. 3 ways: humans rayadam (best, costly), real users questions label (system running kavali), LLM generate (manam).
+    Prathi document ki LLM 5 questions generate chestundi, so aa questions ki correct document ade ani manaki telusu. Anduke prathi document ki <b>stable ID</b> undali.
+    <b>Structured output:</b> LLM free text kaadu, mana Pydantic class format lo istundi. Code direct ga <code>.questions</code> list vadochu, text parse avasaram ledu.
+    Instructions lo "FAQ words takkuva vadu" ani cheppam, real users vere words lo adugutaru kabatti.
+  </div>
+  <div class="flow h">
+    <div class="node">FAQ doc (JSON)</div><div class="arr">→</div>
+    <div class="node">LLM + Questions schema</div><div class="arr">→</div>
+    <div class="node">5 questions</div><div class="arr">→</div>
+    <div class="node ok">{question, document id} × 5</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 46 batch.</div>
+</section>
+
+<!-- M4 L03 -->
+<section>
+  <h2><span class="num">46</span> Ground Truth for All Documents <span class="lesson">M4 Lesson 03</span></h2>
+  <span class="where">Ekkada: <code>module4-evaluation/01-data-gen.ipynb</code></span>
+<pre><code>from concurrent.futures import ThreadPoolExecutor
+from evaluation_utils import map_progress, llm_structured_retry, calc_total_price
+
+with ThreadPoolExecutor(max_workers=2) as pool:      # course: 6
+    results = map_progress(pool, documents[:10], generate_ground_truth)
+
+pd.DataFrame(ground_truth).to_csv("data/ground_truth-groq-sample.csv", index=False)</code></pre>
+  <table>
+    <tr><th></th><th>Course (2026-05-29)</th><th>Mana Groq run</th></tr>
+    <tr><td>Documents</td><td>79</td><td>10 (sample)</td></tr>
+    <tr><td>Questions</td><td>395</td><td>50</td></tr>
+    <tr><td>Time</td><td>-</td><td>11 s</td></tr>
+    <tr><td>Cost</td><td>$0.057</td><td>$0.0033</td></tr>
+  </table>
+  <div class="warn"><b>FAQ maarindi:</b> Today LLM Zoomcamp FAQ lo <b>161</b> documents (course run lo 79). Course ground truth 78 documents lo <b>16 ippudu FAQ lo levu</b>. Idi Step 47 numbers ni affect chestundi.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/03-ground-truth-batch-03-parallel-split-whiteboard-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/03-ground-truth-batch-03-parallel-split-whiteboard-imagegen.png" alt="Documents ni parts ga split chesi parallel processing" loading="lazy"></a><figcaption>Documents ni parts ga split chesi parallel processing <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Okkokka call tarvata okkati ante time waste: prathi request network meeda wait. <b>Parallel</b> ga chala requests okkesari pampi kalipi wait. Kani ekkuva connections isthe rate limit. Course 6 workers, manam free tier ki 2.
+    <b>Retry:</b> 79 calls lo okkati fail ainaa batch mottham fail avvakudadu. <code>llm_structured_retry</code> aagi malli try.
+    Generate cheyyakapothe course <code>ground_truth-new.csv</code> download cheyyochu, manam full evaluation ki adi vadutunnam.
+  </div>
+  <div class="flow h">
+    <div class="node">documents</div><div class="arr">→</div>
+    <div class="node">ThreadPool (2 workers)</div><div class="arr">→</div>
+    <div class="node">generate_ground_truth × N<br><small>retry on 429</small></div><div class="arr">→</div>
+    <div class="node ok">ground_truth.csv</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 47 search evaluation.</div>
+</section>
+
+<!-- M4 L04-05 -->
+<section>
+  <h2><span class="num">47</span> Search Evaluation: relevance lists <span class="lesson">M4 Lesson 04</span></h2>
+  <span class="where">Ekkada: <code>module4-evaluation/02-search-eval.ipynb</code> (LLM calls levu)</span>
+<pre><code>def compute_relevance(q, search_function):
+    doc_id = q["document"]
+    results = search_function(query=q["question"])
+    return [int(d["id"] == doc_id) for d in results]</code></pre>
+  <div class="expect">Mana first question: "Is it okay to join the course late if I just found it now?" → <code>74eb249bbf == 74eb249bbf: True</code> first position → <code>[1, 0, 0, 0, 0]</code>.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/04-search-evaluation-03-relevance-matrix-whiteboard-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/04-search-evaluation-03-relevance-matrix-whiteboard-cropped.png" alt="Relevance matrix: prathi question ki 5 results lo correct ekkada" loading="lazy"></a><figcaption>Relevance matrix: prathi question ki 5 results lo correct ekkada <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Prathi ground truth question ni search ki ichi, top 5 results lo correct document unda, ye position lo ani chustam. <b>Relevance list</b> = 5 numbers, correct document position lo 1, migatha 0. <code>[0, 0, 0, 0, 0]</code> ante miss.
+    Function ki <code>search_function</code> parameter: text search, vector search, hybrid edaina same evaluation code tho test cheyyochu (RAG modular laage).
+  </div>
+  <div class="next"><b>Next:</b> Step 48 metrics.</div>
+</section>
+
+<section>
+  <h2><span class="num">48</span> Hit Rate + MRR <span class="lesson">M4 Lesson 05</span></h2>
+  <span class="where">Ekkada: <code>module4-evaluation/02-search-eval.ipynb</code></span>
+<pre><code>def hit_rate(relevance):     # correct doc top 5 lo ekkadaina unna queries fraction
+    return sum(1 in line for line in relevance) / len(relevance)
+
+def mrr(relevance):          # 1 / (first correct position), average
+    total = 0.0
+    for line in relevance:
+        for rank in range(len(line)):
+            if line[rank] == 1:
+                total += 1 / (rank + 1)
+                break
+    return total / len(relevance)</code></pre>
+  <table>
+    <tr><th>Position</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>miss</th></tr>
+    <tr><td>MRR score</td><td>1.0</td><td>0.5</td><td>0.333</td><td>0.25</td><td>0.2</td><td>0</td></tr>
+  </table>
+  <div class="expect">Course 15-row example: hit_rate <b>0.933</b>, mrr <b>0.822</b> (mana run same).</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/05-search-metrics-04-mrr-rank-annotations-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/05-search-metrics-04-mrr-rank-annotations-cropped.png" alt="MRR rank annotations" loading="lazy"></a><figcaption>MRR rank annotations <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>Mana full 395 run (boost question=3, section=0.5)</h3>
+  <table>
+    <tr><th>Ground truth</th><th>Hit Rate</th><th>MRR</th></tr>
+    <tr><td>Course result (79 docs index, 2026-05)</td><td>0.899</td><td>0.769</td></tr>
+    <tr><td>Mana, anni 395 questions</td><td>0.620</td><td>0.543</td></tr>
+    <tr><td>Mana, document inka unna 315 questions</td><td><b>0.778</b></td><td><b>0.681</b></td></tr>
+  </table>
+  <div class="warn"><b>Mana numbers enduku takkuva?</b> (1) 80 questions ki correct document FAQ lo ledu, avi eppudu miss. (2) Index 79 → 161 docs, compete chese documents ekkuva. Evaluation dataset ni knowledge base tho sync ga unchali ani ide lesson.</div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Hit Rate (Recall@5):</b> correct document top 5 lo ekkadaina vachina queries percentage. Position pattinchukodu.
+    <b>MRR:</b> position kuda chustundi. First lo vaste 1, second 0.5, third 0.33. Average. Correct document top lo unte LLM ki easy.
+    Hit Rate &gt;= MRR eppudu. Hit rate ekkuva, MRR takkuva ante document undi kani kinda paddadi.
+    Synthetic data lo 95% paina vaste anumaninchandi (questions FAQ ki chala daggara). Manchi threshold use case batti: konni apps ki 50% chalu, konni ki 90%+.
+  </div>
+  <div class="flow h">
+    <div class="node">395 questions</div><div class="arr">→</div>
+    <div class="node">search_function</div><div class="arr">→</div>
+    <div class="node">relevance lists</div><div class="arr">→</div>
+    <div class="node ok">hit_rate, mrr</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 49 tuning.</div>
+</section>
+
+<!-- M4 L06 -->
+<section>
+  <h2><span class="num">49</span> Search Parameter Tuning <span class="lesson">M4 Lesson 06</span></h2>
+  <span class="where">Ekkada: <code>module4-evaluation/02-search-eval.ipynb</code></span>
+  <h3>Question boost sweep (mana full 395)</h3>
+  <table>
+    <tr><th>question boost</th><th>Hit Rate</th><th>MRR</th></tr>
+    <tr><td>0.5</td><td>0.666</td><td>0.571</td></tr>
+    <tr><td><b>1.0</b></td><td><b>0.671</b></td><td><b>0.578</b></td></tr>
+    <tr><td>3.0 (Module 1 default)</td><td>0.620</td><td>0.543</td></tr>
+    <tr><td>5.0</td><td>0.608</td><td>0.521</td></tr>
+    <tr><td>10.0</td><td>0.590</td><td>0.500</td></tr>
+  </table>
+  <h3>Grid search (3 × 4 × 3 = 36 combos), top</h3>
+  <table>
+    <tr><th>question</th><th>answer</th><th>section</th><th>Hit Rate</th><th>MRR</th></tr>
+    <tr><td>1.0</td><td>2.0</td><td>0.1</td><td>0.724</td><td>0.627</td></tr>
+    <tr><td>2.0</td><td>4.0</td><td>0.1</td><td>0.724</td><td>0.627</td></tr>
+    <tr><td>5.0</td><td>10.0</td><td>0.5</td><td>0.724</td><td>0.627</td></tr>
+  </table>
+  <div class="expect"><b>Course laane best ratio: question : answer : section = 1 : 2 : 0.1.</b> Present-documents 315 questions meeda: tuning mundu hit 0.778 / mrr 0.681 → tuning tarvata <b>hit 0.908 / mrr 0.786</b> (course: 0.975 / 0.885). Mana Groq generated 50 questions meeda tuned: hit 0.92, mrr 0.747.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/06-search-tuning-04-grid-sorted-by-mrr-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/06-search-tuning-04-grid-sorted-by-mrr-cropped.png" alt="Grid search sorted by MRR" loading="lazy"></a><figcaption>Grid search sorted by MRR <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Module 1 lo <code>question: 3.0</code> boost "question match important" ani guess chesam. Data emi cheptundi? <b>Opposite.</b> Question boost penchite metrics padipotayi. <b>Answer</b> text ki double weight best.
+    Ide offline evaluation power: okka parameter maarchi, same questions malli run, number kadilinda chudandi. Dataset fixed kabatti comparison fair.
+    Grid search chinna parameter space ki ok (mana run lo okka combo ~1 s). Pedda space ki random sampling / Bayesian optimization (hyperopt), overfit avvakunda validation split.
+    <b>Top-K:</b> 10 results isthe hit rate perugutundi kani LLM ki ekkuva context, ekkuva cost, confuse. FAQ ki 5 manchi default.
+  </div>
+  <div class="flow h">
+    <div class="node">Guess: question=3</div><div class="arr">→ <small>measure</small></div>
+    <div class="node bad">worse than 1.0</div><div class="arr">→ <small>grid</small></div>
+    <div class="node ok">q=1, a=2, s=0.1</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 50 RAG + agent evaluation.</div>
+</section>
+
+<!-- M4 L11 -->
+<section>
+  <h2><span class="num">50</span> RAG and Agent Evaluation <span class="lesson">M4 Lesson 11</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/11-evaluation-intro-01-rag-agent-evaluation-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/11-evaluation-intro-01-rag-agent-evaluation-imagegen.png" alt="RAG evaluation: search, prompt, LLM, answer; agent evaluation tool calls + trajectory kuda" loading="lazy"></a><figcaption>RAG evaluation: search, prompt, LLM, answer; agent evaluation tool calls + trajectory kuda <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Search correct document istundi ani telusu. Kani final <b>answer</b>? Bad answer ki 3 karanalu undochu: search wrong document, prompt lo context miss, LLM context ignore. RAG evaluation mottham flow ni okkesari check chestundi.
+    Generated answer original laaga same words lo undadu, so exact match pani cheyyadu. <b>LLM-as-a-judge:</b> inkoka LLM ki question, original answer, generated answer ichi "same meaning aa?" ani adugutam. <b>Reasoning</b> kuda adigite verdict better avutundi.
+    Agents ki answer tho paatu <b>trajectory</b> (tool calls) kuda save chesi judge ki istam.
+  </div>
+  <div class="next"><b>Next:</b> Step 51 RAG answers + judge.</div>
+</section>
+
+<!-- M4 L12-13 -->
+<section>
+  <h2><span class="num">51</span> RAG Answers + LLM as a Judge <span class="lesson">M4 Lessons 12-13</span></h2>
+  <span class="where">Ekkada: <code>module4-evaluation/03-rag-evals.ipynb</code></span>
+  <h3>51a. RAG answers (RAGWithUsage, tuned boosts)</h3>
+<pre><code>from evaluation_utils import RAGWithUsage
+assistant = RAGWithUsage(index=index, llm_client=openai_client)   # boosts q=1, a=2, s=0.1
+
+def generate_rag_answer(rec):
+    answer_llm = assistant.rag(rec["question"])
+    return {"question": rec["question"], "answer_llm": answer_llm,
+            "answer_orig": doc_idx[rec["document"]]["answer"], "document": rec["document"]}</code></pre>
+  <h3>51b. Judge</h3>
+<pre><code>class AnswerEvaluation(BaseModel):
+    reasoning: str
+    score: Literal["good", "bad"]
+
+eval_result, usage = llm_structured_retry(openai_client, aqa_judge_instructions,
+                                          prompt, AnswerEvaluation)</code></pre>
+  <h3>51c. Results</h3>
+  <table>
+    <tr><th>Run</th><th>Answers</th><th>Good</th><th>Bad</th><th>Cost</th></tr>
+    <tr><td>Course (gpt-5.4-mini RAG + judge)</td><td>395</td><td>379 (96%)</td><td>16</td><td>RAG $0.34 + judge $0.25</td></tr>
+    <tr><td><b>Mana (Groq RAG + Groq judge)</b></td><td>15</td><td><b>15 (100%)</b></td><td>0</td><td>RAG $0.0051 + judge $0.0037</td></tr>
+  </table>
+  <div class="expect">Mana sample lo bad cases levu. Example judge reasoning: "The AI answer correctly identifies that the error message indicates insufficient credits, which matches the original answer. It expands on the original ... but still conveys the core information." 15 questions chinna sample, course 395 lo 16 bad (4%), so bad cases rare.</div>
+  <h3>51d. Evaluating the judge (extra)</h3>
+  <div class="expect">Course answers lo 15 random tisukoni mana Groq judge tho judge chesam, course gpt-5.4-mini judge verdict tho compare: <b>agreement 14 / 15</b>. Disagree ayinadi okkate: "Which free Groq models support tool use right now?" Groq judge <b>bad</b>, course judge <b>good</b>. Rendu judges kuda konnisarlu different ga chustayi, anduke judge verdicts ni manam chethi tho sample chadavali (course rule).</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/13-llm-as-judge-05-score-counts-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/13-llm-as-judge-05-score-counts-cropped.png" alt="Judge score counts" loading="lazy"></a><figcaption>Judge score counts <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Lesson 12:</b> prathi ground truth question ki RAG run chesi answer (A') save. Original (A) <code>doc_idx</code> lookup nunchi. <code>RAGWithUsage</code> prathi LLM call tokens gurthu pettukuni total cost chupistundi.
+    <b>Lesson 13:</b> judge ki rules: word-for-word avasaram ledu, same key information undali, extra detail ok, wrong / key point miss aithe matrame bad. Output Pydantic: reasoning + score.
+    <b>Bad cases chadavandi.</b> Avi most useful: wrong document retrieve, generic answer, FAQ lo unna "I don't know".
+    <b>Judge kuda tappu cheyyochu.</b> Judge ni inkoka judge tho check cheyyalem, manam chethi tho sample chadivi agree aa ani chudali. Course idea: Streamlit app lo side by side chusi mark cheyyadam. Mana extra test lo rendu different judges (gpt-5.4-mini vs gpt-oss-120b) entha agree avutayo chusam.
+  </div>
+  <div class="flow h">
+    <div class="node">ground truth Q</div><div class="arr">→</div>
+    <div class="node">RAGWithUsage.rag()</div><div class="arr">→</div>
+    <div class="node">A' + A</div><div class="arr">→</div>
+    <div class="node">Judge LLM<br><small>reasoning + good/bad</small></div><div class="arr">→</div>
+    <div class="node ok">% good, bad cases chadavu</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 52 agent evaluation.</div>
+</section>
+
+<!-- M4 L14 -->
+<section>
+  <h2><span class="num">52</span> Agent Evaluation <span class="lesson">M4 Lesson 14</span></h2>
+  <span class="where">Ekkada: <code>module4-evaluation/04-agent-eval.ipynb</code></span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/14-agent-evaluation-01-agent-evaluation-record-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/14-agent-evaluation-01-agent-evaluation-record-imagegen.png" alt="Agent evaluation record: question, original, generated, tool calls, trajectory" loading="lazy"></a><figcaption>Agent evaluation record: question, original, generated, tool calls, trajectory <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+<pre><code>runner = OpenAIResponsesRunner(
+    tools=agent_tools, developer_prompt=instructions,
+    llm_client=OpenAIClient(model=MODEL, client=openai_client),   # Groq
+    pricing_config=pricing)                                       # Groq prices
+
+result = runner.loop(prompt=rec["question"])
+tool_calls = extract_tool_calls(result.all_messages)   # [{"name": "search", "arguments": "..."}]</code></pre>
+  <h3>Good trajectory</h3>
+  <ul>
+    <li>Search query question ki relevant, important keywords unnayi.</li>
+    <li>Duplicate searches levu. Malli search cheste adi refinement.</li>
+    <li>Usually 1 search. 2-3 ok kashtamaina questions ki. 3 kanna ekkuva ki clear reason kavali.</li>
+    <li>Tool calls final answer ki support.</li>
+  </ul>
+  <h3>Results</h3>
+  <table>
+    <tr><th>Run</th><th>Answers</th><th>Answer good</th><th>Trajectory good</th><th>Cost</th></tr>
+    <tr><td>Course (gpt-5.4-mini)</td><td>50</td><td>45</td><td>49</td><td>agent $0.070 + judge $0.053</td></tr>
+    <tr><td><b>Mana (Groq)</b></td><td>8</td><td><b>8 / 8</b></td><td><b>7 / 8</b></td><td>agent $0.0061 + judge $0.0030</td></tr>
+  </table>
+  <div class="expect">Mana agent search calls per question: 7 questions ki 1 search, okka question (\u0027Will there be another run of this course...\u0027) ki 4 searches. Okka run time 212 s (rate limit waits tho).</div>
+  <div class="warn">Trajectory bad (1): "Will there be another run of this course..." question ki agent 4 searches chesindi. Answer correct (good), kani judge rule "3 kanna ekkuva searches ki clear reason kavali" prakaram trajectory bad. Answer good + trajectory bad = result correct, kani efficiency improve cheyyochu (instructions lo search limit).</div>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Agent ki same A → Q → A', A' agent nunchi. Extra ga <b>trajectory</b> = agent chesina tool calls (ye query tho search, enni sarlu).
+    Judge rendu scores istundi: <b>answer_score</b>, <b>trajectory_score</b>. Combination nunchi problem ekkada ani telustundi:
+    answer bad + trajectory good → model context sariga vadaledu. Rendu bad → wrong search or early stop.
+    <code>tool_calls</code> ni <code>json.dumps</code> tho save, special characters (quotes) escape avvadaniki.
+  </div>
+  <div class="flow">
+    <div class="node">Question</div><div class="arr">↓</div>
+    <div class="node">ToyAIKit agent (Groq) → search tool</div><div class="arr">↓</div>
+    <div class="node">answer_agent + tool_calls</div><div class="arr">↓</div>
+    <div class="node">Judge</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">answer_score</span><div class="node">matches FAQ?</div></div>
+      <div class="branch"><span class="lbl">trajectory_score</span><div class="node">searches reasonable?</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Step 53 next steps.</div>
+</section>
+
+<!-- M4 L15 -->
+<section>
+  <h2><span class="num">53</span> Next Steps <span class="lesson">M4 Lesson 15</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/15-next-steps-01-evaluation-feedback-loop-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/04-evaluation/images/15-next-steps-01-evaluation-feedback-loop-imagegen.png" alt="Evaluation feedback loop: synthetic → evaluate → deploy → real queries → labels → better test set" loading="lazy"></a><figcaption>Evaluation feedback loop: synthetic → evaluate → deploy → real queries → labels → better test set <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/04-evaluation">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>Synthetic nunchi real data ki</h3>
+  <ol>
+    <li>Synthetic data tho start (LLM questions).</li>
+    <li>Metrics too good aithe generation prompt tune (questions FAQ ki daggara).</li>
+    <li>Deploy, real queries + feedback collect.</li>
+    <li>Real data ni humans label.</li>
+    <li>Real patterns tho synthetic generator improve.</li>
+  </ol>
+  <table>
+    <tr><th>Framework</th><th>Emi</th></tr>
+    <tr><td>Ragas</td><td>RAG metrics: faithfulness, answer relevance, context precision</td></tr>
+    <tr><td>DeepEval</td><td>Hallucination detection, answer relevance</td></tr>
+    <tr><td>TruLens</td><td>App instrument chesi quality track</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Evaluation okka sari pani kaadu. Prompt, model, search parameters edi maarchina malli run chesi better ayyinda worse ayyinda chudandi.
+    <b>Manual evaluation ni edi beat cheyyadu:</b> meere try cheyyandi, edge cases alochinchandi, fail ayye examples collect.
+    Mana run lo nerchukunnadi: FAQ maarite ground truth kuda update cheyyali (16 documents poyayi, metrics padipoyayi).
+    <b>Online evaluation (monitoring):</b> thumbs up/down, logs, dashboards, alerts. Module 5 lo.
+  </div>
+  <div class="next"><b>Next:</b> Module 5: Monitoring (kinda, Step 54 nunchi).</div>
+</section>
+
+<!-- MODULE 5 MAP -->
+<section>
+  <h2>Module 5: Monitoring map (course README)</h2>
+  <p>Course source: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">github.com/DataTalksClub/llm-zoomcamp/05-monitoring</a>. Module 4 = <b>offline</b> evaluation (users ki mundu). Module 5 = <b>online</b> evaluation: real users vadutunnappudu live app ni chudadam.</p>
+  <div class="warn"><b>Mana setup:</b> code <code>module5-monitoring/</code>, root <code>.venv</code> (Python 3.15) + <code>streamlit</code>. Course PostgreSQL Docker lo run chestundi, mee machine lo Docker ledu. Course lesson 07 lo author ne cheptaru: <i>"Grafana avasaram lekapothe Postgres badulu SQLite vadi Docker skip cheyyochu"</i>. So mana <code>db_init.py</code> lo switch:
+  <ul>
+    <li><code>DB_BACKEND=sqlite</code> (default): <code>module5-monitoring/monitoring.db</code> file, ippude pani chestundi.</li>
+    <li><code>DB_BACKEND=postgres</code>: course laage Postgres (Docker + <code>uv add "psycopg[binary]"</code> kavali).</li>
+  </ul>
+  SQL anni course Postgres SQL; SQLite ki <code>sql()</code> helper 3 chinna maarpulu chestundi (<code>%s</code>→<code>?</code>, <code>SERIAL</code>, timestamp type).</div>
+  <table>
+    <tr><th>Lesson</th><th>Topic</th><th>Step</th><th>Mana run</th></tr>
+    <tr><td>01</td><td>Why monitoring</td><td>54</td><td>Reading</td></tr>
+    <tr><td>02-03</td><td>Assistant + Streamlit chat app</td><td>55</td><td class="ok">CLI + app run</td></tr>
+    <tr><td>04</td><td>Capturing metrics</td><td>56</td><td class="ok">Run</td></tr>
+    <tr><td>05-06</td><td>Database: save + query</td><td>57</td><td class="ok">SQLite tho run</td></tr>
+    <tr><td>07</td><td>Streamlit dashboard</td><td>58</td><td class="ok">Run (server 200 OK)</td></tr>
+    <tr><td>08</td><td>User feedback (+1 / -1)</td><td>59</td><td class="ok">Run</td></tr>
+    <tr><td>09</td><td>Built-in judge</td><td>60</td><td class="ok">Run</td></tr>
+    <tr><td>10-11</td><td>Feedback dashboard + synthetic data</td><td>61</td><td class="ok">Run (20 rows)</td></tr>
+    <tr><td>12</td><td>Grafana dashboards</td><td>62</td><td class="bad">Docker kosam wait (SQL ready)</td></tr>
+    <tr><td>13</td><td>Docker Compose</td><td>63</td><td class="bad">Docker kosam wait (compose ready)</td></tr>
+    <tr><td>14</td><td>Next steps</td><td>64</td><td>Reading</td></tr>
+  </table>
+</section>
+
+<!-- M5 L01 -->
+<section>
+  <h2><span class="num">54</span> Why Monitoring <span class="lesson">M5 Lesson 01</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/01-intro-02-ragbase-pipeline-code-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/01-intro-02-ragbase-pipeline-code-cropped.png" alt="RAGBase pipeline code: manam monitor chese system" loading="lazy"></a><figcaption>RAGBase pipeline code: manam monitor chese system <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>Prathi question ki capture chesedi</h3>
+  <ul>
+    <li>Instructions, prompt, model</li>
+    <li>Input / output tokens, cost</li>
+    <li>Response time (user entha wait chesadu)</li>
+    <li>User feedback (thumbs up / down)</li>
+    <li>Relevance (answer question ki sambandham unda)</li>
+  </ul>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Offline numbers (Module 4) deploy tarvata full story cheppavu: answers entha time teesukuntunnayi, entha cost, users ki useful aa teliyadu. <b>Monitoring = online evaluation</b>: running system nunchi metrics collect chesi dashboard lo chudadam.
+    3 kotha pieces: <b>UI</b> (users questions adigedi, Streamlit), <b>database</b> (conversations + feedback store), <b>dashboard</b> (metrics visualize). RAG ni malli build cheyyam, Module 1 <code>RAGBase</code> ne wrap chestam.
+    Course RAG ni monitor chestundi; agent monitoring same idea, homework.
+  </div>
+  <div class="flow h">
+    <div class="node">User</div><div class="arr">→</div>
+    <div class="node">Streamlit app<br><small>RAG + metrics</small></div><div class="arr">→</div>
+    <div class="node">Database<br><small>conversations, feedback</small></div><div class="arr">→</div>
+    <div class="node ok">Dashboard<br><small>Streamlit / Grafana</small></div>
+  </div>
+  <div class="next"><b>Next:</b> Step 55 assistant + chat app.</div>
+</section>
+
+<!-- M5 L02-03 -->
+<section>
+  <h2><span class="num">55</span> Assistant + Chat App <span class="lesson">M5 Lessons 02-03</span></h2>
+  <span class="where">Ekkada: <code>module5-monitoring/</code> terminal</span>
+  <h3>55a. assistant.py</h3>
+<pre><code>def create_assistant():
+    documents = load_faq_data()
+    index = build_index(documents)
+    return RAGWithMetrics(index=index, llm_client=groq_client())   # course: OpenAI()</code></pre>
+<pre><code>cd module5-monitoring
+uv run python assistant.py "How do I join the course?"</code></pre>
+  <div class="expect">Mana run: Groq answer ("Registration is only used to gauge interest... submit your final project while the submission window is still open...") + <code>saved conversation 1</code>.</div>
+  <div class="warn"><b>Makefile:</b> Course <code>make run</code>, <code>make chat</code> vadutundi. Windows lo <code>make</code> ledu, so direct commands vadandi (kinda table).</div>
+  <table>
+    <tr><th>Course (make)</th><th>Windows command</th></tr>
+    <tr><td><code>make run</code></td><td><code>uv run python assistant.py</code></td></tr>
+    <tr><td><code>make chat</code></td><td><code>uv run python -m streamlit run app.py</code></td></tr>
+    <tr><td>dashboard</td><td><code>uv run python -m streamlit run dashboard.py --server.port 8502</code></td></tr>
+  </table>
+  <div class="warn"><code>uv run streamlit ...</code> badulu <code>uv run python -m streamlit ...</code>: <code>.venv\Scripts\streamlit.exe</code> unsigned launcher, Smart App Control block cheyyochu (<code>jupyter.exe</code> laaga). <code>python -m</code> safe.</div>
+  <h3>55b. app.py (Streamlit)</h3>
+<pre><code>@st.cache_resource            # extra: assistant okka sari build, prathi click ki kaadu
+def get_assistant():
+    return create_assistant()
+
+st.title("Course Assistant")
+user_input = st.text_input("Enter your question:")
+if st.button("Ask"):
+    answer = assistant.rag(user_input)
+    st.write(answer)</code></pre>
+  <div class="expect">Browser lo <code>http://localhost:8501</code>. Mana test (Streamlit AppTest, browser lekunda real app logic): title "Course Assistant", "Can I still join the course after it started?" → "Yes—you can still join the course even after it has started... submit your capstone project...".</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/03-chat-app-03-answer-in-browser-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/03-chat-app-03-answer-in-browser-cropped.png" alt="Browser lo chat app answer" loading="lazy"></a><figcaption>Browser lo chat app answer <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Streamlit</b> = Python tho web UI, HTML / JS rayakunda. <code>st.text_input</code>, <code>st.button</code>, <code>st.write</code> anni widgets.
+    Streamlit prathi click ki <b>mottham script malli run</b> chestundi. Course code lo prathi rerun ki FAQ download + index build. Manam <code>@st.cache_resource</code> pettam: okka sari build, tarvata reuse (Streamlit standard pattern, logic same).
+  </div>
+  <div class="next"><b>Next:</b> Step 56 metrics.</div>
+</section>
+
+<!-- M5 L04 -->
+<section>
+  <h2><span class="num">56</span> Capturing Metrics <span class="lesson">M5 Lesson 04</span></h2>
+  <span class="where">Ekkada: <code>module5-monitoring/metrics.py</code></span>
+<pre><code>@dataclass
+class LLMCallRecord:
+    model: str; prompt: str; instructions: str; answer: str
+    prompt_tokens: int; completion_tokens: int; total_tokens: int
+    response_time: float; cost: float
+    timestamp: datetime = field(default_factory=datetime.now)
+
+class RAGWithMetrics(RAGBase):
+    def llm(self, prompt):
+        start_time = time.time()
+        response = self._call_llm(prompt)          # Groq responses.create (+ 429 retry)
+        response_time = time.time() - start_time
+        self._log_response(prompt, response, response_time)   # self.last_call
+        return response.output_text</code></pre>
+  <table>
+    <tr><th>Mana run (app test)</th><th>Value</th></tr>
+    <tr><td>Response time</td><td>1.60 s</td></tr>
+    <tr><td>Prompt tokens</td><td>455</td></tr>
+    <tr><td>Completion tokens</td><td>116</td></tr>
+    <tr><td>Cost</td><td>$0.0001</td></tr>
+  </table>
+  <div class="warn"><b>Maarpulu:</b> (1) <code>calculate_cost</code> lo Groq gpt-oss-120b price ($0.15 / $0.60). (2) <code>_call_llm</code> ki 429 retry: mana first CLI run lo Module 4 background tho kalisi Groq "8000 tokens/min" limit daatindi. Retry wait kuda <code>response_time</code> lo count avutundi, user nijanga antha wait chestadu (CLI run lo 7.6 s vachindi ide karanam).</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/04-metrics-06-streamlit-metrics-display-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/04-metrics-06-streamlit-metrics-display-cropped.png" alt="Streamlit lo metrics display" loading="lazy"></a><figcaption>Streamlit lo metrics display <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Prathi LLM call black box. Monitor cheyyali ante mundu numbers capture cheyyali: time, tokens, cost.
+    <b>Dataclass</b> = fields clear ga define chesina record, dictionary kanna readable.
+    <code>RAGBase</code> ni maarchakunda <b>subclass</b> chesi <code>llm()</code> matrame override (Module 1 Step 15 + Module 2 Step 30 same trick). <code>rag()</code> call chesina prathi sari metrics automatic.
+    <code>self.last_call</code> lo record: simple, kani rendu requests okkesari vaste clash. Okka user ki ok.
+  </div>
+  <div class="flow h">
+    <div class="node">rag(query)</div><div class="arr">→</div>
+    <div class="node">llm(): timer start</div><div class="arr">→</div>
+    <div class="node">Groq call</div><div class="arr">→</div>
+    <div class="node">timer stop + usage + cost</div><div class="arr">→</div>
+    <div class="node ok">LLMCallRecord → last_call</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 57 database.</div>
+</section>
+
+<!-- M5 L05-06 -->
+<section>
+  <h2><span class="num">57</span> Database: Save + Query <span class="lesson">M5 Lessons 05-06</span></h2>
+  <span class="where">Ekkada: <code>db_init.py</code>, <code>db_save.py</code>, <code>db_query.py</code></span>
+<pre><code>uv run python db_init.py            # tables create (okka sari; schema maarite --drop)
+uv run python db_query.py           # recent conversations + stats</code></pre>
+  <div class="expect">Mana run: <code>Backend: sqlite (...\module5-monitoring\monitoring.db)</code>, <code>Using timezone: India Standard Time</code>, <code>Database initialized</code>. Query: <code>Stats(total=1, avg_response_time=7.57, total_cost=0.00039, avg_tokens=1311.0)</code>.</div>
+  <h3>conversations table (course schema)</h3>
+<pre><code>id SERIAL PRIMARY KEY, question, answer, course, model, instructions, prompt,
+prompt_tokens, completion_tokens, total_tokens, response_time, cost,
+timestamp TIMESTAMP WITH TIME ZONE</code></pre>
+  <table>
+    <tr><th>Course Postgres</th><th>Mana SQLite (automatic)</th></tr>
+    <tr><td><code>docker run ... postgres:17</code></td><td>Avasaram ledu, <code>monitoring.db</code> file</td></tr>
+    <tr><td><code>%s</code> placeholders</td><td><code>?</code></td></tr>
+    <tr><td><code>SERIAL PRIMARY KEY</code></td><td><code>INTEGER PRIMARY KEY AUTOINCREMENT</code></td></tr>
+    <tr><td><code>TIMESTAMP WITH TIME ZONE</code></td><td>ISO text (timezone tho), chadivetappudu <code>datetime.fromisoformat</code></td></tr>
+    <tr><td><code>with conn.cursor() as cur</code></td><td><code>cur = conn.cursor()</code> (sqlite3 cursor context manager kaadu, rendu backends ki pani chestundi)</td></tr>
+  </table>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/05-database-02-timezone-aware-timestamp.jpg" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/05-database-02-timezone-aware-timestamp.jpg" alt="Timezone-aware timestamp" loading="lazy"></a><figcaption>Timezone-aware timestamp <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Metrics app close cheste pothayi, so database lo save. Course Postgres enduku? Structured data ki manchidi + Grafana easy ga connect. Mana machine lo Docker ledu, so SQLite (Python lo built-in, okka file). Grafana vachinappudu <code>DB_BACKEND=postgres</code> tho same code Postgres ki.
+    <code>RETURNING id</code>: insert chesina row id venakki, feedback ki ade conversation ki link cheyyadaniki.
+    <b>question</b> separate column: <code>prompt</code> lo full template + context; user asalu adigindi separate ga undali.
+    <b>Timezone-aware timestamp:</b> lekapothe Grafana time axis tappu.
+    <code>row_to_record</code>: database row (tuple) ni malli <code>LLMCallRecord</code> ga, column numbers gurthu pettukovakkarledu.
+  </div>
+  <div class="flow h">
+    <div class="node">LLMCallRecord + question</div><div class="arr">→</div>
+    <div class="node">save_conversation()<br><small>INSERT ... RETURNING id</small></div><div class="arr">→</div>
+    <div class="node">conversations table</div><div class="arr">→</div>
+    <div class="node ok">get_conversations() → records</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 58 dashboard.</div>
+</section>
+
+<!-- M5 L07 -->
+<section>
+  <h2><span class="num">58</span> Streamlit Dashboard <span class="lesson">M5 Lesson 07</span></h2>
+  <span class="where">Ekkada: <code>module5-monitoring/dashboard.py</code></span>
+<pre><code>uv run python -m streamlit run dashboard.py --server.port 8502</code></pre>
+<pre><code>stats = get_stats()        # COUNT, AVG(response_time), SUM(cost), AVG(total_tokens)
+col1.metric("Total conversations", stats.total)
+...
+st.line_chart(df, x="timestamp", y="cost")
+st.line_chart(df, x="timestamp", y="response_time")</code></pre>
+  <div class="expect">Mana real server test: <code>http://localhost:8502/_stcore/health</code> → <code>ok</code> (1 s lo), <code>GET /</code> → 200. Port 8502, enduku ante 8501 chat app ki.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/07-streamlit-dashboard-06-dashboard-overview-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/07-streamlit-dashboard-06-dashboard-overview-cropped.png" alt="Streamlit dashboard overview" loading="lazy"></a><figcaption>Streamlit dashboard overview <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Grafana ki mundu Streamlit lo simple dashboard. Chala projects ki idi chalu: latency, cost, recent conversations okka chota.
+    Top lo 4 numbers (total, avg time, total cost, avg tokens), tarvata time charts, kinda recent conversations.
+    Last 100 records mottham fetch chesi rendu columns chart cheyyadam efficient kaadu, kani mana volume ki ok.
+    Mana extra: empty database lo charts crash avvakunda <code>if records:</code> check.
+  </div>
+  <div class="next"><b>Next:</b> Step 59 user feedback.</div>
+</section>
+
+<!-- M5 L08 -->
+<section>
+  <h2><span class="num">59</span> User Feedback (+1 / -1) <span class="lesson">M5 Lesson 08</span></h2>
+  <span class="where">Ekkada: <code>db_init.py</code> (feedback table), <code>db_feedback.py</code>, <code>app.py</code></span>
+<pre><code>CREATE TABLE feedback (
+    id SERIAL PRIMARY KEY,
+    conversation_id INTEGER REFERENCES conversations(id),
+    source TEXT NOT NULL,          -- 'user' or 'judge'
+    relevance TEXT, explanation TEXT,
+    score INTEGER,                 -- +1 / -1
+    timestamp TIMESTAMP WITH TIME ZONE NOT NULL)</code></pre>
+<pre><code>conversation_id = st.session_state.get("conversation_id")
+if conversation_id is not None:
+    if st.button("+1", key=f"feedback_up_{conversation_id}"):
+        save_feedback(conversation_id, "user", score=1)
+        st.success("Thanks!")</code></pre>
+  <div class="expect">Mana test: Ask tarvata buttons <code>['Ask', '+1', '-1']</code>, +1 click → <code>Thanks!</code>, database lo feedback row.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/08-user-feedback-06-app-feedback-buttons-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/08-user-feedback-06-app-feedback-buttons-cropped.png" alt="App lo feedback buttons" loading="lazy"></a><figcaption>App lo feedback buttons <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Time, tokens, cost answer <b>quality</b> cheppavu. Users ki telusu, ChatGPT lo rate chesinatte. Thumbs up/down collect.
+    Feedback noisy (accidental clicks), kani evaluation dataset ki valuable, and dashboard lo okka hour lo chala thumbs-down = edo broke.
+    Okka table, <code>source</code> column: <code>user</code> or <code>judge</code>.
+    <b>session_state:</b> Streamlit prathi click ki script malli run chestundi. Answer conversation_id ni button click varaku carry cheyyadaniki session_state. Feedback buttons <code>Ask</code> block <b>bayata</b> undali, lekapothe rerun lo pani cheyyavu.
+  </div>
+  <div class="flow h">
+    <div class="node">Ask → conversation_id</div><div class="arr">→</div>
+    <div class="node">st.session_state</div><div class="arr">→</div>
+    <div class="node">+1 / -1 click (rerun)</div><div class="arr">→</div>
+    <div class="node ok">feedback row (source=user)</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 60 judge.</div>
+</section>
+
+<!-- M5 L09 -->
+<section>
+  <h2><span class="num">60</span> Built-in Judge <span class="lesson">M5 Lesson 09</span></h2>
+  <span class="where">Ekkada: <code>module5-monitoring/judge.py</code></span>
+<pre><code>class RelevanceVerdict(BaseModel):
+    relevance: Literal["NON_RELEVANT", "PARTLY_RELEVANT", "RELEVANT"]
+    explanation: str
+
+relevance, explanation = evaluate_relevance(user_input, answer)   # Groq judge
+save_feedback(conversation_id, "judge", relevance=relevance, explanation=explanation)</code></pre>
+<pre><code>uv run python judge.py</code></pre>
+  <div class="expect">Mana run: <code>RELEVANT</code> · "The answer directly addresses the question by confirming that the user can still join the course and provides additional context that it is self-paced." App lo kuda: <code>Relevance: RELEVANT</code>.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/09-built-in-judge-04-judge-run-output-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/09-built-in-judge-04-judge-run-output-cropped.png" alt="Judge run output" loading="lazy"></a><figcaption>Judge run output <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Module 4 judge ki ground truth (original answer) undi. <b>Online lo ledu</b>: judge ki question + answer matrame. Kashtam, so instructions lo RELEVANT / PARTLY / NON clear ga.
+    <b>explanation</b> adigite judge mundu reason chesi tarvata label istundi, label better.
+    <code>llm_structured_retry</code> (Module 4 nunchi): JSON format tappu vaste malli try.
+    <b>Production lo:</b> judge extra LLM call (latency + cost). Answer user ki mundu ichi, judge background lo. Judge cost separate ga track. Prathi answer kaadu, 10 lo 1 sample chalu.
+    Judge ni user labels tho <b>align</b> cheyyali, lekapothe "relevant" ante nijanga relevant kakapovachu.
+  </div>
+  <div class="next"><b>Next:</b> Step 61 feedback dashboard + synthetic data.</div>
+</section>
+
+<!-- M5 L10-11 -->
+<section>
+  <h2><span class="num">61</span> Feedback Dashboard + Synthetic Data <span class="lesson">M5 Lessons 10-11</span></h2>
+  <span class="where">Ekkada: <code>dashboard.py</code>, <code>generate_data.py</code></span>
+<pre><code>uv run python generate_data.py              # prathi second ki okka fake conversation, Ctrl+C varaku
+uv run python generate_data.py --count 20   # mana extra option: 20 rows tarvata aagu</code></pre>
+  <ul>
+    <li>Prathi fake conversation: random question/answer, random tokens, time 0.5-5 s, cost.</li>
+    <li>70% ki judge relevance (random), 50% ki user score (4:1 thumbs up).</li>
+  </ul>
+  <h3>Mana dashboard (2 real + 20 synthetic)</h3>
+  <table>
+    <tr><th>Metric</th><th>Value</th></tr>
+    <tr><td>Total conversations</td><td>22</td></tr>
+    <tr><td>Avg response time</td><td>2.76 s</td></tr>
+    <tr><td>Total cost</td><td>$0.0991</td></tr>
+    <tr><td>Avg tokens</td><td>346</td></tr>
+    <tr><td>Thumbs up / down</td><td>6 / 1</td></tr>
+    <tr><td>Sections</td><td>Cost over time, Response time over time, Judge relevance, User feedback, Recent conversations (3 charts)</td></tr>
+  </table>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/10-feedback-dashboard-01-monitoring-panels-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/10-feedback-dashboard-01-monitoring-panels-imagegen.png" alt="Monitoring panels: cost, latency, relevance, user feedback" loading="lazy"></a><figcaption>Monitoring panels: cost, latency, relevance, user feedback <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/11-synthetic-data-01-live-data-loop-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/11-synthetic-data-01-live-data-loop-imagegen.png" alt="Synthetic data loop: generator → database → live dashboard" loading="lazy"></a><figcaption>Synthetic data loop: generator → database → live dashboard <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Ippudu rendu quality signals: user thumbs + judge relevance. Dashboard lo cost, latency pakkana quality kuda.
+    Konni conversations tho charts kaali ga untayi. Chethi tho questions adagadam slow, so <b>synthetic data script</b>: fake conversations database lo pedutundi, dashboard real volume tho ela untundo chudochu. Live mode lo Grafana real-time update chudochu.
+    Synthetic cost (gpt-5.4-mini fake numbers) valla total cost $0.099, real Groq calls kaadu.
+  </div>
+  <div class="next"><b>Next:</b> Step 62 Grafana.</div>
+</section>
+
+<!-- M5 L12 -->
+<section>
+  <h2><span class="num">62</span> Grafana Dashboards <span class="lesson">M5 Lesson 12</span></h2>
+  <span class="where">Ekkada: <code>http://localhost:3000</code> (Docker kavali, <b>mana machine lo inka run cheyyaledu</b>)</span>
+  <div class="bad">Grafana Postgres nunchi chaduvutundi, rendu Docker lo. Docker install tarvata Step 63 commands.</div>
+  <h3>Data source (Grafana UI)</h3>
+  <ul>
+    <li>Configuration → Data Sources → Add → <b>PostgreSQL</b></li>
+    <li>Host: <code>postgres:5432</code> (mana compose service name; course <code>docker run</code> lo <code>course-assistant-pg:5432</code>)</li>
+    <li>Database <code>course_assistant</code>, User <code>user</code>, Password <code>password</code>, SSL disable → Save &amp; Test</li>
+  </ul>
+  <h3>Panels (anni SQL <code>module5-monitoring/grafana-panels.sql</code> lo)</h3>
+  <table>
+    <tr><th>Panel</th><th>Type</th><th>Query idea</th></tr>
+    <tr><td>Response time</td><td>Time series</td><td><code>timestamp AS time, response_time</code></td></tr>
+    <tr><td>Token usage</td><td>Time series</td><td><code>$__timeGroup</code> buckets, <code>AVG(total_tokens)</code></td></tr>
+    <tr><td>Cost</td><td>Time series</td><td>buckets, <code>SUM(cost)</code></td></tr>
+    <tr><td>Model usage</td><td>Bar chart</td><td><code>GROUP BY model</code></td></tr>
+    <tr><td>Relevance</td><td>Pie</td><td>feedback <code>source='judge'</code> <code>GROUP BY relevance</code></td></tr>
+    <tr><td>User feedback</td><td>Gauge / Pie</td><td>thumbs up vs down</td></tr>
+    <tr><td>Recent conversations</td><td>Table</td><td>last 5</td></tr>
+  </table>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/12-grafana-08-finished-dashboard-panels-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/12-grafana-08-finished-dashboard-panels-cropped.png" alt="Finished Grafana dashboard" loading="lazy"></a><figcaption>Finished Grafana dashboard <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Streamlit dashboard already pani chestundi. <b>Grafana</b> dedicated dashboard tool: chala data sources, ekkuva panel types, <b>alerts</b> (metric limit daatite notification). Kani separate, heavy app. Simple needs ki Streamlit chalu.
+    Rendu habits: time column ni <code>AS time</code> (x-axis). <code>WHERE timestamp BETWEEN $__timeFrom() AND $__timeTo()</code>: top lo select chesina time range follow.
+    <code>$__timeGroup(timestamp, $__interval)</code>: chala points unte buckets (e.g. 5 min) ga group chesi average / sum.
+    Auto-refresh 30 s, default "Last 6 hours". Synthetic data run chestu charts move avvadam chudandi.
+  </div>
+  <div class="next"><b>Next:</b> Step 63 Docker Compose.</div>
+</section>
+
+<!-- M5 L13 -->
+<section>
+  <h2><span class="num">63</span> Docker Compose <span class="lesson">M5 Lesson 13</span></h2>
+  <span class="where">Ekkada: <code>module5-monitoring/docker-compose.yml</code> (<b>Docker vachaka</b>)</span>
+<pre><code>cd module5-monitoring
+docker compose up -d                          # postgres:17 + grafana
+uv add "psycopg[binary]"                      # Postgres driver
+$env:DB_BACKEND = "postgres"                  # PowerShell (course: env var / .env)
+uv run python db_init.py
+uv run python generate_data.py                # live data
+uv run python -m streamlit run app.py         # chat app
+# Grafana: http://localhost:3000  (admin / admin)
+docker compose down                           # stop</code></pre>
+  <div class="warn"><b>Mana compose vs course:</b> Course lo Streamlit container kuda (Dockerfile, <code>python:3.12-slim</code>). Manam Postgres + Grafana matrame, app local ga <code>uv</code> tho (localhost:5432 ki connect). Extra: Postgres <b>healthcheck</b>, Grafana Postgres ready ayyaka start (course homework lo suggest chesindi). Test cheyyaledu, Docker ledu.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/13-docker-compose-01-service-topology-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/13-docker-compose-01-service-topology-imagegen.png" alt="Docker Compose: Streamlit app, Postgres, Grafana shared network" loading="lazy"></a><figcaption>Docker Compose: Streamlit app, Postgres, Grafana shared network <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    3 pieces (Postgres, Grafana, app) chethi tho start cheyyadam: network gurthu, pedda commands, "container already exists" errors. <b>Docker Compose</b> okka file lo anni services, okka command. Volumes valla data restart tarvata kuda untundi.
+  </div>
+  <div class="flow h">
+    <div class="node">docker compose up -d</div><div class="arr">→</div>
+    <div class="node">postgres (healthy)</div><div class="arr">→</div>
+    <div class="node">grafana :3000</div><div class="arr">+</div>
+    <div class="node ok">app (uv) :8501 → postgres</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 64 next steps.</div>
+</section>
+
+<!-- M5 L14 -->
+<section>
+  <h2><span class="num">64</span> Next Steps <span class="lesson">M5 Lesson 14</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/14-next-steps-02-app-relevance-verdict-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/05-monitoring/images/14-next-steps-02-app-relevance-verdict-cropped.png" alt="App lo relevance verdict" loading="lazy"></a><figcaption>App lo relevance verdict <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/05-monitoring">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>Build yourself vs framework</h3>
+  <table>
+    <tr><th>Tool</th><th>Emi</th></tr>
+    <tr><td>Langfuse, Arize Phoenix</td><td>LLM app tracing</td></tr>
+    <tr><td>Pydantic Logfire</td><td>Code instrument, ready dashboard (course author favourite)</td></tr>
+    <tr><td>Evidently</td><td>Monitoring + evaluation</td></tr>
+    <tr><td>OpenTelemetry</td><td>Standard instrumentation layer (Logfire, Langfuse daani meeda)</td></tr>
+  </table>
+  <h3>Homework (okati choose)</h3>
+  <ul>
+    <li><b>Agent monitor:</b> Module 1 agent ki same instrumentation, prathi tool call capture.</li>
+    <li>Synthetic data tho Grafana fill.</li>
+    <li>Full Docker Compose: app container, <code>db_init</code> init step, Grafana datasource + dashboards files nunchi provision, Postgres healthcheck.</li>
+  </ul>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Ippudu manaki rendu kotha vishayalu: system ela behave chestundo <b>visibility</b>, and problem vaste chudadaniki <b>logs</b>.
+    Chethi tho instrumentation = full control. Frameworks = speed, kani avi emi capture chestayo eppudu teliyadu. Trade-off.
+    <b>Production:</b> prathi call ki database write + judge call user request ni slow chestayi. Async ga: queue lo pettu, separate ga process. High-volume logs ki Postgres kanna Kafka lanti streaming.
+  </div>
+  <div class="next"><b>Next:</b> Module 6 (Best Practices).</div>
 </section>
 
 <!-- DAILY -->
@@ -2370,6 +3128,13 @@ apiKey: "{{ secret('GEMINI_API_KEY') }}"</code></pre>
     <tr><td><code>Docker is not installed</code> (start-kestra.ps1)</td><td>Module 3 ki Docker Desktop kavali</td><td>Docker Desktop install + start, tarvata script malli</td></tr>
     <tr><td>Kestra <code>429 Resource Exhausted</code></td><td>Gemini free tier rate limit</td><td>Okka nimisham aagi malli run</td></tr>
     <tr><td>Flow lo <code>secret('GEMINI_API_KEY')</code> not found</td><td>Kestra start chesinappudu SECRET_ variable ledu</td><td><code>.env</code> lo key pettandi → <code>.\start-kestra.ps1</code> malli (container restart avutundi)</td></tr>
+    <tr><td><code>429 Rate limit reached ... tokens per minute</code></td><td>Groq free tier (8,000 TPM, 1,000 requests/day)</td><td><code>max_workers=2</code>, <code>evaluation_utils.with_retry</code> aagi malli try. Pedda runs ki sample or course CSV</td></tr>
+    <tr><td>Search eval hit rate course kanna chala takkuva</td><td>Ground truth documents FAQ nunchi delete ayyayi</td><td>Ippudu unna documents questions matrame vadandi (02-search-eval fair cell)</td></tr>
+    <tr><td>CSV lo text maaripoyindi / BOM</td><td>PowerShell <code>&gt;</code> redirect encoding + line endings maarustundi</td><td><code>curl.exe -o file URL</code> tho download</td></tr>
+    <tr><td><code>streamlit</code> not recognized / Application Control block</td><td><code>.venv\Scripts\streamlit.exe</code> unsigned launcher</td><td><code>uv run python -m streamlit run app.py</code></td></tr>
+    <tr><td><code>make</code> not recognized</td><td>Windows lo make ledu</td><td>Step 55 table lo direct commands</td></tr>
+    <tr><td>Port 8501 already in use</td><td>Chat app already running</td><td>Dashboard <code>--server.port 8502</code></td></tr>
+    <tr><td><code>ModuleNotFoundError: psycopg</code></td><td><code>DB_BACKEND=postgres</code> pettaru kani driver ledu</td><td><code>uv add "psycopg[binary]"</code> or <code>DB_BACKEND</code> teeseyandi (SQLite)</td></tr>
     <tr><td><code>404 model_not_found</code></td><td>Model Groq lo ledu</td><td><code>openai/gpt-oss-120b</code> vadandi</td></tr>
     <tr><td><code>.env</code> change work avvatledu</td><td>Kernel old key cache chesindi</td><td>Kernel restart → Cell 1 malli run</td></tr>
   </table>
@@ -2418,8 +3183,19 @@ apiKey: "{{ secret('GEMINI_API_KEY') }}"</code></pre>
 │   ├── docker-compose.yml       ← course file + SECRET_GROQ_API_KEY
 │   ├── start-kestra.ps1         ← Windows: .env → SECRET_* → compose up → import flows
 │   └── flows/                   ← course 6 flows + 3_rag_with_websearch_groq.yaml
+├── module4-evaluation/         ← Module 4 (root .venv)
+│   ├── evaluation_utils.py      ← course file, Groq prices + 429 retry
+│   ├── ingest.py, rag_helper.py, minsearch_lite.py
+│   ├── 01-data-gen … 04-agent-eval.ipynb
+│   └── data/                    ← mana *-groq-sample.csv + course/ (prepared CSVs)
+├── module5-monitoring/         ← Module 5 (root .venv + streamlit)
+│   ├── assistant.py, metrics.py, judge.py
+│   ├── db_init.py (SQLite/Postgres switch), db_save.py, db_feedback.py, db_query.py
+│   ├── app.py (chat), dashboard.py, generate_data.py
+│   ├── docker-compose.yml, grafana-panels.sql   ← Docker vachaka
+│   └── monitoring.db            ← SQLite (git ignore)
 ├── labs/             ← lab notes
-│   ├── 00-environment-setup.html   ← ee file (Setup + Modules 1-3)
+│   ├── 00-environment-setup.html   ← ee file (Setup + Modules 1-5)
 │   └── 01 ... 05 .md
 ├── src/              ← agent code
 ├── data/             ← docs + evals
@@ -2453,6 +3229,8 @@ apiKey: "{{ secret('GEMINI_API_KEY') }}"</code></pre>
     <tr><td>2026-10-27</td><td>Module 2 lessons 02-07: embeddings, dataset, numpy, minsearch VectorSearch, RAGVector, sqlitesearch vector</td><td>Steps 26-31</td></tr>
     <tr><td>2026-10-27</td><td>Module 2 lessons 08, 10: PGVector (code matrame, Docker ledu), next steps</td><td>Steps 32-33</td></tr>
     <tr><td>2026-10-27</td><td>Module 3 Kestra: anni 9 lessons documented, 6 flows explained, Groq flow 3, Windows start script. Run pending: Docker + Gemini + Tavily</td><td>Steps 34-42</td></tr>
+    <tr><td>2026-10-27</td><td>Module 4 Evaluation: ground truth (Groq sample + course 395), search eval full + tuning, RAG judge sample + judge-vs-judge, agent eval sample</td><td>Steps 43-53</td></tr>
+    <tr><td>2026-10-27</td><td>Module 5 Monitoring: assistant, Streamlit chat + dashboard, metrics, SQLite db (Postgres switch), feedback, judge, synthetic data run; Grafana + compose files ready (Docker pending)</td><td>Steps 54-64</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.
