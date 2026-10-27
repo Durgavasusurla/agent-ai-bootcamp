@@ -460,6 +460,85 @@ print(llm(question))</code></pre>
   <div class="next"><b>Next:</b> Lab 04 Dataset (FAQ documents load chesi minsearch tho search).</div>
 </section>
 
+<!-- LAB 04 DATASET -->
+<section>
+  <h2><span class="num">11</span> Lab 04: Course FAQ Dataset</h2>
+  <span class="where">Ekkada: notebooks/bootcamp.ipynb (Lab 03 cells kinda)</span>
+
+  <h3>11a. Courses list fetch</h3>
+<pre><code>import requests
+
+docs_url = "https://datatalks.club/faq/json/courses.json"
+response = requests.get(docs_url)
+courses_raw = response.json()
+len(courses_raw), courses_raw[0]</code></pre>
+  <div class="expect">Expected: <code>6</code> courses. First di: <code>{'course': 'machine-learning-zoomcamp', 'path': '/json/machine-learning-zoomcamp.json', 'questions_count': 482, ...}</code></div>
+
+  <h3>11b. Anni courses FAQ documents fetch</h3>
+<pre><code>documents = []
+url_prefix = "https://datatalks.club/faq"
+
+for course in courses_raw:
+    course_url = f"""{url_prefix}{course["path"]}"""
+    course_response = requests.get(course_url)
+    course_response.raise_for_status()
+    course_data = course_response.json()
+    documents.extend(course_data)
+
+len(documents)</code></pre>
+  <div class="expect">Expected: <code>1456</code> (Oct 2026 lo. FAQ grow avutundi, so mee number koncham ekkuva undochu.)</div>
+
+  <h3>11c. Oka document chudandi</h3>
+<pre><code>documents[0]</code></pre>
+  <div class="expect"><code>{'id': '0e38656cfb', 'course': 'machine-learning-zoomcamp', 'section': 'General Course-Related Questions', 'question': 'How do I submit homework?', 'answer': '- Do the tasks locally ...'}</code></div>
+
+  <h3>11d. Course wise count (extra, notes lo ledu)</h3>
+<pre><code>from collections import Counter
+Counter(d["course"] for d in documents)</code></pre>
+  <table>
+    <tr><th>Course slug</th><th>FAQ count</th></tr>
+    <tr><td><code>machine-learning-zoomcamp</code></td><td>482</td></tr>
+    <tr><td><code>data-engineering-zoomcamp</code></td><td>398</td></tr>
+    <tr><td><code>mlops-zoomcamp</code></td><td>249</td></tr>
+    <tr><td><code>llm-zoomcamp</code></td><td>161</td></tr>
+    <tr><td><code>stock-markets-analytics-zoomcamp</code></td><td>93</td></tr>
+    <tr><td><code>ai-dev-tools-zoomcamp</code></td><td>73</td></tr>
+  </table>
+
+  <h3>Document fields</h3>
+  <table>
+    <tr><th>Field</th><th>Artham</th><th>RAG lo use</th></tr>
+    <tr><td><code>id</code></td><td>Unique ID</td><td>Document identify cheyyadaniki</td></tr>
+    <tr><td><code>course</code></td><td>Course slug</td><td><b>Filter</b>: DE course question aithe ML results skip</td></tr>
+    <tr><td><code>section</code></td><td>Course lo e part</td><td>Ranking ki extra context</td></tr>
+    <tr><td><code>question</code></td><td>FAQ question</td><td><b>Search</b> chese text</td></tr>
+    <tr><td><code>answer</code></td><td>FAQ answer</td><td><b>Search</b> chese text + LLM ki context</td></tr>
+  </table>
+
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Lab 03 lo context ni chethi tho paste chesam. Ippudu asalu <b>knowledge base</b> teesukostunnam: DataTalks.Club website nunchi anni courses FAQ, JSON format lo.
+    <b>2 steps:</b> First <code>courses.json</code> lo courses list (6 courses, prathi daaniki <code>path</code>). Tarvata prathi course <code>path</code> ki request pampi aa course FAQ entries anni <code>documents</code> list lo kaluputam (<code>extend</code>).
+    <b>Slug</b> ante URL lo vade chinna name, <code>machine-learning-zoomcamp</code> laga. Next lab lo search filter ki idi vadutam.
+    <b>Data preparation note:</b> Ikkada data already clean ga JSON lo undi, so easy. Real projects lo websites scrape cheyyadam, PDFs parse cheyyadam, clean cheyyadam, chunks ga split cheyyadam, ide ekkuva time teesukuntundi. RAG lo ide hidden pedda pani.
+    <code>raise_for_status()</code> ante request fail aithe (404, 500) ventane error ichi aagu ani. Silent ga empty data tho continue avvadu.
+  </div>
+  <div class="flow h">
+    <div class="node">courses.json<br><small>6 courses</small></div><div class="arr">→</div>
+    <div class="node">for course<br><small>path ki request</small></div><div class="arr">→</div>
+    <div class="node">documents.extend()</div><div class="arr">→</div>
+    <div class="node ok">1456 FAQ docs<br><small>knowledge base</small></div>
+  </div>
+  <div class="flow">
+    <div class="node">Student question</div><div class="arr">↓</div>
+    <div class="node">1. Index anni documents</div><div class="arr">↓</div>
+    <div class="node">2. Index lo search<br><small>question + answer fields, course filter</small></div><div class="arr">↓</div>
+    <div class="node">3. Top FAQ entries</div><div class="arr">↓</div>
+    <div class="node">4. LLM ki context ga</div><div class="arr">↓</div>
+    <div class="node ok">5. Answer</div>
+  </div>
+  <div class="next"><b>Next:</b> Lab 05 Search (minsearch tho index build).</div>
+</section>
+
 <!-- DAILY -->
 <section>
   <h2>Daily workflow (ikapai eppudu)</h2>
@@ -542,6 +621,7 @@ print(llm(question))</code></pre>
     <tr><td>2026-10-23</td><td>Notebook create, kernel select, Groq client test (gpt-oss-120b)</td><td>Steps 7-8</td></tr>
     <tr><td>2026-10-23</td><td>Git commit + push, daily workflow, troubleshooting</td><td>Step 9+</td></tr>
     <tr><td>2026-10-27</td><td>Lab 03 RAG: llm() Groq version, plain vs context answer, rag() skeleton. jupyter.exe block fix</td><td>Step 10</td></tr>
+    <tr><td>2026-10-27</td><td>Lab 04 Dataset: courses.json fetch, 1456 FAQ docs, fields + course counts</td><td>Step 11</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.
