@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bootcamp Environment Setup</title>
+<title>Bootcamp Notes</title>
 <style>
   :root{
     --bg:#f7f7f5; --card:#ffffff; --ink:#1f2328; --muted:#59636e; --line:#d9dde3;
@@ -51,6 +51,8 @@
   .branch{display:flex;flex-direction:column;align-items:center;flex:1;min-width:200px}
   .branch .lbl{font-size:12px;font-weight:700;color:var(--muted);padding:2px 8px;border:1px solid var(--line);border-radius:999px;background:#fff;margin-bottom:4px}
   .cap{font-size:13px;color:var(--muted);text-align:center;margin-top:6px}
+  td.ok{color:var(--ok);font-weight:600}
+  td.bad{color:var(--bad)}
   .pic{margin:14px 0;text-align:center}
   .pic img{max-width:100%;border:1px solid var(--line);border-radius:8px;background:#fff}
   .pic figcaption{font-size:13px;color:var(--muted);margin-top:4px}
@@ -63,8 +65,25 @@
 <body>
 <div class="wrap">
 
-<h1>Bootcamp Environment Setup</h1>
-<p class="sub">Windows 11 · Python 3.15 · uv · Groq · VS Code. Prathi step lo: <b>ekkada</b> cheyyali, <b>emi</b> cheyyali, <b>emi command</b> run cheyyali, <b>emi vastundi</b>, <b>next emi</b>.<br>Ee file repo lo <code>labs/00-environment-setup.html</code> lo undi. Manam kotha step chesina prathi sari idi update avutundi (chivarlo Changelog chudandi). Open cheyyali ante VS Code Explorer lo file meeda right-click → Reveal in File Explorer → double-click.</p>
+<h1>LLM Zoomcamp Bootcamp Notes</h1>
+<p class="sub">Setup + Module 1 (Agentic RAG) + Module 2 (Vector Search), okke document lo. Windows 11 · Python 3.15 / 3.14 · uv · Groq · VS Code. Prathi step lo: <b>ekkada</b> cheyyali, <b>emi</b> cheyyali, <b>emi command</b> run cheyyali, <b>emi vastundi</b>, <b>next emi</b>.<br>Ee file repo lo <code>labs/00-environment-setup.html</code> lo undi. Manam kotha step chesina prathi sari idi update avutundi (chivarlo Changelog chudandi). Open cheyyali ante VS Code Explorer lo file meeda right-click → Reveal in File Explorer → double-click.</p>
+
+<!-- TOC -->
+<section>
+  <h2>Contents</h2>
+  <table>
+    <tr><th>Part</th><th>Steps</th><th>Course folder</th><th>Mana code</th></tr>
+    <tr><td><b>Setup</b> (Python, uv, .env, Groq)</td><td>0-9</td><td>01-agentic-rag lessons 01-02</td><td>project root</td></tr>
+    <tr><td><b>Module 1: Agentic RAG</b></td><td>10-23</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/01-agentic-rag">01-agentic-rag</a> lessons 03-16</td><td><code>notebooks/</code> (Python 3.15)</td></tr>
+    <tr><td><b>Module 2: Vector Search</b></td><td>24-33</td><td><a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">02-vector-search</a> lessons 01-10</td><td><code>module2-vector-search/</code> (Python 3.14)</td></tr>
+    <tr><td>Daily workflow, Troubleshooting, Folder structure, Changelog</td><td>chivarlo</td><td></td><td></td></tr>
+  </table>
+  <div class="flow h">
+    <div class="node">Setup<br><small>Steps 0-9</small></div><div class="arr">→</div>
+    <div class="node">Module 1: keyword RAG + agents<br><small>Steps 10-23</small></div><div class="arr">→</div>
+    <div class="node ok">Module 2: vector (meaning) search<br><small>Steps 24-33</small></div>
+  </div>
+</section>
 
 <!-- OVERVIEW -->
 <section>
@@ -1417,7 +1436,491 @@ result2 = runner.loop(prompt="How do I run a different model?",
     Anni frameworks lopala same pattern: messages pampu, function calls run chey, model aapevaraku repeat. Manam handwritten loop nerchukunnam, so e framework ainaa easy ga ardham avutundi. Kashtam loop kaadu, <b>manchi tools + manchi prompts design cheyyadam</b>.
     <b>Agent cost:</b> ekkuva API calls, ekkuva wait, ekkuva dabbu (prathi turn full history malli), monitor cheyyalsinavi ekkuva, same prompt ki rendu sarlu different path. So mundu simple approach try cheyyandi. Pani chesthe ship. Agent nijanga avasaram aithe matrame.
   </div>
-  <div class="next"><b>Next:</b> Module 2: Vector Search.</div>
+  <div class="next"><b>Next:</b> Module 2: Vector Search (kinda, Step 24 nunchi).</div>
+</section>
+
+<!-- MODULE 2 MAP -->
+<section>
+  <h2>Module 2: Vector Search map (course README)</h2>
+  <p>Course source: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">github.com/DataTalksClub/llm-zoomcamp/02-vector-search</a>. Module 1 lo keyword search (exact words). Module 2 lo <b>meaning</b> batti search.</p>
+  <table>
+    <tr><th>Lesson</th><th>Topic</th><th>Ee document lo</th><th>Mana status</th></tr>
+    <tr><td>01</td><td>What is vector search</td><td>Step 24</td><td>Reading</td></tr>
+    <tr><td>(setup)</td><td>Module 2 environment (Python 3.14 + ONNX)</td><td>Step 25</td><td class="ok">Done</td></tr>
+    <tr><td>02</td><td>Embeddings</td><td>Step 26</td><td>Run, course numbers match</td></tr>
+    <tr><td>03</td><td>Embedding our dataset</td><td>Step 27</td><td>Run</td></tr>
+    <tr><td>04</td><td>Vector search with numpy</td><td>Step 28</td><td>Run</td></tr>
+    <tr><td>05</td><td>Vector search with minsearch</td><td>Step 29</td><td>Run</td></tr>
+    <tr><td>06</td><td>RAG with vector search</td><td>Step 30</td><td>Run</td></tr>
+    <tr><td>07</td><td>Vector search with sqlitesearch</td><td>Step 31</td><td>Run</td></tr>
+    <tr><td>08</td><td>PGVector (Postgres)</td><td>Step 32</td><td>Code + explanation matrame. <b>Docker ledu, run cheyyaledu</b></td></tr>
+    <tr><td>09</td><td>ONNX embedder</td><td>Step 25 (mana base)</td><td>Done, mottham module ide vadutundi</td></tr>
+    <tr><td>10</td><td>Next steps</td><td>Step 33</td><td>Reading</td></tr>
+  </table>
+  <div class="warn"><b>Okka important maarpu:</b> Course lesson 02-08 lo <code>sentence-transformers</code> (PyTorch) vadutundi. Mee machine lo PyTorch pani cheyyadu (Step 25 lo karanam). Anduke course lesson 09 lo unna <b>ONNX Embedder</b> ni mundu ki techhi, mottham module lo adi vadutunnam. Same model (<code>all-MiniLM-L6-v2</code>), same vectors, same results. Mana run lo course cheppina numbers exact ga vachayi.</div>
+</section>
+
+<!-- M2 L01 -->
+<section>
+  <h2><span class="num">24</span> What is Vector Search <span class="lesson">M2 Lesson 01</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <h3>Problem</h3>
+  <ul>
+    <li>"Can I still join the course after the start date?"</li>
+    <li>"Is it possible to enroll late?"</li>
+  </ul>
+  <p>Rendu same meaning, kani common words daadapu levu. Keyword search miss avutundi. Module 1 Step 12e lo idi chusam: wrong results ("Is it a group project?").</p>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/01-intro-02-paraphrased-queries-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/01-intro-02-paraphrased-queries-cropped.png" alt="Same meaning, different words: keyword search ki kashtam" loading="lazy"></a><figcaption>Same meaning, different words: keyword search ki kashtam <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>Vector search 2 stages</h3>
+  <table>
+    <tr><th>Stage</th><th>Eppudu</th><th>Emi</th></tr>
+    <tr><td>Offline (indexing)</td><td>Okka sari</td><td>Anni documents ni vectors (numbers list) ga maarchi index lo store</td></tr>
+    <tr><td>Online (querying)</td><td>Prathi question</td><td>Question ni same model tho vector chesi, daggara unna document vectors vethakadam</td></tr>
+  </table>
+  <h3>Keyword vs Vector</h3>
+  <table>
+    <tr><th></th><th>Keyword search</th><th>Vector search</th></tr>
+    <tr><td>Match</td><td>Exact words</td><td>Meaning</td></tr>
+    <tr><td>Best for</td><td>Specific terms, IDs, names ("pandas dataframe")</td><td>Paraphrased questions ("How do I work with tabular data?")</td></tr>
+    <tr><td>Index</td><td>Inverted index (BM25, TF-IDF)</td><td>Vector index, cosine similarity</td></tr>
+    <tr><td>Miss avutundi</td><td>Synonyms, paraphrases</td><td>Exact term matches</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Vector search</b> words badulu <b>ideas</b> match chestundi. <b>Embedding model</b> (neural network) prathi text ni numbers list (vector) ga maarustundi. Similar meaning unna texts ki similar vectors vastayi.
+    Rendu vectors entha daggara ani <b>cosine similarity</b> tho kolustam: 1 daggara = same meaning, 0 = sambandham ledu, -1 = opposite.
+    <b>Course author advice:</b> Vector search tho start cheyyakandi. Adi chala operational complexity add chestundi. Mundu text search, vector worth ani prove aithe appudu. Best: rendu kalipi <b>hybrid search</b> (later module).
+    Ee module lo 3 tools: minsearch (in-memory), sqlitesearch (file), PGVector (Postgres, Docker).
+  </div>
+  <div class="flow">
+    <div class="branches">
+      <div class="branch"><span class="lbl">Offline (okka sari)</span><div class="node">1456 FAQ docs</div><div class="arr">↓</div><div class="node">Embedding model</div><div class="arr">↓</div><div class="node ok">Vector index</div></div>
+      <div class="branch"><span class="lbl">Online (prathi query)</span><div class="node">User question</div><div class="arr">↓</div><div class="node">Same model → query vector</div><div class="arr">↓</div><div class="node ok">Cosine similarity → top 5</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Step 25 Module 2 environment.</div>
+</section>
+
+<!-- M2 SETUP -->
+<section>
+  <h2><span class="num">25</span> Module 2 Environment: Python 3.14 + ONNX <span class="lesson">M2 Setup + Lesson 09</span></h2>
+  <span class="where">Ekkada: Terminal, project lo kotha folder <code>module2-vector-search/</code></span>
+
+  <h3>25a. PyTorch enduku pani cheyyadu (mana test results)</h3>
+  <table>
+    <tr><th>Python</th><th>ONNX Runtime</th><th>PyTorch (sentence-transformers)</th></tr>
+    <tr><td>3.15 (Module 1)</td><td class="bad">Wheel ledu (cp315 support inka raledu)</td><td class="bad">Import OK, model load lo crash (<code>0xC0000005</code> in <code>python315.dll</code>)</td></tr>
+    <tr><td>3.14</td><td class="ok">Pani chestundi</td><td class="bad">Smart App Control <code>torch_python.dll</code> block</td></tr>
+    <tr><td>3.13</td><td class="ok">Pani chestundi</td><td class="bad">Smart App Control <code>torch_python.dll</code> block</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Python 3.15 chala kotha, ML libraries inka daaniki stable ga levu. Paata versions lo PyTorch DLLs ki Windows reputation ledu, Smart App Control block chestundi. <b>ONNX Runtime</b> Microsoft di, daani DLLs Microsoft sign chesindi, so block avvadu. Course lesson 09 lo ide production ki recommend chestaru: same model, ~33x chinna install.
+    Module 1 ni (Python 3.15) touch cheyyakunda, Module 2 ki separate folder + Python 3.14. Course kuda ee module ki "fresh project" ani cheptundi.
+  </div>
+
+  <h3>25b. Project create (okka sari)</h3>
+  <p><code>module2-vector-search/pyproject.toml</code> lo dependencies:</p>
+<pre><code>requires-python = "==3.14.*"
+dependencies = ["minsearch", "numpy", "onnxruntime", "openai", "python-dotenv",
+                "requests", "sqlitesearch", "tokenizers", "tqdm"]
+[dependency-groups]
+dev = ["huggingface-hub", "ipykernel", "nbconvert", "nbformat"]</code></pre>
+<pre><code>cd module2-vector-search
+uv sync                        # Python 3.14 automatic ga download chesi .venv create
+uv run python --version        # Python 3.14.9</code></pre>
+  <div class="expect">Mana <code>.venv</code> size: <b>489 MB</b>. Course numbers: sentence-transformers 4.8 GB vs ONNX 147 MB. Mana daantlo minsearch (scipy, scikit-learn, pandas) + Jupyter kuda unnayi, anduke 489.</div>
+
+  <h3>25c. Files</h3>
+  <table>
+    <tr><th>File</th><th>Ekkadi nunchi</th><th>Pani</th></tr>
+    <tr><td><code>embedder.py</code></td><td>Course <code>embed/embedder.py</code></td><td><code>Embedder</code> class: tokenize → ONNX run → mean pooling → normalize</td></tr>
+    <tr><td><code>download.py</code></td><td>Course <code>embed/download.py</code></td><td>HuggingFace nunchi ONNX model download</td></tr>
+    <tr><td><code>ingest.py</code>, <code>rag_helper.py</code>, <code>minsearch_lite.py</code></td><td>Mana Module 1 <code>notebooks/</code> nunchi copy</td><td>FAQ load, RAGBase (Groq), fallback</td></tr>
+  </table>
+
+  <h3>25d. Model download (okka sari)</h3>
+<pre><code>uv run python download.py</code></pre>
+  <div class="expect"><code>saved models\Xenova\all-MiniLM-L6-v2\tokenizer.json</code> (0.7 MB), <code>saved models\Xenova\all-MiniLM-L6-v2\model.onnx</code> (86 MB). <code>models/</code> ni <code>.gitignore</code> lo pettam.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/09-onnx-embedder-03-model-download-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/09-onnx-embedder-03-model-download-cropped.png" alt="ONNX model download" loading="lazy"></a><figcaption>ONNX model download <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+
+  <h3>25e. VS Code kernel</h3>
+  <div class="warn"><b>Module 2 notebooks open chesinappudu</b> kernel ga <code>module2-vector-search\.venv\Scripts\python.exe</code> (Python 3.14) select cheyyandi. Module 1 <code>.venv</code> (3.15) select cheste <code>No module named 'onnxruntime'</code> vastundi.</div>
+  <div class="flow">
+    <div class="node q">Ye notebook?</div>
+    <div class="branches">
+      <div class="branch"><span class="lbl">notebooks/*.ipynb (Module 1)</span><div class="node">.venv (Python 3.15)</div></div>
+      <div class="branch"><span class="lbl">module2-vector-search/*.ipynb</span><div class="node ok">module2-vector-search/.venv (Python 3.14)</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Step 26 Embeddings.</div>
+</section>
+
+<!-- M2 L02 -->
+<section>
+  <h2><span class="num">26</span> Embeddings <span class="lesson">M2 Lesson 02</span></h2>
+  <span class="where">Ekkada: <code>module2-vector-search/vector_search.ipynb</code></span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/02-embeddings-01-vector-space-whiteboard-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/02-embeddings-01-vector-space-whiteboard-imagegen.png" alt="Vector space: enroll, join daggara; Docker dooram" loading="lazy"></a><figcaption>Vector space: enroll, join daggara; Docker dooram <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>Code</h3>
+<pre><code>from embedder import Embedder
+model = Embedder()        # course: model = SentenceTransformer("all-MiniLM-L6-v2")
+
+q1 = "Can I still join the course after the start date?"
+v1 = model.encode(q1)     # 384 numbers
+
+d  = "You don't need to register. You're accepted. You can also just start learning and submitting homework without registering."
+dv = model.encode(d)
+v1.dot(dv)
+
+q2 = "How to install Docker on Windows?"
+v2 = model.encode(q2)
+v2.dot(dv)</code></pre>
+  <table>
+    <tr><th>Comparison</th><th>Course (PyTorch)</th><th>Mana run (ONNX)</th></tr>
+    <tr><td>q1 (join) vs d (registration)</td><td>0.32</td><td><b>0.323</b></td></tr>
+    <tr><td>q2 (Docker) vs d</td><td>0.01</td><td><b>0.020</b></td></tr>
+    <tr><td>Extra: "join after start" vs "enroll late"</td><td>-</td><td><b>0.521</b> (keyword search ee pair miss chesindi)</td></tr>
+    <tr><td>Extra: "join after start" vs "Docker on Windows"</td><td>-</td><td>-0.107</td></tr>
+    <tr><td>Vector length (norm)</td><td>1</td><td>1.0 (normalized)</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>Embedding</b> = text ni vector space lo okka point ga pettadam. Idea <b>word2vec</b> nunchi: similar words daggara ga untayi. Ade sentences ki kuda.
+    Model <b>full sentence</b> chusi encode chestundi. "judge" word legal sentence lo okka vector, "LLM-as-a-judge" lo vere vector. Context batti maarutundi.
+    <b>all-MiniLM-L6-v2:</b> 384 numbers, CPU lo fast, English ki manchi quality. Local ga run avutundi, API cost ledu.
+    <b>Dot product = cosine similarity</b> enduku? Model vectors <b>normalized</b> (length 1). Length 1 vectors ki dot product = cos(angle). So <code>v1.dot(dv)</code> direct ga similarity.
+    Practice lo 0 kanna takkuva arudu, enduku ante model vectors ni oke region lo pedutundi.
+  </div>
+  <div class="flow h">
+    <div class="node">"Can I join..."</div><div class="arr">→</div>
+    <div class="node">Embedder<br><small>tokenize → ONNX → pool → normalize</small></div><div class="arr">→</div>
+    <div class="node">[0.021, -0.074, ...]<br><small>384 numbers</small></div><div class="arr">→</div>
+    <div class="node ok">dot product = similarity</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 27 Dataset embed.</div>
+</section>
+
+<!-- M2 L03 -->
+<section>
+  <h2><span class="num">27</span> Embedding Our Dataset <span class="lesson">M2 Lesson 03</span></h2>
+  <span class="where">Ekkada: <code>module2-vector-search/vector_search.ipynb</code></span>
+<pre><code>from ingest import load_faq_data
+documents = load_faq_data()
+
+texts = [doc["question"] + " " + doc["answer"] for doc in documents]
+
+from tqdm.auto import tqdm
+batch_size = 50
+vectors = []
+for i in tqdm(range(0, len(texts), batch_size)):
+    batch = texts[i:i + batch_size]
+    batch_vectors = model.encode_batch(batch)   # course: model.encode(batch)
+    vectors.extend(batch_vectors)
+
+import numpy as np
+X = np.array(vectors)
+X.shape</code></pre>
+  <div class="expect">Mana run: <b>1456</b> documents, <b>36 seconds</b> (CPU), <code>X.shape = (1456, 384)</code>. Course lo 1208 (FAQ perigindi).</div>
+  <div class="warn">Course lo <code>wget ... ingest.py</code> undi. Manaki already <code>module2-vector-search/ingest.py</code> undi (Module 1 nunchi copy), download avasaram ledu.</div>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/03-embeddings-dataset-05-encoding-progress-done-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/03-embeddings-dataset-05-encoding-progress-done-cropped.png" alt="Batches lo encode, tqdm progress" loading="lazy"></a><figcaption>Batches lo encode, tqdm progress <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Prathi document ki question + answer kalipi okka text. Appudu query question ki match ainaa, answer ki match ainaa dorukutundi.
+    Anni okkesari model ki ivvakunda <b>50 batches</b> lo: progress kanipistundi (<code>tqdm</code>), memory control. Idi okka sari pani (offline stage).
+    <b>Matrix X:</b> rows = documents, columns = 384 dimensions.
+  </div>
+  <div class="flow h">
+    <div class="node">1456 docs</div><div class="arr">→</div>
+    <div class="node">question + " " + answer</div><div class="arr">→</div>
+    <div class="node">30 batches × 50</div><div class="arr">→</div>
+    <div class="node ok">X (1456 × 384)</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 28 numpy search.</div>
+</section>
+
+<!-- M2 L04 -->
+<section>
+  <h2><span class="num">28</span> Vector Search with numpy <span class="lesson">M2 Lesson 04</span></h2>
+  <span class="where">Ekkada: <code>module2-vector-search/vector_search.ipynb</code></span>
+<pre><code>query = "Can I still join the course after the start date?"
+v_query = model.encode(query)
+
+scores = X.dot(v_query)      # 1456 scores, okka line lo
+idx = np.argmax(scores)
+documents[idx]
+
+top5 = np.argsort(-scores)[:5]</code></pre>
+  <div class="expect">Best match (course laane): id <code>3f1424af17</code>, data-engineering-zoomcamp, "Course: Can I still join the course after the start date?", score <b>0.763</b> (course: 0.76).</div>
+  <table>
+    <tr><th>Score</th><th>Course</th><th>Question</th></tr>
+    <tr><td>0.763</td><td>data-engineering</td><td>Course: Can I still join the course after the start date?</td></tr>
+    <tr><td>0.758</td><td>mlops</td><td>Course - Can I still join the course after the start date?</td></tr>
+    <tr><td>0.719</td><td>machine-learning</td><td>The course has already started. Can I still join it?</td></tr>
+    <tr><td>0.654</td><td>llm-zoomcamp</td><td>I just discovered the course. Can I still join?</td></tr>
+    <tr><td>0.560</td><td>data-engineering</td><td>Course - Can I follow the course after it finishes?</td></tr>
+  </table>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/04-vector-search-03-best-document-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/04-vector-search-03-best-document-cropped.png" alt="Best matching document" loading="lazy"></a><figcaption>Best matching document <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <code>X.dot(v_query)</code> = matrix × vector. Prathi row (document) ki query tho similarity okkesari. For loop kanna chala fast (numpy C code).
+    <code>np.argmax</code> = highest score index. <code>np.argsort(-scores)[:5]</code> = top 5: minus pettadam valla pedda score mundu vastundi (min-sort ni max-sort ga maarche trick).
+    <b>Top 5 enduku?</b> Answer okka document lo kakapovachu, konni documents lo split avvochu. LLM ki 5 isthe ade kalipi chustundi. 5 gut feeling number, evaluation tho tarvata tune chestam.
+    Gamaninchandi: filter lekapovadam valla anni courses nunchi vachayi. Next step lo filter.
+  </div>
+  <div class="flow h">
+    <div class="node">query → v_query</div><div class="arr">→</div>
+    <div class="node">X.dot(v_query)<br><small>1456 scores</small></div><div class="arr">→</div>
+    <div class="node">argsort(-scores)</div><div class="arr">→</div>
+    <div class="node ok">top 5 docs</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 29 minsearch VectorSearch.</div>
+</section>
+
+<!-- M2 L05 -->
+<section>
+  <h2><span class="num">29</span> Vector Search with minsearch <span class="lesson">M2 Lesson 05</span></h2>
+  <span class="where">Ekkada: <code>module2-vector-search/vector_search.ipynb</code></span>
+<pre><code>from minsearch import VectorSearch
+
+vindex = VectorSearch(keyword_fields=["course"])
+vindex.fit(X, documents)
+
+query_vector = model.encode("I just discovered the course. Can I still join it?")
+results = vindex.search(query_vector, num_results=5)
+
+results = vindex.search(query_vector,
+                        filter_dict={"course": "llm-zoomcamp"},
+                        num_results=5)</code></pre>
+  <div class="expect"><code>results[0]</code>: id <code>74eb249bbf</code>, llm-zoomcamp, "I just discovered the course. Can I still join?" (course laane).</div>
+  <h3>Extra test: keyword vs vector, same paraphrased question</h3>
+  <table>
+    <tr><th>"Is it possible to enroll late?" (llm-zoomcamp)</th><th>Top 3</th></tr>
+    <tr><td class="bad">Keyword (Module 1 Index)</td><td>Is it a group project? · My dataset is copyrighted... · uv says Failed to hardlink...</td></tr>
+    <tr><td class="ok">Vector (VectorSearch)</td><td><b>I just discovered the course. Can I still join?</b> · registered... confirmation email? · self-paced certificate?</td></tr>
+  </table>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/05-minsearch-vector-04-filter-by-course-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/05-minsearch-vector-04-filter-by-course-cropped.png" alt="VectorSearch with course filter" loading="lazy"></a><figcaption>VectorSearch with course filter <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    numpy code prathi sari rayadam boring, filter kuda ledu. minsearch lo <code>VectorSearch</code> class undi, Module 1 <code>Index</code> laane API: <code>fit</code>, <code>search</code>, <code>filter_dict</code>.
+    Difference: <code>fit(X, documents)</code> ki vectors + documents. <code>search</code> ki <b>text kaadu, query vector</b>.
+    <b>Filter mundu, score tarvata:</b> LLM Zoomcamp student ki DE course answers avasaram ledu.
+    Extra test lo clear ga kanipistundi: keyword search "enroll late" ki garbage, vector search correct FAQ first lo. Ide Module 2 asalu point.
+  </div>
+  <div class="flow h">
+    <div class="node">query text</div><div class="arr">→</div>
+    <div class="node">model.encode()</div><div class="arr">→</div>
+    <div class="node">filter course</div><div class="arr">→</div>
+    <div class="node">dot product</div><div class="arr">→</div>
+    <div class="node ok">top 5</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 30 RAG with vector search.</div>
+</section>
+
+<!-- M2 L06 -->
+<section>
+  <h2><span class="num">30</span> RAG with Vector Search <span class="lesson">M2 Lesson 06</span></h2>
+  <span class="where">Ekkada: <code>module2-vector-search/vector_search.ipynb</code></span>
+  <h3>30a. Groq client (keys root .env lo)</h3>
+<pre><code>load_dotenv("../.env")    # module2 folder nunchi project root .env
+openai_client = OpenAI(api_key=os.getenv("GROQ_API_KEY"),
+                       base_url="https://api.groq.com/openai/v1")</code></pre>
+  <h3>30b. RAGVector: search() matrame override</h3>
+<pre><code>from rag_helper import RAGBase
+
+class RAGVector(RAGBase):
+
+    def __init__(self, embedder, **kwargs):
+        super().__init__(**kwargs)
+        self.embedder = embedder
+
+    def search(self, query, num_results=5):
+        query_vector = self.embedder.encode(query)
+        filter_dict = {"course": self.course}
+        return self.index.search(query_vector,
+                                 num_results=num_results,
+                                 filter_dict=filter_dict)
+
+vector_assistant = RAGVector(embedder=model, index=vindex, llm_client=openai_client)
+vector_assistant.rag("the program has already begun, can I still sign up?")</code></pre>
+  <div class="expect">Mana run: <code>Yes—you can still join even though the program has already started. Feel free to start learning and submitting homework while the submission form remains open. If you'd like to receive a certificate, just be sure to submit your capstone project before the submission window closes.</code></div>
+  <table>
+    <tr><th>"the program has already begun, can I still sign up?"</th><th>Top 3 retrieved</th></tr>
+    <tr><td>Keyword RAGBase</td><td>The homework submission form is still open... · I just discovered the course... · I missed the first homework...</td></tr>
+    <tr><td>Vector RAGVector</td><td><b>I just discovered the course. Can I still join?</b> · registered... confirmation email · run the course locally</td></tr>
+  </table>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/06-rag-vector-05-vector-assistant-answer-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/06-rag-vector-05-vector-assistant-answer-cropped.png" alt="Vector assistant answer" loading="lazy"></a><figcaption>Vector assistant answer <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    RAG lo 3 steps: search, prompt, LLM. Vector search ki <b>search okkate maarali</b>. Prompt, LLM same.
+    <code>vindex</code> ni direct ga <code>RAGBase</code> ki ivvalem, enduku ante RAGBase query <b>text</b> pamputundi, vector index ki <b>vector</b> kavali. So <b>subclass</b>: <code>RAGVector</code> lo <code>search()</code> override chesi mundu query encode, tarvata search. Migatha anni RAGBase nunchi inherit.
+    Ide Module 1 Step 15 lo cheppina class benefit: okka method override, migatha code touch ledu. Tarvata LLM provider maarchali ante <code>llm()</code> override.
+    Mana Groq <code>llm()</code> already <code>rag_helper.py</code> lo undi, so ikkada em extra Groq maarpu ledu.
+  </div>
+  <div class="flow">
+    <div class="node">RAGBase<br><small>search (text) · build_prompt · llm (Groq)</small></div><div class="arr">↓ <small>subclass</small></div>
+    <div class="node">RAGVector<br><small>search override: encode → vector index</small></div><div class="arr">↓</div>
+    <div class="node ok">rag(): vector search → same prompt → same LLM</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 31 sqlitesearch vector (persistent).</div>
+</section>
+
+<!-- M2 L07 -->
+<section>
+  <h2><span class="num">31</span> Vector Search with sqlitesearch <span class="lesson">M2 Lesson 07</span></h2>
+  <span class="where">Ekkada: <code>module2-vector-search/vector_search_persistent.ipynb</code></span>
+  <h3>minsearch 3 problems</h3>
+  <ul>
+    <li>Prathi startup ki re-index (vector ki model run, mana machine lo 36 seconds).</li>
+    <li>Anni memory lo.</li>
+    <li>Brute force: prathi query ki anni documents tho compare.</li>
+  </ul>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/07-sqlitesearch-vector-01-ann-vs-nn-whiteboard-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/07-sqlitesearch-vector-01-ann-vs-nn-whiteboard-imagegen.png" alt="NN (anni compare) vs ANN (region narrow chesi compare)" loading="lazy"></a><figcaption>NN (anni compare) vs ANN (region narrow chesi compare) <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <table>
+    <tr><th></th><th>NN (exact)</th><th>ANN (approximate)</th></tr>
+    <tr><td>Ela</td><td>Query ni ANNI docs tho compare</td><td>Mundu likely region ki narrow, akkade compare</td></tr>
+    <tr><td>Accuracy</td><td>Eppudu true top 5</td><td>Konnisarlu best miss, kani manchi results</td></tr>
+    <tr><td>Speed</td><td>~10K docs daatithe slow</td><td>Chala fast</td></tr>
+  </table>
+  <h3>Code</h3>
+<pre><code>from sqlitesearch import VectorSearchIndex
+
+vs_index = VectorSearchIndex(keyword_fields=["course"], mode="ivf",
+                             db_path="faq_vectors2.db")
+vs_index.fit(vectors, documents)      # okka sari (ingestion)
+vs_index.search(query_vector, filter_dict={"course": "llm-zoomcamp"}, num_results=5)
+vs_index.close()
+
+# Kotha session: re-embed lekunda reopen
+model = Embedder()
+vs_index = VectorSearchIndex(keyword_fields=["course"], mode="ivf",
+                             db_path="faq_vectors2.db")
+vs_index.search(model.encode("How do I run Kafka?"), num_results=5)</code></pre>
+  <table>
+    <tr><th>Mana run</th><th>Value</th></tr>
+    <tr><td><code>fit()</code> time</td><td>0.7 s</td></tr>
+    <tr><td><code>faq_vectors2.db</code> size</td><td>5.6 MB</td></tr>
+    <tr><td>"Can I still join it?" top 1</td><td>I just discovered the course. Can I still join? (llm-zoomcamp)</td></tr>
+    <tr><td>Reopen + "How do I run Kafka?"</td><td>Anni data-engineering Kafka FAQs (Java Kafka producer/consumer, "kafka" module not found...)</td></tr>
+    <tr><td>RAGVector on reopened index</td><td>"Yes—you can still join even though the program has already started..." correct</td></tr>
+  </table>
+  <h3>ANN modes</h3>
+  <table>
+    <tr><th>Mode</th><th>Size</th><th>Ela</th></tr>
+    <tr><td><code>lsh</code> (default)</td><td>~100K vectors</td><td>Random hyperplane projections</td></tr>
+    <tr><td><code>ivf</code> (mana choice, course laane)</td><td>10K-500K</td><td>K-means clustering</td></tr>
+    <tr><td><code>hnsw</code></td><td>10K-1M+</td><td>Proximity graph, highest recall</td></tr>
+  </table>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/07-sqlitesearch-vector-02-ingestion-deployment-split-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/07-sqlitesearch-vector-02-ingestion-deployment-split-imagegen.png" alt="Ingestion and deployment same index share chestayi" loading="lazy"></a><figcaption>Ingestion and deployment same index share chestayi <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Module 1 Step 16 lo text search ki chesina <b>ingestion / query split</b> ne, ippudu vectors ki. Text search lo indexing fast, kani vector ki prathi document ki model run (36 s). User app open chesinappudu 36 s wait cheyyakudadu. So okka sari embed chesi <code>.db</code> file lo save, query side instant start.
+    Reopen lo kuda <code>model</code> load chestam, enduku ante <b>query</b> encode cheyyali. Documents malli encode cheyyam, <code>fit</code> ledu.
+    sqlitesearch dependencies SQLite + numpy matrame, free SQLite hosting lo run avutundi. Course author: teaching tool, real work ki next lesson.
+    <code>*.db</code> already <code>.gitignore</code> lo undi.
+  </div>
+  <div class="flow">
+    <div class="branches">
+      <div class="branch"><span class="lbl">Ingestion (okka sari, ~37 s)</span><div class="node">FAQ → Embedder</div><div class="arr">↓</div><div class="node">VectorSearchIndex.fit()</div><div class="arr">↓</div><div class="node ok">faq_vectors2.db</div></div>
+      <div class="branch"><span class="lbl">Query (instant)</span><div class="node">open faq_vectors2.db</div><div class="arr">↓</div><div class="node">encode(query) → search</div><div class="arr">↓</div><div class="node ok">RAGVector.rag()</div></div>
+    </div>
+  </div>
+  <div class="next"><b>Next:</b> Step 32 PGVector.</div>
+</section>
+
+<!-- M2 L08 -->
+<section>
+  <h2><span class="num">32</span> Vector Search with PGVector <span class="lesson">M2 Lesson 08</span></h2>
+  <span class="where">Ekkada: Docker + notebook. <b>Mana machine lo run cheyyaledu</b></span>
+  <div class="bad"><b>Run cheyyaledu, enduku:</b> Ee lesson ki Docker kavali. Mee machine lo Docker install ledu, WSL kuda ledu. Install cheyyali ante Docker Desktop + WSL, admin rights, restart, konni GB download. Adi mee decision. Kinda course code + explanation, chadavadaniki. Concept Step 31 (sqlitesearch) laane, database matrame maarutundi.</div>
+  <h3>32a. Postgres + pgvector Docker lo start</h3>
+<pre><code>docker run -it --name pgvector \
+    -e POSTGRES_USER=user -e POSTGRES_PASSWORD=pswd -e POSTGRES_DB=faq \
+    -v pgvector_data:/var/lib/postgresql/data \
+    -p 5432:5432 pgvector/pgvector:pg17</code></pre>
+  <div class="warn">PowerShell lo line continuation <code>\</code> kaadu, backtick <code>`</code>. Or okke line lo rayandi.</div>
+  <h3>32b. Python driver + table</h3>
+<pre><code>uv add "psycopg[binary]"
+
+import psycopg
+conn = psycopg.connect("postgresql://user:pswd@localhost:5432/faq")
+conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
+conn.execute("""CREATE TABLE documents (
+    id SERIAL PRIMARY KEY, course TEXT, section TEXT,
+    question TEXT, answer TEXT, embedding vector(384))""")</code></pre>
+  <h3>32c. Insert + search (SQL)</h3>
+<pre><code>def vec_to_str(vector):
+    return "[" + ",".join(str(x) for x in vector) + "]"
+
+# insert: VALUES (%s, %s, %s, %s, %s::vector) ... conn.commit()
+
+SELECT course, question, answer, 1 - (embedding &lt;=&gt; %s::vector) AS similarity
+FROM documents
+WHERE course = %s
+ORDER BY embedding &lt;=&gt; %s::vector
+LIMIT 5
+
+CREATE INDEX ON documents USING hnsw (embedding vector_cosine_ops);</code></pre>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/08-pgvector-05-cosine-search-query-cropped.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/08-pgvector-05-cosine-search-query-cropped.png" alt="PGVector cosine search query" loading="lazy"></a><figcaption>PGVector cosine search query <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>32d. RAGPgVector</h3>
+<pre><code>class RAGPgVector(RAGBase):
+    def __init__(self, embedder, conn, **kwargs):
+        super().__init__(index=None, **kwargs)
+        self.embedder = embedder
+        self.conn = conn
+
+    def search(self, query, num_results=5):
+        query_str = vec_to_str(self.embedder.encode(query))
+        rows = self.conn.execute("""SELECT course, section, question, answer
+            FROM documents WHERE course = %s
+            ORDER BY embedding &lt;=&gt; %s::vector LIMIT %s""",
+            (self.course, query_str, num_results)).fetchall()
+        return [{"course": r[0], "section": r[1], "question": r[2], "answer": r[3]} for r in rows]</code></pre>
+  <table>
+    <tr><th></th><th>minsearch</th><th>sqlitesearch</th><th>PGVector</th></tr>
+    <tr><td>Setup</td><td>Ledu</td><td>Ledu</td><td>Docker, Postgres</td></tr>
+    <tr><td>Storage</td><td>Memory</td><td>SQLite file</td><td>Postgres database</td></tr>
+    <tr><td>Scale</td><td>Chinna</td><td>Medium</td><td>Millions, concurrent access, transactions</td></tr>
+    <tr><td>Best for</td><td>Notebooks, experiments</td><td>Pet projects</td><td>Production</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    <b>pgvector</b> = Postgres extension, Postgres ki vector column type + similarity operators istundi. Chala companies already Postgres vadutayi, so kotha database avasaram ledu.
+    <code>vector(384)</code> column lo mana embeddings. <code>&lt;=&gt;</code> = cosine <b>distance</b> (1 - similarity), chinna distance = daggara. Filter just <code>WHERE course = ...</code>, plain SQL.
+    <b>HNSW index</b> = approximate search (Step 31 ANN), dedicated vector databases vade same algorithm.
+    RAG lo malli same trick: <code>search()</code> override, <code>index=None</code> (connection pass chestam).
+  </div>
+  <div class="flow h">
+    <div class="node">query → embedder</div><div class="arr">→</div>
+    <div class="node">vec_to_str</div><div class="arr">→</div>
+    <div class="node">SQL: ORDER BY embedding &lt;=&gt; query</div><div class="arr">→</div>
+    <div class="node ok">top 5 rows → RAG</div>
+  </div>
+  <div class="next"><b>Next:</b> Step 33 Next steps. (Lesson 09 ONNX = Step 25.)</div>
+</section>
+
+<!-- M2 L10 -->
+<section>
+  <h2><span class="num">33</span> Next Steps <span class="lesson">M2 Lesson 10</span></h2>
+  <span class="where">Ekkada: Reading matrame</span>
+  <figure class="pic"><a href="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/10-next-steps-01-similarity-search-imagegen.png" target="_blank"><img src="https://raw.githubusercontent.com/DataTalksClub/llm-zoomcamp/main/02-vector-search/images/10-next-steps-01-similarity-search-imagegen.png" alt="Query vector daggara unna document vectors → ranked results" loading="lazy"></a><figcaption>Query vector daggara unna document vectors → ranked results <span class="src">· Course picture: <a href="https://github.com/DataTalksClub/llm-zoomcamp/tree/main/02-vector-search">DataTalksClub/llm-zoomcamp</a></span></figcaption></figure>
+  <h3>Module 2 lo emi chesam</h3>
+  <ul>
+    <li>Embeddings: text → vectors (ONNX all-MiniLM-L6-v2, 384 dims).</li>
+    <li>1456 FAQ docs embed (36 s).</li>
+    <li>Vector search: numpy, minsearch VectorSearch, sqlitesearch VectorSearchIndex (PGVector code chadivam).</li>
+    <li>RAGVector: RAG lo search matrame vector ki maarchadam.</li>
+  </ul>
+  <h3>Eppudu vector search?</h3>
+  <table>
+    <tr><th>Version</th><th>Emi</th><th>Eppudu next ki</th></tr>
+    <tr><td>v1</td><td>Text search, RAG end to end</td><td>Start ikkade</td></tr>
+    <tr><td>v2</td><td>Vector search add</td><td>Text search relevant results miss chestundi ani <b>measure</b> chesinappudu</td></tr>
+    <tr><td>v3</td><td>Hybrid (text + vector, RRF) + reranking</td><td>Evaluation justify chesinappudu</td></tr>
+  </table>
+  <div class="telugu"><b class="t">Telugu lo</b>
+    Vector search overhead: embedding model kavali, embeddings compute + store cheyyali, prathi query ki encode. Chinna model ainaa considerable, plus dependencies (mana case lo PyTorch asalu pani cheyyaledu!).
+    Chala RAG tutorials vector search tho start avutayi, konni vector database ammukune companies nunchi. Day one avasaram ledu.
+    <b>Rule:</b> evaluation (later module) numbers tho decide: marginal gain ki overhead worth kaadu, real gain ki worth.
+    <b>Hybrid search</b> rendu run chesi results merge (Reciprocal Rank Fusion). <b>Reranking</b> retrieved docs ni separate model tho malli score. Best Practices module lo.
+    Try: mee data meeda text vs vector compare, vere embedding models (ONNX list: bge-small, gte-small, multilingual-e5...), vere vector DBs (Elasticsearch, Qdrant, Weaviate, Chroma).
+  </div>
+  <div class="flow h">
+    <div class="node">v1 Text search</div><div class="arr">→ <small>measure miss</small></div>
+    <div class="node">v2 + Vector search</div><div class="arr">→ <small>evaluate</small></div>
+    <div class="node ok">v3 Hybrid + rerank</div>
+  </div>
+  <div class="next"><b>Next:</b> Module 3 (Orchestration).</div>
 </section>
 
 <!-- DAILY -->
@@ -1456,6 +1959,11 @@ result2 = runner.loop(prompt="How do I run a different model?",
     <tr><td><code>DLL load failed while importing _ckdtree</code> (or any <code>.pyd</code>)</td><td>Smart App Control unsigned compiled file block chesindi</td><td>Kernel restart chesi malli try (konnisarlu tarvata allow avutundi). minsearch aithe <code>minsearch_lite</code> fallback automatic.</td></tr>
     <tr><td><code>StopIteration</code> on <code>next(... function_call)</code></td><td>gpt-oss tool icchina search cheyyakunda direct answer ichindi</td><td>Developer message lo "use the search tool" hint + retry. <code>tool_choice="required"</code> Groq lo 400 error ivvochu.</td></tr>
     <tr><td>toyaikit <code>UnknownModelWarning</code>, <code>result.cost</code> = None</td><td>ToyAIKit price list lo Groq model ledu</td><td><code>PricingConfig().register_model(MODEL, 0.15, 0.60)</code> → runner ki <code>pricing_config=</code></td></tr>
+    <tr><td><code>OSError: [WinError 4551] ... torch_python.dll</code></td><td>Smart App Control PyTorch DLL block (Python 3.13/3.14)</td><td>PyTorch vaddu, ONNX <code>Embedder</code> vadandi (Step 25)</td></tr>
+    <tr><td>Python crash <code>-1073741819</code> / <code>0xC0000005</code> on <code>SentenceTransformer(...)</code></td><td>Python 3.15 + PyTorch incompatible</td><td>Module 2 Python 3.14 + ONNX folder lo run cheyyandi</td></tr>
+    <tr><td><code>onnxruntime ... no wheels with a matching Python ABI tag (cp315)</code></td><td>onnxruntime ki Python 3.15 version inka ledu</td><td><code>module2-vector-search/</code> (Python 3.14) lo install</td></tr>
+    <tr><td><code>No module named 'onnxruntime'</code> Module 2 notebook lo</td><td>Module 1 kernel (3.15) select ayindi</td><td>Kernel → <code>module2-vector-search\.venv\Scripts\python.exe</code></td></tr>
+    <tr><td><code>FileNotFoundError</code> deep inside <code>site-packages\transformers\...</code></td><td>Windows 260-character path limit (LongPathsEnabled=0)</td><td>Project ni chinna path lo unchandi (<code>C:\Users\vasus\Projects\...</code> ok)</td></tr>
     <tr><td><code>404 model_not_found</code></td><td>Model Groq lo ledu</td><td><code>openai/gpt-oss-120b</code> vadandi</td></tr>
     <tr><td><code>.env</code> change work avvatledu</td><td>Kernel old key cache chesindi</td><td>Kernel restart → Cell 1 malli run</td></tr>
   </table>
@@ -1492,8 +2000,16 @@ result2 = runner.loop(prompt="How do I run a different model?",
 │   ├── sqlite-rag.ipynb    ← Lesson 09 querying
 │   ├── agents.ipynb        ← Lessons 12-15
 │   └── faq.db              ← sqlitesearch index (git ignore)
+├── module2-vector-search/      ← Module 2 (Python 3.14, separate .venv)
+│   ├── pyproject.toml, uv.lock
+│   ├── embedder.py, download.py ← ONNX embedder (course embed/)
+│   ├── ingest.py, rag_helper.py, minsearch_lite.py ← Module 1 nunchi copy
+│   ├── vector_search.ipynb      ← Lessons 02-06
+│   ├── vector_search_persistent.ipynb ← Lesson 07
+│   ├── models/                  ← ONNX model (git ignore)
+│   └── faq_vectors2.db          ← vector index (git ignore)
 ├── labs/             ← lab notes
-│   ├── 00-environment-setup.html   ← ee file
+│   ├── 00-environment-setup.html   ← ee file (Setup + Module 1 + Module 2)
 │   └── 01 ... 05 .md
 ├── src/              ← agent code
 ├── data/             ← docs + evals
@@ -1522,6 +2038,10 @@ result2 = runner.loop(prompt="How do I run a different model?",
     <tr><td>2026-10-27</td><td>Lessons 10-11: Part 1 wrap-up, agents intro</td><td>Steps 17-18</td></tr>
     <tr><td>2026-10-27</td><td>Lessons 12-14: Olama typo, function calling (Groq Responses API), agent loop, instructions steering</td><td>Steps 19-21</td></tr>
     <tr><td>2026-10-27</td><td>Lessons 15-16: ToyAIKit (Groq client + pricing), other frameworks</td><td>Steps 22-23</td></tr>
+    <tr><td>2026-10-27</td><td>Document overall ga maarchindi: title, Contents table</td><td>Top</td></tr>
+    <tr><td>2026-10-27</td><td>Module 2 setup: PyTorch test (3.13/3.14/3.15), Python 3.14 + ONNX project, model download</td><td>Steps 24-25</td></tr>
+    <tr><td>2026-10-27</td><td>Module 2 lessons 02-07: embeddings, dataset, numpy, minsearch VectorSearch, RAGVector, sqlitesearch vector</td><td>Steps 26-31</td></tr>
+    <tr><td>2026-10-27</td><td>Module 2 lessons 08, 10: PGVector (code matrame, Docker ledu), next steps</td><td>Steps 32-33</td></tr>
   </table>
   <div class="telugu"><b class="t">Telugu lo</b>
     Ikapai bootcamp lo kotha step chesinappudu (Lab 01, 02 ...) ee file lo kotha section + ee table lo okka row add avutundi. Ala ee okka file lo mottham journey untundi.

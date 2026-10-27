@@ -24,3 +24,6 @@ Thumbs.db
 *.db
 *.db-wal
 *.db-shm
+
+# Module 2 ONNX model files (re-download with module2-vector-search/download.py)
+models/

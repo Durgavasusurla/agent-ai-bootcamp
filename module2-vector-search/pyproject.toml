@@ -1,0 +1,27 @@
+[project]
+name = "module2-vector-search"
+version = "0.1.0"
+description = "LLM Zoomcamp Module 2: vector search with an ONNX embedder (no PyTorch)"
+requires-python = "==3.14.*"
+dependencies = [
+    "minsearch",
+    "numpy",
+    "onnxruntime",
+    "openai",
+    "python-dotenv",
+    "requests",
+    "sqlitesearch",
+    "tokenizers",
+    "tqdm",
+]
+
+[dependency-groups]
+dev = [
+    "huggingface-hub",
+    "ipykernel",
+    "nbconvert",
+    "nbformat",
+]
+
+[tool.uv]
+package = false
